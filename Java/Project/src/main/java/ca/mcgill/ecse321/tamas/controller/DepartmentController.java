@@ -28,41 +28,6 @@ public class DepartmentController {
 
 	}
 
-
-	/**
-	 * @param name
-	 * @param instructorID
-	 * @param email
-	 *
-	 */
-	public void createInstructor(String name, int instructorID, String email){
-
-		Instructor instructor = new Instructor(name, instructorID, email);
-		department.addAllInstructor(instructor);
-		PersistenceXStream.saveToXMLwithXStream(department);
-
-
-
-	}
-
-	/**
-	 * @param studentID
-	 * @param name
-	 * @param email
-	 * @param isGrad
-	 * @param year
-	 * @param jobPreference
-	 * @param numberOfHours
-	 *
-	 */
-	public void createStudent(int studentID, String name, String email, boolean isGrad, int year, String jobPreference, int numberOfHours){
-
-		Student student = new Student(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
-		department.addAllStudent(student);
-		PersistenceXStream.saveToXMLwithXStream(department);
-
-	}
-
 	/**
 	 * @param posType
 	 * @param course
@@ -74,7 +39,6 @@ public class DepartmentController {
 		department.addAllJob(job);
 		PersistenceXStream.saveToXMLwithXStream(department);
 
-
 	}
 
 	/**
@@ -82,6 +46,8 @@ public class DepartmentController {
 	 * @param student
 	 */
 	public void createAllocation(Job job, Student student){
+
+		////HAVE TO COMPLETE\\\\
 		PersistenceXStream.saveToXMLwithXStream(department);
 
 	}
@@ -103,6 +69,6 @@ public class DepartmentController {
 		PersistenceXStream.saveToXMLwithXStream(department);
 	}
 
-
+	
 
 }

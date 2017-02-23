@@ -18,14 +18,23 @@ public class StudentController {
 		this.department = department;
 		
 	}
+
+    public void createStudent(int studentID, String name, String email, boolean isGrad, int year, String jobPreference, int numberOfHours){
+
+        Student student = new Student(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        department.addAllStudent(student);
+        PersistenceXStream.saveToXMLwithXStream(department);
+
+    }
+
+	public void addPreviousExperienceToStudent(Student student, Job previousJob){
+
+	    student.addPreviousJobExperience(previousJob);
+        PersistenceXStream.saveToXMLwithXStream(department);
+
+    }
 	
-	
-	
-	
-	/**
-	 * @param jobPosting
-	 * @param applicant
-	 */
+
 	public void applyToJobPosting(Job jobPosting,Student applicant){
 		
 		jobPosting.addApplicant(applicant);
@@ -34,11 +43,7 @@ public class StudentController {
 	}
 	
 	
-	/**
-	 * @param student
-	 * @param jobOffer
-	 * @param accept
-	 */
+
 	public void respondToJobOffer(Student student,Job jobOffer, boolean accept){
 		
 		if(accept){

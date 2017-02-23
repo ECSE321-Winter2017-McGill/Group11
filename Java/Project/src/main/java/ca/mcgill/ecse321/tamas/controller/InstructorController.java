@@ -19,6 +19,14 @@ public class InstructorController {
 		this.department = department;
 		
 	}
+
+	public void createInstructor(String name, int instructorID, String email){
+
+		Instructor instructor = new Instructor(name, instructorID, email);
+		department.addAllInstructor(instructor);
+		PersistenceXStream.saveToXMLwithXStream(department);
+
+	}
 	
 	/**
 	 * @param job
@@ -54,10 +62,29 @@ public class InstructorController {
 	
 	/**
 	 * @param job
-	 * @param student
+	 * @param applicant
 	 */
-	public void modifyAllocation(Job job, Student student){
-		
+	public void modifyAllocation(Job job, Student applicant){
+
+		boolean validApplicant = false;
+		//Check if student is an applicant
+		for(Student st: job.getApplicant()){
+
+			if(st==applicant){
+				validApplicant = true;
+				break;
+			}
+
+		}
+
+		if(validApplicant){
+			job.removeApplicant(applicant);
+			job.addAllocatedStudent(applicant);
+		}else{
+			//// IMPLEMENT EXCEPTION \\\\\\\\\\\\\\\\\
+			return;
+		}
+
 		PersistenceXStream.saveToXMLwithXStream(department);
 
 	}
