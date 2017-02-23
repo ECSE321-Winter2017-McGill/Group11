@@ -273,9 +273,9 @@ public class Instructor
     return 0;
   }
 
-  public Review addReviewText(String aContent, int aAssociatedJobID, Student aReviewee)
+  public Review addReviewText(String aContent, Student aReviewee, Job aReviewedJob)
   {
-    return new Review(aContent, aAssociatedJobID, aReviewee, this);
+    return new Review(aContent, aReviewee, aReviewedJob, this);
   }
 
   public boolean addReviewText(Review aReviewText)

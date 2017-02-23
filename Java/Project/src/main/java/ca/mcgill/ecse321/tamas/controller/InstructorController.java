@@ -45,10 +45,9 @@ public class InstructorController {
 	 * @param reviewer
 	 * @param reviewee
 	 * @param content
-	 * @param associatedJobID
 	 */
-	public void createReview(Instructor reviewer, Student reviewee, String content, int associatedJobID){
-		Review review = new Review(content, associatedJobID, reviewee, reviewer);
+	public void createReview(Instructor reviewer, Student reviewee, String content, Job reviewedJob){
+		Review review = new Review(content, reviewee, reviewedJob, reviewer);
 		
 		PersistenceXStream.saveToXMLwithXStream(department);
 	}

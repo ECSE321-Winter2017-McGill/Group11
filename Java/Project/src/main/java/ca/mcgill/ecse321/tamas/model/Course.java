@@ -3,6 +3,7 @@
 
 package ca.mcgill.ecse321.tamas.model;
 import java.util.*;
+import java.sql.Date;
 
 // line 40 "../../../../../ECSE321UmpleCode.ump"
 public class Course
