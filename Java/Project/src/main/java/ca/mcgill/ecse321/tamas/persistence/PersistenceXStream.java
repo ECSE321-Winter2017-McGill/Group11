@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.project.persistence;
+package ca.mcgill.ecse321.tamas.persistence;
 
 import java.io.File;
 import java.io.FileReader;
@@ -7,12 +7,12 @@ import java.io.IOException;
 
 import com.thoughtworks.xstream.XStream;
 
-import ca.mcgill.ecse321.project.model.Course;
-import ca.mcgill.ecse321.project.model.Department;
-import ca.mcgill.ecse321.project.model.Instructor;
-import ca.mcgill.ecse321.project.model.Job;
-import ca.mcgill.ecse321.project.model.Review;
-import ca.mcgill.ecse321.project.model.Student;
+import ca.mcgill.ecse321.tamas.model.Course;
+import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.Instructor;
+import ca.mcgill.ecse321.tamas.model.Job;
+import ca.mcgill.ecse321.tamas.model.Review;
+import ca.mcgill.ecse321.tamas.model.Student;
 
 public class PersistenceXStream {
 

@@ -1,9 +1,8 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.25.0-9e8af9e modeling language!*/
 
-package ca.mcgill.ecse321.project.model;
+package ca.mcgill.ecse321.tamas.model;
 import java.util.*;
-import java.sql.Date;
 
 // line 40 "../../../../../ECSE321UmpleCode.ump"
 public class Course

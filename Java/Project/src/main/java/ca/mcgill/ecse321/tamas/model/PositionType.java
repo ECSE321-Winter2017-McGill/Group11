@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.project.model;
+package ca.mcgill.ecse321.tamas.model;
 
 public enum PositionType {
 	TA, Grader

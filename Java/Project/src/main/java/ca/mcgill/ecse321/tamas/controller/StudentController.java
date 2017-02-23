@@ -1,9 +1,9 @@
-package ca.mcgill.ecse321.project.controller;
+package ca.mcgill.ecse321.tamas.controller;
 
-import ca.mcgill.ecse321.project.model.Department;
-import ca.mcgill.ecse321.project.model.Job;
-import ca.mcgill.ecse321.project.model.Student;
-import ca.mcgill.ecse321.project.persistence.PersistenceXStream;
+import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.Job;
+import ca.mcgill.ecse321.tamas.model.Student;
+import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 /**
  * @author Tharsan Ponnampalam

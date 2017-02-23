@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.project.persistence;
+package ca.mcgill.ecse321.tamas.persistence;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -9,8 +9,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import ca.mcgill.ecse321.project.model.Department;
-import ca.mcgill.ecse321.project.model.Instructor;
+import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.Instructor;
 
 public class TestPersistence {
 	private Department department;
