@@ -1,13 +1,5 @@
 <?php
 
-#Position type text field
-#Skills required text field
-#Experiecen required text field
-#Job description text field
-#Publish job posting button
-
-#Department page button
-
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
@@ -77,5 +69,7 @@
 		</div>
 	</div>
 </div>
+
+# Confirmation message
 
 php>
