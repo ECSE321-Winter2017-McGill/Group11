@@ -7,6 +7,7 @@ import ca.mcgill.ecse321.tamas.model.Job;
 import ca.mcgill.ecse321.tamas.model.PositionType;
 import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
+import ca.mcgill.ecse321.tamas.view.DepartmentPage;
 
 public class DepartmentController {
 
