@@ -24,7 +24,6 @@ public class TestPersistence {
 
 		department.addAllInstructor(instructor1);
 		department.addAllInstructor(instructor2);
-
 	}
 
 	@After
