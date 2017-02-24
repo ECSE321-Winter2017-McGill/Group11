@@ -23,28 +23,25 @@
 				<li>
 					<a href="#">Course List</a>
 				</li>
-				<li>
-					<a href="#">TA & Grader Related</a>
-				</li>
 				<li class="disabled">
 					<a href="#">Messages</a>
 				</li>
 				<li class="dropdown pull-right">
-					 <a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown<strong class="caret"></strong></a>
+					 <a href="#" data-toggle="dropdown" class="dropdown-toggle">TA & Grader Related<strong class="caret"></strong></a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="#">Action</a>
+							<a href="#">Create Job Posting</a>
 						</li>
 						<li>
-							<a href="#">Another action</a>
+							<a href="#">Job Posting List</a>
 						</li>
 						<li>
-							<a href="#">Something else here</a>
+							<a href="#">Modify Allocation</a>
 						</li>
 						<li class="divider">
 						</li>
 						<li>
-							<a href="#">Separated link</a>
+							<a href="#">Write Review</a>
 						</li>
 					</ul>
 				</li>
