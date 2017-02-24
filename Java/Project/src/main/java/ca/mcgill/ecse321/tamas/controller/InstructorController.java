@@ -11,7 +11,17 @@ import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 public class InstructorController {
-	
+
+	private final String createJobPostingNullJobErrorMessage = "Must select Job!";
+	private final String createJobPostingNullJobDescriptionErrorMessage = "Job description cannot be empty!";
+	private final String createJobPostingNullSkillsRequiredErrorMessage = "Skills required cannot be empty!";
+	private final String createJobPostingNullExperienceRequiredErrorMessage = "Experience required cannot be empty!";
+	private final String createJobPostingNullPostDeadlineErrorMessage = "Job post deadline date cannot be empty!";
+	//private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!";
+
+
+
+
 	private Department department;
 	
 	public InstructorController(Department department) {
@@ -26,16 +36,35 @@ public class InstructorController {
 	 * @param skillsRequired
 	 * @param experienceRequired
 	 * @param postingDeadlineDate
-	 * @param offerDeadlineDate
 	 */
-	public void createJobPosting(Job job, String jobDescription, String skillsRequired, String experienceRequired, Date postingDeadlineDate, Date offerDeadlineDate){
-		
+	public void createJobPosting(Job job, String jobDescription, String skillsRequired, String experienceRequired, Date postingDeadlineDate) throws InvalidInputException{
+
+		String error = "";
+
+		if(job == null){
+			error = error + createJobPostingNullJobErrorMessage;
+		}
+		if(jobDescription == null || jobDescription.trim().length() == 0){
+			error = error + createJobPostingNullJobDescriptionErrorMessage;
+		}
+		if(skillsRequired == null || skillsRequired.trim().length() == 0){
+			error = error + createJobPostingNullSkillsRequiredErrorMessage;
+		}
+		if(experienceRequired == null || experienceRequired.trim().length() == 0){
+			error = error + createJobPostingNullExperienceRequiredErrorMessage;
+		}
+		if(postingDeadlineDate == null){
+			error = error + createJobPostingNullPostDeadlineErrorMessage;
+		}
+		if (error.length()>0){
+			throw new InvalidInputException(error);
+		}
+
 		job.setJobDescription(jobDescription);
 		job.setSkillsRequired(skillsRequired);
 		job.setExperienceRequired(experienceRequired);
 		job.setPostingDeadlineDate(postingDeadlineDate);
-		job.setOfferDeadlineDate(offerDeadlineDate);
-		
+
 		job.setState(JobStatus.Posted);
 		PersistenceXStream.saveToXMLwithXStream(department);
 
