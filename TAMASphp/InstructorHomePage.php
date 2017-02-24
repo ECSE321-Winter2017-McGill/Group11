@@ -13,28 +13,47 @@
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<ul class="breadcrumb">
-				<li>
-					<a href="#">Home</a> <span class="divider">/</span>
-				</li>
-				<li>
-					<a href="#">Library</a> <span class="divider">/</span>
-				</li>
-				<li class="active">
-					Data
-				</li>
-			</ul>
+			<div class="tabbable" id="tabs-212784">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#panel-392363" data-toggle="tab">Section 1</a>
+					</li>
+					<li>
+						<a href="#panel-195771" data-toggle="tab">Section 2</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="panel-392363">
+						<p>
+							I'm in Section 1.
+						</p>
+					</div>
+					<div class="tab-pane" id="panel-195771">
+						<p>
+							Howdy, I'm in Section 2.
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-			<h3>
-				h3. Lorem ipsum dolor sit amet.
-			</h3>
+			<div class="page-header">
+				<h1>
+					LayoutIt! <small>Interface Builder for Bootstrap</small>
+				</h1>
+			</div>
+			<h2>
+				Heading
+			</h2>
 			<p>
-				Lorem ipsum dolor sit amet, <strong>consectetur adipiscing elit</strong>. Aliquam eget sapien sapien. Curabitur in metus urna. In hac habitasse platea dictumst. Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus et, pharetra in dolor. Sed iaculis posuere diam ut cursus. <em>Morbi commodo sodales nisi id sodales. Proin consectetur, nisi id commodo imperdiet, metus nunc consequat lectus, id bibendum diam velit et dui.</em> Proin massa magna, vulputate nec bibendum nec, posuere nec lacus. <small>Aliquam mi erat, aliquam vel luctus eu, pharetra quis elit. Nulla euismod ultrices massa, et feugiat ipsum consequat eu.</small>
+				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
 			</p>
-			<ul>
+			<p>
+				<a class="btn" href="#">View details »</a>
+			</p>
+			<ol>
 				<li>
 					Lorem ipsum dolor sit amet
 				</li>
@@ -59,7 +78,7 @@
 				<li>
 					Eget porttitor lorem
 				</li>
-			</ul>
+			</ol>
 		</div>
 	</div>
 </div>
