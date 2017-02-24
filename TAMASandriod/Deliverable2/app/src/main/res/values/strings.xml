@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Deliverable2</string>
+    <string name="action_settings">Settings</string>
+    <string name="newparticipant_hint">Who?</string>
+    <string name="newparticipant_button">Add Participant</string>
+    <string name="newparticipant2_hint">ID</string>
+    <string name="studentrolespinner_label">Role</string>
+    <string name="newstudent_hint">Add Student</string>
+    <string name="newstudent_button">Add student</string>
+    <string name="participantspinner_label">Students</string>
+    <string name="applytojob_button">Apply</string>
+    <string name="jobspinner_label">Job</string>
+    <string name="newevent_hint">Job Name</string>
+    <string name="newjob_button">Post Job</string>
+    <string name="newstudent1_hint">Who</string>
+    <string name="newstudent2_hint">ID</string>
+    <string name="newjob_hint">Job Name</string>
+    <string name="studentspinner_label">Students</string>
+    <string name="newevent1_hint">Course Name</string>
+</resources>
