@@ -37,6 +37,19 @@ public class StudentController {
 
 	public void applyToJobPosting(Job jobPosting,Student applicant){
 		
+		String error = "";
+		if (applicant == null)
+  			error = error + "Applicant needs to be selected for registration! ";
+		else if (!department.getAllStudents().contains(applicant))
+  			error = error + "Applicant does not exist! ";
+		if (job == null)
+			error = error +"Job needs to be selected for registration!";
+		else if(!department.getAllJobs().contains(job))
+			error = error + "Job does not exist!";
+		error = error.trim();
+		if (error.length()>0)
+			throw new InvalidInputException(error);
+		
 		jobPosting.addApplicant(applicant);
 		PersistenceXStream.saveToXMLwithXStream(department);
 		
