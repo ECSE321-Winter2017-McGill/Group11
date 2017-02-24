@@ -22,9 +22,6 @@ class InstructorController
 		$instructorEmail = InvalidInputException::validate_input($instructorEmail);
 			
 			// throw exceptions, if need be
-		if ($instructorName == null || strlen ( $instructorName ) == 0 
-				|| $instructorID == null || strlen ( $instructorID ) == 0 
-				|| $instructorEmail == null || strlen ( $instructorEmail ) == 0) {
 			if ($instructorName == null || strlen ( $instructorName ) == 0) {
 				$error .= "@1Instructor name cannot be empty!";
 			}
@@ -34,8 +31,10 @@ class InstructorController
 			if ($instructorEmail == null || strlen ( $instructorEmail ) == 0) {
 				$error .= "@3Instructor name cannot be empty!";
 			}
-			throw new Exception ( $error );
-		} else {
+			if (strlen($error) != 0){
+				throw new Exception ( $error );
+			}
+
 			//if inputs are valid
 			
 			//2. load data from persistence
@@ -45,13 +44,49 @@ class InstructorController
 			//3. add instructor
 			$instructor = new Instructor($instructorName, $instructorID, $instructorEmail);
 			$dpt->addAllInstructor($instructor);
-		}
 		
 		
 		
 	}
 	
-	public function createJobPosting($job, $jobDescription, $skillsRequired, $experienceRequired) {
+	public function createJobPosting($aJob, $jobDescription, $skillsRequired, $experienceRequired) {
+		//1. load data
+		$persis= new PersistenceTamas();
+		$dpt = $persis -> loadDataFromStore();
+		
+		//2. find job
+		$myJob = NULL;
+		foreach ($dpt->getAllJobs() as $job){
+			if(strcmp($job->getJobID, $aJob) == 0){
+				$myJob = $job;
+			}
+		}
+		
+				
+		$error = "";
+		//2. validate inputs
+		if ($myjob == null ) {
+			$error .= "@1Job ";
+			if($aJob != NULL){
+				$error .= $aJob;
+			}
+			$error .= " not found! ";
+		}
+		if ($jobDescription == null || strlen ( $jobDescription ) == 0) {
+			$error .= "@2Job description field cannot be empty!";
+		}
+		if ($skillsRequired == null || strlen ( $skillsRequired ) == 0) {
+			$error .= "@2Skills required field cannot be empty!";
+		}
+		if ($experienceRequired == null || strlen ( $experienceRequired ) == 0) {
+			$error .= "@3Experience required field cannot be empty!";
+		}
+		if (strlen($error) != 0){
+			throw new Exception ( trim($error) );
+		}
+		
+		
+		
 		
 	}
 	
