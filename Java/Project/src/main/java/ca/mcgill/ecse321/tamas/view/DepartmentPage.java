@@ -205,6 +205,8 @@ public class DepartmentPage extends JFrame {
         });
         applyForAJobButton.setBounds(225, 233, 100, 43);
         contentPane.add(applyForAJobButton);
+
+        this.setSize(800,400);
     }
 
 
