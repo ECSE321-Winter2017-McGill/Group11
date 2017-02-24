@@ -6,4 +6,6 @@
 #Job description text field
 #Publish job posting button
 
+#Department page button
+
 php>
