@@ -1,0 +1,83 @@
+namespace ca.mcgill.ecse321.tamas.model;
+
+class Department{
+
+	1 -> * Job allJobs;
+	1 -> * Course allCourses;
+	1 -> * Instructor allInstructors;
+	1 -> * Student allStudents;
+	1 -> * Review allReviews;
+
+}
+class Student{
+
+	unique Integer studentID;
+	name;
+	unique email;
+	Boolean isGrad;
+	Integer year;
+	jobPreference;
+	Integer numberOfHours;
+	
+	* previousWorker -- * Job previousJobExperiences;
+	* applicant -- 0..3 Job jobsAppliedTo;
+	* offerReceiver -- 0..3 Job offeredJobs;
+	* employee -- 0..3 Job currentJobs;
+	
+}
+
+class Instructor{
+	
+	name;
+	unique Integer instructorID;
+	unique email;
+	
+	1..* instructors -- * Course courses;
+	1 reviewer -- * Review reviewText;
+	
+}
+
+class Course{
+
+	code;
+	name;
+	semester;
+	Integer numberOfCredits;
+	Integer numberOfLabs;
+	Integer numberOfTutorials;
+	Integer numberOfHours;
+	Integer studentsEnrolled;
+	Integer tasNeeded;
+	Integer gradersNeeded;
+	Integer taHourlyRate;
+	Integer graderHourlyRate;
+	Integer budget;
+	
+	1 correspondingCourse -- * Job jobs;
+	
+}
+
+class Job{
+	
+	autounique jobID;
+	lazy jobDescription;
+	PositionType posType;
+	lazy skillsRequired;
+	lazy experienceRequired;
+	lazy Date postingDeadlineDate;
+	lazy Date offerDeadlineDate;
+	defaulted JobStatus state = JobStatus.Ready;
+
+	0..3 -> * Student allocatedStudent;
+
+}
+
+
+class Review{
+
+	content;
+
+	* reviewText -- 1 Student reviewee;
+	1 -> 1 Job reviewedJob;
+
+}
