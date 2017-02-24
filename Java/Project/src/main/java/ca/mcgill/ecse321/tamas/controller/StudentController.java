@@ -35,16 +35,16 @@ public class StudentController {
     }
 	
 
-	public void applyToJobPosting(Job jobPosting,Student applicant){
+	public void applyToJobPosting(Job jobPosting,Student applicant) throws InvalidInputException {
 		
 		String error = "";
 		if (applicant == null)
   			error = error + "Applicant needs to be selected for registration! ";
 		else if (!department.getAllStudents().contains(applicant))
   			error = error + "Applicant does not exist! ";
-		if (job == null)
+		if (jobPosting == null)
 			error = error +"Job needs to be selected for registration!";
-		else if(!department.getAllJobs().contains(job))
+		else if(!department.getAllJobs().contains(jobPosting))
 			error = error + "Job does not exist!";
 		error = error.trim();
 		if (error.length()>0)
