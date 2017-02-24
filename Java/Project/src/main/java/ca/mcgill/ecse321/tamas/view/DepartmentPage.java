@@ -19,19 +19,18 @@ import javax.swing.JRadioButton;
 public class DepartmentPage extends JFrame {
 
     private JPanel contentPane;
-    private JTextField textField;
-    private JTextField textField_1;
-    private JTextField textField_2;
-    private JTextField textField_3;
-    private JTextField textField_4;
-    private JTextField textField_5;
-    private JTextField textField_6;
-    private JTextField textField_7;
-    private JTextField textField_8;
-    private JTextField textField_9;
-    private JTextField textField_10;
-    private JTextField textField_11;
-
+    private JTextField positionTypeField;
+    private JTextField skillsRequiredField;
+    private JTextField experienceRequiredField;
+    private JTextField jobDescriptionField;
+    private JTextField studentNameField;
+    private JTextField emailField;
+    private JTextField studentYearField;
+    private JTextField jobPreferenceField;
+    private JTextField studentIDField;
+    private JTextField courseNumberField;
+    private JTextField studentNameForApplyingField;
+    private JTextField JobForApplyingField;
 
     /**
      * Create the frame.
@@ -45,155 +44,155 @@ public class DepartmentPage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel lblNewLabel = new JLabel("Position type");
-        lblNewLabel.setBounds(10, 35, 90, 16);
-        contentPane.add(lblNewLabel);
+        JLabel positionTypeLabel = new JLabel("Position type");
+        positionTypeLabel.setBounds(10, 35, 90, 16);
+        contentPane.add(positionTypeLabel);
 
-        textField = new JTextField();
-        textField.setBounds(105, 30, 100, 26);
-        contentPane.add(textField);
-        textField.setColumns(10);
+        positionTypeField = new JTextField();
+        positionTypeField.setBounds(105, 30, 100, 26);
+        contentPane.add(positionTypeField);
+        positionTypeField.setColumns(10);
 
-        JLabel lblSkillsRequired = new JLabel("Skills required");
-        lblSkillsRequired.setBounds(10, 63, 90, 16);
-        contentPane.add(lblSkillsRequired);
+        JLabel skillsRequiredLabel = new JLabel("Skills required");
+        skillsRequiredLabel.setBounds(10, 63, 90, 16);
+        contentPane.add(skillsRequiredLabel);
 
-        textField_1 = new JTextField();
-        textField_1.setBounds(105, 58, 100, 26);
-        contentPane.add(textField_1);
-        textField_1.setColumns(10);
+        skillsRequiredField = new JTextField();
+        skillsRequiredField.setBounds(105, 58, 100, 26);
+        contentPane.add(skillsRequiredField);
+        skillsRequiredField.setColumns(10);
 
-        JLabel lblExpRequired = new JLabel("Exp. required");
-        lblExpRequired.setBounds(10, 91, 90, 16);
-        contentPane.add(lblExpRequired);
+        JLabel experienceRequiredLabel = new JLabel("Exp. required");
+        experienceRequiredLabel.setBounds(10, 91, 90, 16);
+        contentPane.add(experienceRequiredLabel);
 
-        textField_2 = new JTextField();
-        textField_2.setBounds(105, 86, 100, 26);
-        contentPane.add(textField_2);
-        textField_2.setColumns(10);
+        experienceRequiredField = new JTextField();
+        experienceRequiredField.setBounds(105, 86, 100, 26);
+        contentPane.add(experienceRequiredField);
+        experienceRequiredField.setColumns(10);
 
-        JLabel lblJobDescription = new JLabel("Job description");
-        lblJobDescription.setBounds(10, 119, 90, 16);
-        contentPane.add(lblJobDescription);
+        JLabel jobDescriptionLabel = new JLabel("Job description");
+        jobDescriptionLabel.setBounds(10, 119, 90, 16);
+        contentPane.add(jobDescriptionLabel);
 
-        textField_3 = new JTextField();
-        textField_3.setBounds(105, 114, 100, 26);
-        contentPane.add(textField_3);
-        textField_3.setColumns(10);
+        jobDescriptionField = new JTextField();
+        jobDescriptionField.setBounds(105, 114, 100, 26);
+        contentPane.add(jobDescriptionField);
+        jobDescriptionField.setColumns(10);
 
-        JButton btnPublishJobPosting = new JButton("Publish job posting");
-        btnPublishJobPosting.addActionListener(new ActionListener() {
+        JButton publishJobPostingButton = new JButton("Publish job posting");
+        publishJobPostingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        btnPublishJobPosting.setBounds(10, 175, 190, 29);
-        contentPane.add(btnPublishJobPosting);
+        publishJobPostingButton.setBounds(10, 175, 190, 29);
+        contentPane.add(publishJobPostingButton);
 
-        JLabel lblStudentName = new JLabel("Student name");
-        lblStudentName.setBounds(215, 63, 90, 16);
-        contentPane.add(lblStudentName);
+        JLabel studentNameLabel = new JLabel("Student name");
+        studentNameLabel.setBounds(215, 63, 90, 16);
+        contentPane.add(studentNameLabel);
 
-        textField_4 = new JTextField();
-        textField_4.setBounds(310, 58, 130, 26);
-        contentPane.add(textField_4);
-        textField_4.setColumns(10);
+        studentNameField = new JTextField();
+        studentNameField.setBounds(310, 58, 130, 26);
+        contentPane.add(studentNameField);
+        studentNameField.setColumns(10);
 
-        JLabel lblYear = new JLabel("Email");
-        lblYear.setBounds(215, 91, 61, 16);
-        contentPane.add(lblYear);
+        JLabel emailLabel = new JLabel("Email");
+        emailLabel.setBounds(215, 91, 61, 16);
+        contentPane.add(emailLabel);
 
-        JLabel lblPublishAJob = new JLabel("Publish A Job Posting");
-        lblPublishAJob.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        lblPublishAJob.setBounds(23, 6, 165, 20);
-        contentPane.add(lblPublishAJob);
+        JLabel publishJobLabel = new JLabel("Publish A Job Posting");
+        publishJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        publishJobLabel.setBounds(23, 6, 165, 20);
+        contentPane.add(publishJobLabel);
 
-        JLabel lblApplyForA = new JLabel("Register a Student");
-        lblApplyForA.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        lblApplyForA.setBounds(260, 7, 140, 20);
-        contentPane.add(lblApplyForA);
+        JLabel RegisterStudentLabel = new JLabel("Register a Student");
+        RegisterStudentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        RegisterStudentLabel.setBounds(260, 7, 140, 20);
+        contentPane.add(RegisterStudentLabel);
 
-        textField_5 = new JTextField();
-        textField_5.setBounds(310, 86, 130, 26);
-        contentPane.add(textField_5);
-        textField_5.setColumns(10);
+        emailField = new JTextField();
+        emailField.setBounds(310, 86, 130, 26);
+        contentPane.add(emailField);
+        emailField.setColumns(10);
 
-        JRadioButton rdbtnUndergraduate = new JRadioButton("Undergraduate");
-        rdbtnUndergraduate.setBounds(217, 115, 124, 23);
-        contentPane.add(rdbtnUndergraduate);
+        JRadioButton undergraduateRadio = new JRadioButton("Undergraduate");
+        undergraduateRadio.setBounds(217, 115, 124, 23);
+        contentPane.add(undergraduateRadio);
 
-        JRadioButton rdbtnGraduate = new JRadioButton("Graduate");
-        rdbtnGraduate.setBounds(339, 115, 101, 23);
-        contentPane.add(rdbtnGraduate);
+        JRadioButton graduateRadio = new JRadioButton("Graduate");
+        graduateRadio.setBounds(339, 115, 101, 23);
+        contentPane.add(graduateRadio);
 
-        JLabel lblYear_1 = new JLabel("Year");
-        lblYear_1.setBounds(215, 147, 61, 16);
-        contentPane.add(lblYear_1);
+        JLabel studentYearLabel = new JLabel("Year");
+        studentYearLabel.setBounds(215, 147, 61, 16);
+        contentPane.add(studentYearLabel);
 
-        textField_6 = new JTextField();
-        textField_6.setBounds(310, 142, 130, 26);
-        contentPane.add(textField_6);
-        textField_6.setColumns(10);
+        studentYearField = new JTextField();
+        studentYearField.setBounds(310, 142, 130, 26);
+        contentPane.add(studentYearField);
+        studentYearField.setColumns(10);
 
-        JLabel lblNewLabel_1 = new JLabel("Job preference");
-        lblNewLabel_1.setBounds(215, 175, 90, 16);
-        contentPane.add(lblNewLabel_1);
+        JLabel jobPreferenceLabel = new JLabel("Job preference");
+        jobPreferenceLabel.setBounds(215, 175, 90, 16);
+        contentPane.add(jobPreferenceLabel);
 
-        textField_7 = new JTextField();
-        textField_7.setBounds(310, 170, 130, 26);
-        contentPane.add(textField_7);
-        textField_7.setColumns(10);
+        jobPreferenceField = new JTextField();
+        jobPreferenceField.setBounds(310, 170, 130, 26);
+        contentPane.add(jobPreferenceField);
+        jobPreferenceField.setColumns(10);
 
-        JLabel lblStudentId = new JLabel("Student ID");
-        lblStudentId.setBounds(215, 35, 90, 16);
-        contentPane.add(lblStudentId);
+        JLabel studentIDLabel = new JLabel("Student ID");
+        studentIDLabel.setBounds(215, 35, 90, 16);
+        contentPane.add(studentIDLabel);
 
-        textField_8 = new JTextField();
-        textField_8.setBounds(310, 30, 130, 26);
-        contentPane.add(textField_8);
-        textField_8.setColumns(10);
+        studentIDField = new JTextField();
+        studentIDField.setBounds(310, 30, 130, 26);
+        contentPane.add(studentIDField);
+        studentIDField.setColumns(10);
 
-        JLabel lblCourseNumber = new JLabel("Course number");
-        lblCourseNumber.setBounds(10, 147, 90, 16);
-        contentPane.add(lblCourseNumber);
+        JLabel courseNumberLabel = new JLabel("Course number");
+        courseNumberLabel.setBounds(10, 147, 90, 16);
+        contentPane.add(courseNumberLabel);
 
-        textField_9 = new JTextField();
-        textField_9.setBounds(105, 142, 100, 26);
-        contentPane.add(textField_9);
-        textField_9.setColumns(10);
+        courseNumberField = new JTextField();
+        courseNumberField.setBounds(105, 142, 100, 26);
+        contentPane.add(courseNumberField);
+        courseNumberField.setColumns(10);
 
-        JButton btnRegister = new JButton("Register");
-        btnRegister.setBounds(323, 204, 117, 29);
-        contentPane.add(btnRegister);
+        JButton registerStudentButton = new JButton("Register");
+        registerStudentButton.setBounds(323, 204, 117, 29);
+        contentPane.add(registerStudentButton);
 
-        JLabel lblNewLabel_2 = new JLabel("Apply for a Job");
-        lblNewLabel_2.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        lblNewLabel_2.setBounds(60, 208, 110, 16);
-        contentPane.add(lblNewLabel_2);
+        JLabel applyForAJobLabel = new JLabel("Apply for a Job");
+        applyForAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        applyForAJobLabel.setBounds(60, 208, 110, 16);
+        contentPane.add(applyForAJobLabel);
 
-        JLabel lblStudentName_1 = new JLabel("Student Name");
-        lblStudentName_1.setBounds(10, 233, 61, 16);
-        contentPane.add(lblStudentName_1);
+        JLabel studentNameForApplyingLabel = new JLabel("Student Name");
+        studentNameForApplyingLabel.setBounds(10, 233, 61, 16);
+        contentPane.add(studentNameForApplyingLabel);
 
-        textField_10 = new JTextField();
-        textField_10.setBounds(87, 228, 130, 26);
-        contentPane.add(textField_10);
-        textField_10.setColumns(10);
+        studentNameForApplyingField = new JTextField();
+        studentNameForApplyingField.setBounds(87, 228, 130, 26);
+        contentPane.add(studentNameForApplyingField);
+        studentNameForApplyingField.setColumns(10);
 
-        JLabel lblNewLabel_3 = new JLabel("Job");
-        lblNewLabel_3.setBounds(10, 256, 61, 16);
-        contentPane.add(lblNewLabel_3);
+        JLabel JobForApplyingLabel = new JLabel("Job");
+        JobForApplyingLabel.setBounds(10, 256, 61, 16);
+        contentPane.add(JobForApplyingLabel);
 
-        textField_11 = new JTextField();
-        textField_11.setBounds(87, 251, 130, 26);
-        contentPane.add(textField_11);
-        textField_11.setColumns(10);
+        JobForApplyingField = new JTextField();
+        JobForApplyingField.setBounds(87, 251, 130, 26);
+        contentPane.add(JobForApplyingField);
+        JobForApplyingField.setColumns(10);
 
-        JButton btnNewButton = new JButton("Apply!");
-        btnNewButton.addActionListener(new ActionListener() {
+        JButton applyForAJobButton = new JButton("Apply!");
+        applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        btnNewButton.setBounds(225, 233, 100, 43);
-        contentPane.add(btnNewButton);
+        applyForAJobButton.setBounds(225, 233, 100, 43);
+        contentPane.add(applyForAJobButton);
     }
 }
