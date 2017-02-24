@@ -19,9 +19,9 @@ public class DepartmentController {
 	}
 
 
-	public void createCourse(String code, String name, String semester, int numberOfCredits, int numberOfLabs, int numberOfTutorials, int numberOfHours, int studentsEnrolled, int tasNeeded, int gradersNeeded, int taHourlyRate, int graderHourlyRate, int budget){
+	public void createCourse(String code, String name, String semester, int numberOfCredits, int numberOfLabs, int numberOfTutorials, int numberOfHours, int studentsEnrolled, int tasNeeded, int gradersNeeded, int taHourlyRate, int graderHourlyRate, int budget, Instructor instructor){
 
-		Course course = new Course(code, name, semester, numberOfCredits, numberOfLabs, numberOfTutorials, numberOfHours, studentsEnrolled, tasNeeded, gradersNeeded, taHourlyRate, graderHourlyRate, budget);
+		Course course = new Course(code, name, semester, numberOfCredits, numberOfLabs, numberOfTutorials, numberOfHours, studentsEnrolled, tasNeeded, gradersNeeded, taHourlyRate, graderHourlyRate, budget, instructor);
 		department.addAllCourse(course);
 		PersistenceXStream.saveToXMLwithXStream(department);
 
