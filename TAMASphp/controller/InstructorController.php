@@ -52,7 +52,7 @@ class InstructorController
 		
 	}
 	
-	public function createJobPosting($aJobID, $jobDescription, $skillsRequired, $experienceRequired, $postingDeadlineDate) {
+	public function createJobPosting($aJobID, $jobDescription, $skillsRequired, $experienceRequired, $offerDeadlineDate) {
 		//1. load data
 		$persis= new PersistenceTamas();
 		$dpt = $persis -> loadDataFromStore();
@@ -61,16 +61,13 @@ class InstructorController
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
 			if(strcmp($job->getJobID, $aJobID) == 0){
-				$todelete = $job;
 				$myJob = $job;
 			}
 		}
 		
-		/* //3. remove current version of the job in question
-		 * $dpt->removeAllCourse($myJob);
-		 * //deletes the job saved in dpt equal to myJob
-		 * 
-		 */
+		//3. remove current version of the job in question
+		$dpt->removeAllCourse($myJob);
+		//deletes the job saved in dpt equal to myJob
 		
 				
 		$error = "";
@@ -79,7 +76,7 @@ class InstructorController
 		$jobDesc = InvalidInputException::validate_input($jobDescription);
 		$skillsReq = InvalidInputException::validate_input($skillsRequired);
 		$expReq = InvalidInputException::validate_input($experienceRequired);
-		$postingDate = InvalidInputException::validate_input($postingDeadlineDate);
+		$offerDate = InvalidInputException::validate_input($offerDeadlineDate);
 		
 		//if there are issues...
 		if ($myjob == null ) {
@@ -98,7 +95,7 @@ class InstructorController
 		if ($expReq == null || strlen ( $expReq) == 0) {
 			$error .= "@3Experience required field cannot be empty!";
 		}
-		if ($postingDate == null || strlen ( $postingDate ) == 0 || !strtotime($postingDate)) {
+		if ($oferDate == null || strlen ( $offerDate ) == 0 || !strtotime($offerDate)) {
 			$error .= "@4Posting deadline date must be specified correctly (YYYY-MM-DD)! ";
 		}
 		if (strlen($error) != 0){
@@ -106,7 +103,7 @@ class InstructorController
 		}
 		
 		//4. Convert date
-		$dateConv = date('Y-m-d', strtotime($postingDate));
+		$dateConv = date('Y-m-d', strtotime($offerDate));
 		
 		//5. addding parameters to Job
 		
@@ -114,10 +111,10 @@ class InstructorController
 		$myJob->setJobDescription($jobDesc);
 		$myJob->setSkillsRequired($skillsReq);
 		$myJob->setExperienceRequired($expReq);
-		$myJob->setPostingDeadlineDate($postingDate);
+		$myJob->setOfferDeadlineDate($offerDate);
 		
 		$myJob->setState(JobStatusEnum::Posted);
-		$dpt->addAllJob($myJob);//take Thars advice
+		$dpt->addAllJob($myJob);
 		$persis->writeDataToStore($dpt);
 		
 		
