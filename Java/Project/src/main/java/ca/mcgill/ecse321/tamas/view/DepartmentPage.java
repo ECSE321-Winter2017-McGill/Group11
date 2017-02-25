@@ -19,6 +19,7 @@ import javax.swing.JScrollBar;
 import java.awt.Color;
 import javax.swing.JToolBar;
 import javax.swing.JSpinner;
+import javax.swing.ButtonGroup;
 
 public class DepartmentPage extends JFrame {
 
@@ -33,7 +34,8 @@ public class DepartmentPage extends JFrame {
     private JTextField studentIDField;
     private JTextField courseNumberField;
     private JTextField studentNameForApplyingField;
-
+    private final JRadioButton undergraduateRadioForCreatingJob;
+    private final JRadioButton graduateRadioForCreatingJob;
 
     /**
      * Create the frame.
@@ -114,7 +116,7 @@ public class DepartmentPage extends JFrame {
         contentPane.add(emailField);
         emailField.setColumns(10);
 
-        JRadioButton undergraduateRadioForRegister = new JRadioButton("Undergraduate");
+        final JRadioButton undergraduateRadioForRegister = new JRadioButton("Undergraduate");
         undergraduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
@@ -122,7 +124,7 @@ public class DepartmentPage extends JFrame {
         undergraduateRadioForRegister.setBounds(255, 175, 124, 23);
         contentPane.add(undergraduateRadioForRegister);
 
-        JRadioButton graduateRadioForRegister = new JRadioButton("Graduate");
+        final JRadioButton graduateRadioForRegister = new JRadioButton("Graduate");
         graduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
@@ -201,21 +203,38 @@ public class DepartmentPage extends JFrame {
         createAJobLabel.setBounds(591, 6, 140, 20);
         contentPane.add(createAJobLabel);
 
-        JRadioButton undergraduateRadioForCreatingJob = new JRadioButton("Undergraduate");
+
+
+
+
+        undergraduateRadioForCreatingJob = new JRadioButton("Undergraduate");
+        graduateRadioForCreatingJob = new JRadioButton("Graduate");
+
+        //Create a group for the radio
+        ButtonGroup group = new ButtonGroup();
+        group.add(undergraduateRadioForCreatingJob);
+        group.add(graduateRadioForCreatingJob);
+
         undergraduateRadioForCreatingJob.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
             }
         });
         undergraduateRadioForCreatingJob.setBounds(533, 31, 130, 23);
         contentPane.add(undergraduateRadioForCreatingJob);
 
-        JRadioButton graduateRadioForCreatingJob = new JRadioButton("Graduate");
         graduateRadioForCreatingJob.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
             }
         });
         graduateRadioForCreatingJob.setBounds(675, 31, 90, 23);
         contentPane.add(graduateRadioForCreatingJob);
+
+
+
+
+
 
         JSpinner createNewJobSpinner = new JSpinner();
         createNewJobSpinner.setBounds(533, 63, 221, 26);
