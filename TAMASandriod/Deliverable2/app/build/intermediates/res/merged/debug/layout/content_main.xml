@@ -122,7 +122,6 @@
                 android:text="@string/newstudent_button"
                 android:onClick="addStudent"/>
 
-            <!--
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -166,12 +165,7 @@
                     android:onClick="showDatePickerDialog"/>
 
             </LinearLayout>
-            -->
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/newjob_position"
-                android:hint="Enter TA or Grader"/>
+
 
             <Button
                 android:id="@+id/addJob"
@@ -179,7 +173,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:text="Create"
-                android:onClick="addJob"/>
+                android:onClick="addJobPosting"/>
 
         </LinearLayout>
 
