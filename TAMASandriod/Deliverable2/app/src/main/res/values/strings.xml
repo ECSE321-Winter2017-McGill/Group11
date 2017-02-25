@@ -17,4 +17,10 @@
     <string name="newjob_hint">Job Name</string>
     <string name="studentspinner_label">Students</string>
     <string name="newevent1_hint">Course Name</string>
+    <string name="jobposting_dummy">Dummy Job</string>
+    <string name="jobpostingspinner_label">Job Posting</string>
+    <string name="newevent_date_label">02-02-2017</string>
+    <string name="newevent_date_first">Deadline</string>
+    <string name="newjobposting_date_label">Deadline</string>
+    <string name="newjobposting_date_first">02-02-2017</string>
 </resources>
