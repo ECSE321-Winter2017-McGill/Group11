@@ -1,8 +1,9 @@
 package ca.mcgill.ecse321.tamas.view;
 
+
+//GUI classes
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,9 +18,17 @@ import javax.swing.UIManager;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollBar;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JToolBar;
 import javax.swing.JSpinner;
 import javax.swing.ButtonGroup;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerListModel;
+
+//model classes
+import ca.mcgill.ecse321.tamas.model.Course;
+import ca.mcgill.ecse321.tamas.model.Instructor;
 
 public class DepartmentPage extends JFrame {
 
@@ -40,6 +49,7 @@ public class DepartmentPage extends JFrame {
     private final JRadioButton graduateRadioForCreatingJob;
     private final JRadioButton undergraduateRadioForRegister;
     private final JRadioButton graduateRadioForRegister;
+    private JSpinner createNewJobSpinner;
 
     /**
      * Create the frame.
@@ -119,8 +129,6 @@ public class DepartmentPage extends JFrame {
         emailField.setBounds(362, 86, 130, 26);
         contentPane.add(emailField);
         emailField.setColumns(10);
-
-
 
         undergraduateRadioForRegister = new JRadioButton("Undergraduate");
         graduateRadioForRegister = new JRadioButton("Graduate");
@@ -241,7 +249,26 @@ public class DepartmentPage extends JFrame {
 
 
 
-        JSpinner createNewJobSpinner = new JSpinner();
+
+
+        //temporary course object to test the spinner
+        Instructor instructor = new Instructor("Prakash",26057929, "prakash@mail.mcgill.ca");
+        Course courseA = new Course("COMP 302", "Prog Lang and Par", "Winter", 3, 0, 0, 9, 150, 4, 6, 15, 15, 4000, instructor);
+
+        String[] profStrings = {"Prakash", "David", "Mathieu"};
+
+        List<String> profStringsList = new ArrayList<String>();
+
+        profStringsList.add("Prakash");
+        profStringsList.add("David");
+        profStringsList.add("Jerome");
+
+        SpinnerListModel profModel = new SpinnerListModel(profStringsList);
+
+
+        //spinners
+        createNewJobSpinner = new JSpinner(profModel);
+        ((JSpinner.DefaultEditor) createNewJobSpinner.getEditor()).getTextField().setEditable(false);
         createNewJobSpinner.setBounds(533, 63, 221, 26);
         contentPane.add(createNewJobSpinner);
 
@@ -260,7 +287,14 @@ public class DepartmentPage extends JFrame {
         this.setSize(800,400);
     }
 
+    public void setCreateNewJobSpinnerModel(SpinnerModel model) {
+        createNewJobSpinner.setModel(model);
+    }
 
+    private void addCourseToSpinner(Course course) {
+
+        createNewJobSpinner.setValue(100);
+    }
 
     //*****SETTERS AND GETTERS******
 
