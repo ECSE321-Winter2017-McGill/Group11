@@ -29,6 +29,7 @@ import javax.swing.SpinnerListModel;
 //model classes
 import ca.mcgill.ecse321.tamas.model.Course;
 import ca.mcgill.ecse321.tamas.model.Instructor;
+import ca.mcgill.ecse321.tamas.model.PositionType;
 
 public class DepartmentPage extends JFrame {
 
@@ -251,16 +252,13 @@ public class DepartmentPage extends JFrame {
         //TODO modify every spinner. NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
 
         //temporary course object to test the spinner
-        Instructor instructor = new Instructor("Prakash",26057929, "prakash@mail.mcgill.ca");
-        Course courseA = new Course("COMP 302", "Prog Lang and Par", "Winter", 3, 0, 0, 9, 150, 4, 6, 15, 15, 4000, instructor);
-
         String[] profStrings = {"Prakash", "David", "Mathieu"};
 
         List<String> profStringsList = new ArrayList<String>();
 
-        profStringsList.add("Prakash");
-        profStringsList.add("David");
-        profStringsList.add("Jerome");
+        profStringsList.add("TA for COMP302");
+        profStringsList.add("Grader for ECSE321");
+        profStringsList.add("TA for COMP206");
 
         SpinnerListModel profModel = new SpinnerListModel(profStringsList);
 
@@ -275,9 +273,36 @@ public class DepartmentPage extends JFrame {
         jobTitleSpinner.setBounds(112, 35, 100, 26);
         contentPane.add(jobTitleSpinner);
 
-        JButton createNewJobButton = new JButton("Create new job");
+        final JButton createNewJobButton = new JButton("Create new job");
         createNewJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                String positionType;
+
+                if (undergraduateRadioForCreatingJob.isSelected())
+                    positionType = undergraduateRadioForCreatingJob.getText();
+                else if (graduateRadioForCreatingJob.isSelected())
+                    positionType = graduateRadioForCreatingJob.getText();
+                else
+                    positionType = null;
+
+                //TODO: User could not select either of them ! ---> NULL
+
+                String courseNumberAndPosition = (String) createNewJobSpinner.getValue();
+                String[] courseInformation = courseNumberAndPosition.split(" ");
+
+                Instructor instructor = new Instructor("",0, "");
+                Course courseA = new Course(courseInformation[2], "", "",
+                        0, 0, 0, 0,
+                        0, 0, 0, 0, 0,
+                        0, instructor);
+
+//                PositionType posType;
+//
+//                posType.Grader;
+
+
+                //TODO: do some processing with courseNumberAndPosition and call createNewJob from controller
             }
         });
         createNewJobButton.setBounds(533, 96, 221, 29);
@@ -295,6 +320,7 @@ public class DepartmentPage extends JFrame {
         createNewJobSpinner.setModel(model);
     }
 
+    //TODO: either remove and use spinner model or use this method to set the spinner directly
     private void addCourseToSpinner(Course course) {
 
         createNewJobSpinner.setValue(100);
