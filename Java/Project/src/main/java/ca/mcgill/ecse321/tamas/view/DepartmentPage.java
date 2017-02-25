@@ -34,8 +34,12 @@ public class DepartmentPage extends JFrame {
     private JTextField studentIDField;
     private JTextField courseNumberField;
     private JTextField studentNameForApplyingField;
+
+    //My own private fields
     private final JRadioButton undergraduateRadioForCreatingJob;
     private final JRadioButton graduateRadioForCreatingJob;
+    private final JRadioButton undergraduateRadioForRegister;
+    private final JRadioButton graduateRadioForRegister;
 
     /**
      * Create the frame.
@@ -116,7 +120,15 @@ public class DepartmentPage extends JFrame {
         contentPane.add(emailField);
         emailField.setColumns(10);
 
-        final JRadioButton undergraduateRadioForRegister = new JRadioButton("Undergraduate");
+
+
+        undergraduateRadioForRegister = new JRadioButton("Undergraduate");
+        graduateRadioForRegister = new JRadioButton("Graduate");
+
+        ButtonGroup group1 = new ButtonGroup();
+        group1.add(undergraduateRadioForRegister);
+        group1.add(graduateRadioForRegister);
+
         undergraduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
@@ -124,7 +136,6 @@ public class DepartmentPage extends JFrame {
         undergraduateRadioForRegister.setBounds(255, 175, 124, 23);
         contentPane.add(undergraduateRadioForRegister);
 
-        final JRadioButton graduateRadioForRegister = new JRadioButton("Graduate");
         graduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
@@ -204,13 +215,10 @@ public class DepartmentPage extends JFrame {
         contentPane.add(createAJobLabel);
 
 
-
-
-
         undergraduateRadioForCreatingJob = new JRadioButton("Undergraduate");
         graduateRadioForCreatingJob = new JRadioButton("Graduate");
 
-        //Create a group for the radio
+        //Created a group for the radio
         ButtonGroup group = new ButtonGroup();
         group.add(undergraduateRadioForCreatingJob);
         group.add(graduateRadioForCreatingJob);
@@ -230,9 +238,6 @@ public class DepartmentPage extends JFrame {
         });
         graduateRadioForCreatingJob.setBounds(675, 31, 90, 23);
         contentPane.add(graduateRadioForCreatingJob);
-
-
-
 
 
 
