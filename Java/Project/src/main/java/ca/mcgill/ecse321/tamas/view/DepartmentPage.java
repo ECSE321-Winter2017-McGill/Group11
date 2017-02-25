@@ -248,8 +248,7 @@ public class DepartmentPage extends JFrame {
         contentPane.add(graduateRadioForCreatingJob);
 
 
-
-
+        //TODO modify every spinner. NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
 
         //temporary course object to test the spinner
         Instructor instructor = new Instructor("Prakash",26057929, "prakash@mail.mcgill.ca");
@@ -277,6 +276,10 @@ public class DepartmentPage extends JFrame {
         contentPane.add(jobTitleSpinner);
 
         JButton createNewJobButton = new JButton("Create new job");
+        createNewJobButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
         createNewJobButton.setBounds(533, 96, 221, 29);
         contentPane.add(createNewJobButton);
 
@@ -287,6 +290,7 @@ public class DepartmentPage extends JFrame {
         this.setSize(800,400);
     }
 
+    //useful for updating the createNewJobSpinner using the spinner model
     public void setCreateNewJobSpinnerModel(SpinnerModel model) {
         createNewJobSpinner.setModel(model);
     }
