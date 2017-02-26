@@ -30,7 +30,11 @@ import javax.swing.SpinnerListModel;
 import ca.mcgill.ecse321.tamas.model.Course;
 import ca.mcgill.ecse321.tamas.model.Instructor;
 import ca.mcgill.ecse321.tamas.model.PositionType;
+import ca.mcgill.ecse321.tamas.model.Department;
 import com.sun.org.apache.xpath.internal.operations.Bool;
+
+//Controller class
+import ca.mcgill.ecse321.tamas.controller.DepartmentController;
 
 public class DepartmentPage extends JFrame {
 
@@ -58,6 +62,11 @@ public class DepartmentPage extends JFrame {
      * Create the frame.
      */
     public DepartmentPage() {
+
+        //TODO create a department in order to get a department controller
+        Department department = new Department();
+        final DepartmentController controller = new DepartmentController(department);
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
@@ -203,18 +212,21 @@ public class DepartmentPage extends JFrame {
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String studentID,studentName,studentEmail,studentJobPreference;
-                int studentYear;
+                String studentName,studentEmail,studentJobPreference;
+                int studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
-                studentID = studentIDField.getText();
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
+                studentID = Integer.valueOf(studentIDField.getText());
                 studentYear = Integer.valueOf(studentYearField.getText()); //TODO TRY-CATCH
+                numberOfHours = Integer.valueOf(studentHoursField.getText()); //TODO TRY-CATCH
                 studentJobPreference = jobPreferenceField.getText();
 
-                if (graduateRadioForRegister.isSelected())
+                if (graduateRadioForRegister.isSelected()) //TODO user could have not selected any (right now default is undergraduate student)
                     isGrad = true;
+
+                controller.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
 
 
             }
