@@ -59,6 +59,13 @@ public class DepartmentPage extends JFrame {
     /**
      * Create the frame.
      */
+
+    //TODO: READ ME
+    /* in DepartmentPage() below, you will find the construction of the Swing UI as well as
+     * the event handlers. Event handlers are used when a button is click so this where most of
+     * the interesting code lives. There are 4 major event handlers, one for each button. Note that
+     *  the event handler for "Creating a job" is not complete at all, I will write it for deliverable 3*/
+
     public DepartmentPage() {
 
         //create a department in order to get a department controller
@@ -122,23 +129,28 @@ public class DepartmentPage extends JFrame {
                 int jobID;
                 Job associatedJob = null;
 
+                //if one of the fields is empty, display an error and reset the display
                 if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("")) {
                     publishJobPostingErrorLabel.setText("Please fill all the fields.");
                     updateDisplay();
                     return;
                 }
 
+                //the fields are non-empty, so proceed to storing there value
                 skillsRequired = skillsRequiredField.getText();
                 experienceRequired = experienceRequiredField.getText();
                 jobDescription = jobDescriptionField.getText();
 
+                //this get the value displayed by the spinner
                 jobID = (int) publishJobSpinner.getValue();
 
+                //find a corresponding job using jobID
                 for (Job job: department.getAllJobs()) {
                     if (job.getJobID() == jobID)
                         associatedJob = job;
                 }
 
+                //if the job was found, add the new attributes. Otherwise, display an error.
                 if (associatedJob != null) {
                     associatedJob.setSkillsRequired(skillsRequired);
                     associatedJob.setExperienceRequired(experienceRequired);
@@ -252,15 +264,18 @@ public class DepartmentPage extends JFrame {
                 int studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
+                //if one of the field is empty, display an error and update the display
                 if (studentNameField.getText().equals("") || emailField.getText().equals("") || jobPreferenceField.getText().equals("")) {
                     registerAStudentErrorLabel.setText("Please fill all the required forms.");
                     updateDisplay();
                     return;
                 }
+                //proceed with storing the field values since they are all non-empty
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
                 studentJobPreference = jobPreferenceField.getText();
 
+                //convert the student ID (if possible) as well as student year and number of hours
                 try {
                     studentID = Integer.valueOf(studentIDField.getText());
                 } catch (NumberFormatException exception) {
@@ -288,6 +303,7 @@ public class DepartmentPage extends JFrame {
                 if (graduateRadioForRegister.isSelected()) //TODO user could have not selected any option (right now default is undergraduate student)
                     isGrad = true;
 
+                //register the student
                 controller.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
 
             }
@@ -330,6 +346,7 @@ public class DepartmentPage extends JFrame {
                 Student student;
                 Job associatedJob = null;
 
+                //convert the student ID if possible.
                 try {
                     studentID = Integer.valueOf(studentIDForApplyingField.getText());
                 } catch (NumberFormatException exception) {
@@ -338,17 +355,20 @@ public class DepartmentPage extends JFrame {
                     return;
                 }
 
+                //find the associated student
                 student = Student.getWithStudentID(studentID); //TODO: the student might not exist
 
-                jobID = (int) applyForJobSpinner.getValue();
+                //store the job ID from the spinner
+                jobID = (int) applyForJobSpinner.getValue(); //TODO: A more user-friendly way would be to use a job name
 
+                //search through all the jobs of the department to find the corresponding job object
                 for (Job job: department.getAllJobs()) {
                     if (job.getJobID() == jobID)
                         associatedJob = job;
                 }
 
+                //if the job was found (which should be the case, since the choices come from a spinner)
                 if (associatedJob != null) {
-
                     associatedJob.setState(JobStatus.AppliedTo); //post the job
                     applyForAJobErrorLabel.setText(""); //it worked so remove the error
 
@@ -393,22 +413,21 @@ public class DepartmentPage extends JFrame {
         contentPane.add(graderRadio);
 
 
-        //TODO NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
-
-        /***** These courses are temporary, we use them to test the rest of the functionalities*****/
-        String[] profStrings = {"Prakash", "Daniel", "David"};
-
-        List<String> profStringsList = new ArrayList<String>();
-
-        profStringsList.add("COMP302 Programming languages and paradigms");
-        profStringsList.add("ECSE321 Introduction to software engineering");
-        profStringsList.add("COMP206 Introduction to software systems");
-
-        SpinnerListModel profModel = new SpinnerListModel(profStringsList);
+        //TODO: This commented code is for later, it's how to add elements to a spinner
+//        String[] profStrings = {"Prakash", "Daniel", "David"};
+//
+//        List<String> profStringsList = new ArrayList<String>();
+//
+//        profStringsList.add("COMP302");
+//        profStringsList.add("ECSE321");
+//        profStringsList.add("COMP206");
+//
+//        SpinnerListModel profModel = new SpinnerListModel(profStringsList);
+//        createNewJobSpinner = new JSpinner(profModel);
 
 
         //spinners
-        createNewJobSpinner = new JSpinner(profModel);
+        createNewJobSpinner = new JSpinner();
         ((JSpinner.DefaultEditor) createNewJobSpinner.getEditor()).getTextField().setEditable(false);
         createNewJobSpinner.setBounds(533, 63, 221, 26);
         contentPane.add(createNewJobSpinner);
@@ -423,12 +442,6 @@ public class DepartmentPage extends JFrame {
                     positionType = PositionType.Grader;
 
                 String courseNumber = (String) createNewJobSpinner.getValue();
-
-                Instructor instructor = new Instructor("",0, "");
-                Course courseA = new Course(courseNumber, "", "",
-                        0, 0, 0, 0,
-                        0, 0, 0, 0, 0,
-                        0, instructor);
 
             }
         });
