@@ -328,7 +328,7 @@ public class DepartmentPage extends JFrame {
 
                 int studentID, jobID;
                 Student student;
-                Job job;
+                Job associatedJob = null;
 
                 try {
                     studentID = Integer.valueOf(studentIDForApplyingField.getText());
@@ -337,12 +337,25 @@ public class DepartmentPage extends JFrame {
                     updateDisplay();
                     return;
                 }
-                
-                student = Student.getWithStudentID(studentID);
 
-                jobID = Integer.valueOf((String) applyForJobSpinner.getValue());
-                //TODO: we need a Job.getJobByID(int id)
-                //TODO: set status to applied ?
+                student = Student.getWithStudentID(studentID); //TODO: the student might not exist
+
+                jobID = (int) applyForJobSpinner.getValue();
+
+                for (Job job: department.getAllJobs()) {
+                    if (job.getJobID() == jobID)
+                        associatedJob = job;
+                }
+
+                if (associatedJob != null) {
+
+                    associatedJob.setState(JobStatus.AppliedTo); //post the job
+                    applyForAJobErrorLabel.setText(""); //it worked so remove the error
+
+                } else
+                    applyForAJobErrorLabel.setText("An error occurred, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+
+                updateDisplay();
 
             }
         });
