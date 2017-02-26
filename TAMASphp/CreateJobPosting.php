@@ -1,148 +1,43 @@
-<<<<<<< HEAD
+<?php
+require_once 'controller/InstructorController.php';
+
+session_start();
+
+$c = new InstructorController();
+try{
+	$_SESSION['errorJobID'] = "";
+	$_SESSION['errorJobDesc'] = "";
+	$_SESSION['errorSkillsReq'] = "";
+	$_SESSION['errorExpReq'] = "";
+	$_SESSION['errorOfferDate'] = "";
+	$c->createJobPosting($_POST['aJobID'], $_POST['jobDescription'], $_POST['skillsRequired'], $_POST['experienceRequired'], $_POST['offerDeadlineDate']);
+} catch (Exception $e){
+	$e = $e->getMessage();
+	$e_array = explode('@', $e);
+	foreach($e_array as $entry){
+		if(!empty($entry) && $entry[0] == "1"){
+			$_SESSION['errorJobID'] = substr($entry, 1);
+		}
+		else if(!empty($entry) && $entry[0] == "2"){
+			$_SESSION['errorJobDesc'] = substr($entry, 1);
+		}
+		else if(!empty($entry) && $entry[0] == "3"){
+			$_SESSION['errorSkillsReq'] = substr($entry, 1);
+		}
+		else if(!empty($entry) && $entry[0] == "4"){
+			$_SESSION['errorExpReq'] = substr($entry, 1);
+		}
+		else if(!empty($entry) && $entry[0] == "5"){
+			$_SESSION['errorOfferDate'] = substr($entry, 1);
+		}
+	}
+}
+
+?>
+
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Create Job Posting</title>
-
-    <meta name="description" content="Source code generated using layoutit.com">
-    <meta name="author" content="LayoutIt!">
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-
+<html>
+	<head>
+		<meta http-equiv="refresh" content="0; url=/TAMASphp/CreateJobPostingPage.php" />
 	</head>
-	<body>
-
-	
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<ul class="nav nav-tabs">
-					<li>
-						<a href="InstructorHomePage.php">Home</a>
-					</li>
-					<li class="disabled">
-						<a href="#">Profile</a>
-					</li>
-					<li class="disabled">
-						<a href="#">Course List</a>
-					</li>
-					<li class="dropdown pull">
-						 <a href="#" data-toggle="dropdown" class="dropdown-toggle">TA and Grader Related<strong class="caret"></strong></a>
-						<ul class="dropdown-menu">
-							<li class="active">
-								<a href="#">Create Job Posting</a>
-							</li>
-							<li class="disabled">
-								<a href="#">Job Posting List</a>
-							</li>
-							<li class="disabled">
-								<a href="#">Modify Allocation</a>
-							</li>
-							<li class="divider">
-							</li>
-							<li class="disabled">
-								<a href="#">Write Review</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="page-header">
-					<h1>
-						TAMAS <small>Instructor Home Page</small>
-					</h1>
-				</div>
-				<p>
-					Create Job Posting
-				</p>
-			</div>
-		</div>
-	</div>
-
-	<script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
-  </body>
-=======
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Create Job Posting</title>
-
-    <meta name="description" content="Source code generated using layoutit.com">
-    <meta name="author" content="LayoutIt!">
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/style.css" rel="stylesheet">
-
-	</head>
-	<body>
-
-	
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<ul class="nav nav-tabs">
-					<li>
-						<a href="InstructorHomePage.php">Home</a>
-					</li>
-					<li class="disabled">
-						<a href="#">Profile</a>
-					</li>
-					<li class="disabled">
-						<a href="#">Course List</a>
-					</li>
-					<li class="dropdown pull">
-						 <a href="#" data-toggle="dropdown" class="dropdown-toggle">TA and Grader Related<strong class="caret"></strong></a>
-						<ul class="dropdown-menu">
-							<li class="active">
-								<a href="#">Create Job Posting</a>
-							</li>
-							<li class="disabled">
-								<a href="#">Job Posting List</a>
-							</li>
-							<li class="disabled">
-								<a href="#">Modify Allocation</a>
-							</li>
-							<li class="divider">
-							</li>
-							<li class="disabled">
-								<a href="#">Write Review</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-12">
-				<div class="page-header">
-					<h1>
-						TAMAS <small>Instructor Home Page</small>
-					</h1>
-				</div>
-				<p>
-					Create Job Posting
-				</p>
-			</div>
-		</div>
-	</div>
-
-	<script src="js/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/scripts.js"></script>
-  </body>
->>>>>>> origin/master
 </html>

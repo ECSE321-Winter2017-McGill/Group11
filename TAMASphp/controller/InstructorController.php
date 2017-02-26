@@ -1,6 +1,6 @@
 <?php
-//require_once __DIR__.'\..\controller\InputValidator.php';
-//require_once __DIR__.'\..\persistence\PersistenceEventRegistration.php';
+require_once __DIR__.'\..\controller\InvalidInputException.php';
+require_once __DIR__.'\..\persistence\PersistenceTAMAS.php';
 require_once __DIR__.'\..\model\Course.php';
 require_once __DIR__.'\..\model\Department.php';
 require_once __DIR__.'\..\model\Instructor.php';
@@ -11,7 +11,6 @@ require_once __DIR__.'\..\model\Student.php';
 class InstructorController
 {
 	public function __construct(){
-
 	}
 
 	public function createInstructor($instructorName, $instructorID, $instructorEmail) {
@@ -31,25 +30,23 @@ class InstructorController
 		if ($instructorEmail == null || strlen ( $instructorEmail ) == 0) {
 			$error .= "@3Instructor name cannot be empty!";
 		}
-		if (strlen($error) != 0){
+		if (strlen($error) > 0){
 			throw new Exception ( trim($error) );
 		}
-
-		//if inputs are valid
-			
-		//2. load data from persistence
-		$persis= new PersistenceTamas();
-		$dpt = $persis -> loadDataFromStore();
-			
-		//3. add instructor
-		$instructor = new Instructor($instructorName, $instructorID, $instructorEmail);
-		$dpt->addAllInstructor($instructor);
-			
-		//4. store data
-		$persis->writeDataToStore($dpt);
-
-
-
+		else{
+			//if inputs are valid
+				
+			//2. load data from persistence
+			$persis= new PersistenceTamas();
+			$dpt = $persis -> loadDataFromStore();
+				
+			//3. add instructor
+			$instructor = new Instructor($instructorName, $instructorID, $instructorEmail);
+			$dpt->addAllInstructor($instructor);
+				
+			//4. store data
+			$persis->writeDataToStore($dpt);
+		}
 	}
 
 	public function createJobPosting($aJobID, $jobDescription, $skillsRequired, $experienceRequired, $offerDeadlineDate) {
@@ -60,7 +57,7 @@ class InstructorController
 		//2. find job
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
-			if(strcmp($job->getJobID, $aJobID) == 0){
+			if(strcmp($job->getJobID(), $aJobID) == 0){
 				$myJob = $job;
 			}
 		}
@@ -69,7 +66,6 @@ class InstructorController
 		$dpt->removeAllCourse($myJob);
 		//deletes the job saved in dpt equal to myJob
 
-
 		$error = "";
 		//3. validate inputs
 
@@ -77,47 +73,53 @@ class InstructorController
 		$skillsReq = InvalidInputException::validate_input($skillsRequired);
 		$expReq = InvalidInputException::validate_input($experienceRequired);
 		$offerDate = InvalidInputException::validate_input($offerDeadlineDate);
-
+		
+		$bool_myJob = $myJob == null;
+		$bool_aJobID = $aJobID == null;
+		$bool_myJobDesc = $jobDesc == null || strlen ( $jobDesc ) == 0;
+		$bool_mySkillsReq = $skillsReq == null || strlen ( $skillsReq ) == 0;
+		$bool_myExpReq = $expReq == null || strlen ( $expReq ) == 0;
+		$bool_myOfferDate = $offerDate == null || strlen ( $offerDate ) == 0 || !strtotime($offerDate);
+		
 		//if there are issues...
-		if ($myjob == null ) {
+		if ($bool_myJob) {
 			$error .= "@1Job ";
-			if($aJob != NULL){
-				$error .= $aJob;
+			if(!$bool_aJobID){
+				$error .= $aJobID;
 			}
 			$error .= " not found! ";
 		}
-		if ($jobDesc == null || strlen ( $jobDesc ) == 0) {
-			$error .= "@2Job description field cannot be empty!";
+		if ($bool_myJobDesc) {
+			$error .= "@2Job description field cannot be empty! ";
 		}
-		if ($skillsReq == null || strlen ( $skillsReq ) == 0) {
-			$error .= "@2Skills required field cannot be empty!";
+		if ($bool_mySkillsReq) {
+			$error .= "@3Skills required field cannot be empty! ";
 		}
-		if ($expReq == null || strlen ( $expReq) == 0) {
-			$error .= "@3Experience required field cannot be empty!";
+		if ($bool_myExpReq) {
+			$error .= "@4Experience required field cannot be empty! ";
 		}
-		if ($oferDate == null || strlen ( $offerDate ) == 0 || !strtotime($offerDate)) {
-			$error .= "@4Posting deadline date must be specified correctly (YYYY-MM-DD)! ";
+		if ($bool_myOfferDate) {
+			$error .= "@5Posting deadline date must be specified correctly (YYYY-MM-DD)! ";
 		}
-		if (strlen($error) != 0){
-			throw new Exception ( trim($error) );
+		if (strlen($error) > 0){
+			throw new Exception (trim($error));
 		}
-
-		//4. Convert date
-		$dateConv = date('Y-m-d', strtotime($offerDate));
-
-		//5. addding parameters to Job
-
-		//$myJob = new Job($job, $dateConv);
-		$myJob->setJobDescription($jobDesc);
-		$myJob->setSkillsRequired($skillsReq);
-		$myJob->setExperienceRequired($expReq);
-		$myJob->setOfferDeadlineDate($offerDate);
-
-		$myJob->setState(JobStatusEnum::Posted);
-		$dpt->addAllJob($myJob);
-		$persis->writeDataToStore($dpt);
-
-
+		else{
+			//4. Convert date
+			$dateConv = date('Y-m-d', strtotime($offerDate));
+	
+			//5. addding parameters to Job
+	
+			//$myJob = new Job($job, $dateConv);
+			$myJob->setJobDescription($jobDesc);
+			$myJob->setSkillsRequired($skillsReq);
+			$myJob->setExperienceRequired($expReq);
+			$myJob->setOfferDeadlineDate($dateConv);
+	
+			$myJob->setState(JobStatusEnum::Posted);
+			$dpt->addAllJob($myJob);
+			$persis->writeDataToStore($dpt);
+		}
 	}
 
 	public function modifyAllocaion($job, $student){
