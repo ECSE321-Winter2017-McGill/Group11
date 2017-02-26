@@ -12,8 +12,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -49,15 +52,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
         refreshData();
@@ -92,8 +86,6 @@ public class MainActivity extends AppCompatActivity {
         tvId.setText("");
         TextView tvEmail = (TextView) findViewById(R.id.newstudent_email);
         tvEmail.setText("");
-        TextView tvGrad = (TextView) findViewById(R.id.newstudent_grad);
-        tvGrad.setText("");
         TextView tvYear = (TextView) findViewById(R.id.newstudent_year);
         tvYear.setText("");
         TextView tvPreference = (TextView) findViewById(R.id.newstudent_preference);
@@ -106,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> participantAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
         participantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        for (Student s: d.getAllStudents() ) {
+        for (Student s : d.getAllStudents()) {
             participantAdapter.add(s.getName());
         }
         spinner.setAdapter(participantAdapter);
@@ -120,13 +112,16 @@ public class MainActivity extends AppCompatActivity {
         jobPostingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
 
-        for (Job i: d.getAllJobs() ) {
-           // jobPostingAdapter.add(i.getPosType());
+        for (Job i : d.getAllJobs()) {
+            // jobPostingAdapter.add(i.getPosType());
             String posting = i.getPosType().toString() + i.getCorrespondingCourse().getName();
             jobPostingAdapter.add(posting);
         }
         spinner2.setAdapter(jobPostingAdapter);
 
+        //Set error in error TextView
+        TextView errorText = (TextView) findViewById(R.id.errorlabel);
+        errorText.setText(error);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -137,42 +132,44 @@ public class MainActivity extends AppCompatActivity {
         //Id number
         TextView tvId = (TextView) findViewById(R.id.newstudent_id);
         String ID = tvId.getText().toString();
-        int studentID = Integer.parseInt(ID);
+
         //email
         TextView tvEmail = (TextView) findViewById(R.id.newstudent_email);
         //isGrad?
-        TextView tvGrad = (TextView) findViewById(R.id.newstudent_grad);
-        String grad = tvGrad.getText().toString();
+        CheckBox gradCheckBox = (CheckBox) findViewById(R.id.isGrad_checkBox);
         boolean isGrad = false;
-        if(Objects.equals(grad, "Yes")){
-            isGrad = true;
-        }
+        isGrad = gradCheckBox.isChecked();
+
         //year
         TextView tvYear = (TextView) findViewById(R.id.newstudent_year);
         String year = tvYear.getText().toString();
-        int studentYear = Integer.parseInt(year);
+
         //Job preference
         TextView tvPreference = (TextView) findViewById(R.id.newstudent_preference);
         //Number of Hours
         TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
         String hours = tvHours.getText().toString();
-        int studentHours = Integer.parseInt(hours);
 
         StudentController pc = new StudentController(d);
+        try {
+            pc.createStudent(ID, tvName.getText().toString(), tvEmail.getText().toString(), isGrad, year, tvPreference.getText().toString(), hours);
+            error = "";
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
 
-        pc.createStudent(studentID, tvName.getText().toString(), tvEmail.getText().toString(), isGrad, studentYear, tvPreference.getText().toString(), studentHours);
         refreshData();
     }
 
-    public void addJobPosting(View v) throws InvalidInputException {
+    public void addJobPosting(View v) {
         //variables to create job posting
         //the job (dummy job)
         Instructor dummyInstructor = new Instructor("Henry Smith", 123456789, "henry.smith@mail.uni.ca");
-        Course dummyCourse = new Course("EECC 111", "Introduction", "W2017", 15, 0, 3, 120, 200, 5, 4, 20, 15, 500, dummyInstructor );
+        Course dummyCourse = new Course("EECC 111", "Introduction", "W2017", 15, 0, 3, 120, 200, 5, 4, 20, 15, 500, dummyInstructor);
         Calendar c = Calendar.getInstance();
         c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
         java.sql.Date dummyPostDeadLine = new java.sql.Date(c.getTimeInMillis());
-        Job dummyJob = new Job(PositionType.TA, dummyPostDeadLine,dummyCourse);
+        Job dummyJob = new Job(PositionType.TA, dummyPostDeadLine, dummyCourse);
         //Description
         TextView tvDescription = (TextView) findViewById(R.id.newjobposting_description);
         //Required Skills
@@ -193,53 +190,53 @@ public class MainActivity extends AppCompatActivity {
         InstructorController pc = new InstructorController(d);
 
         d.addAllJob(dummyJob);
-        pc.createJobPosting(dummyJob, tvDescription.getText().toString(), tvSkills.getText().toString(), tvExperience.getText().toString(), sqlDeadline);
+        try {
+            pc.createJobPosting(dummyJob, tvDescription.getText().toString(), tvSkills.getText().toString(), tvExperience.getText().toString(), sqlDeadline);
+            error = "";
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
 
         refreshData();
     }
 
-    public void applyToJob(View v){
+    public void applyToJob(View v) {
         Button applyToJobButton = (Button) findViewById(R.id.register);
         final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
         final Spinner postingSpinner = (Spinner) findViewById(R.id.jobpostingspinner);
-        applyToJobButton.setOnClickListener(new View.OnClickListener() {
+        StudentController s = new StudentController(d);
 
-            @Override
-            public void onClick(View v) {
-                if(studentSpinner.getSelectedItem() != null && postingSpinner.getSelectedItem() != null){
-                    StudentController s = new StudentController(d);
+        String studentName = studentSpinner.getSelectedItem().toString();
 
-                    String studentName = studentSpinner.getSelectedItem().toString();
-
-                    Student applicant = null;
-                    for(Student a : d.getAllStudents()){
-                        if(a.getName() == studentName){
-                            applicant = a;
-                            break;
-                        }
-                    }
-
-                    String jobName = postingSpinner.getSelectedItem().toString();
-                    Job jobposting = null;
-                    for(Job j : d.getAllJobs()){
-                        String postingName = j.getPosType().toString() + j.getCorrespondingCourse().getName();
-                        if(postingName.contentEquals(jobName)){
-                            jobposting = j;
-                            break;
-                        }
-                    }
-
-                    try {
-                        s.applyToJobPosting(jobposting, applicant);
-                    } catch (InvalidInputException e) {
-                        e.printStackTrace();
-                    }
-
-                }
+        Student applicant = null;
+        for (Student a : d.getAllStudents()) {
+            if (a.getName() == studentName) {
+                applicant = a;
+                break;
             }
-        });
+        }
 
+        String jobName = postingSpinner.getSelectedItem().toString();
+        Job jobposting = null;
+        for (Job j : d.getAllJobs()) {
+            String postingName = j.getPosType().toString() + j.getCorrespondingCourse().getName();
+            if (postingName.contentEquals(jobName)) {
+                jobposting = j;
+                break;
+            }
+        }
+
+        try {
+            s.applyToJobPosting(jobposting, applicant);
+            error = "";
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+
+
+        refreshData();
     }
+
     public void showDatePickerDialog(View v) {
         TextView tf = (TextView) v;
         Bundle args = getDateFromLabel(tf.getText());
@@ -264,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         rtn.putInt("day", day);
-        rtn.putInt("month", month-1);
+        rtn.putInt("month", month - 1);
         rtn.putInt("year", year);
 
         return rtn;
