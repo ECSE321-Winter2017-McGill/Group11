@@ -11,12 +11,12 @@ import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
  */
 public class StudentController {
 
-	private final String createStudentNotIntegerStudentIDError = "Input a numeric student ID!";
-	private final String createStudentNotIntegerYearError = "Input a valid numeric year!";
-	private final String createStudentNotIntegerNumberOfHoursError = "Input a valid numeric number of hours!";
-	private final String createStudentNullNameError = "Student name cannot be empty!";
-	private final String createStudentNullEmailError = "Student email cannot be empty!";
-	private final String createStudentNullJobPreferenceError = "Job Preference cannot be empty!";
+	private final String createStudentNotIntegerStudentIDError = " Input a numeric student ID!";
+	private final String createStudentNotIntegerYearError = " Input a valid numeric year!";
+	private final String createStudentNotIntegerNumberOfHoursError = " Input a valid numeric number of hours!";
+	private final String createStudentNullNameError = " Student name cannot be empty!";
+	private final String createStudentNullEmailError = " Student email cannot be empty!";
+	private final String createStudentNullJobPreferenceError = " Job Preference cannot be empty!";
 
 
 	private Department department;
@@ -65,7 +65,7 @@ public class StudentController {
 		}
 
 
-		if(isIntegerStudentID){
+		if(!isIntegerStudentID){
 			error += createStudentNotIntegerStudentIDError;
 		}
 		if(name == null ||  name.trim().length() == 0){
@@ -74,13 +74,13 @@ public class StudentController {
 		if(email == null || email.trim().length() == 0){
 			error += createStudentNullEmailError;
 		}
-		if(isIntegerYear){
+		if(!isIntegerYear){
 			error += createStudentNotIntegerYearError;
 		}
 		if(jobPreference == null || jobPreference.trim().length() == 0){
 			error += createStudentNullJobPreferenceError;
 		}
-		if(isIntegerNumberOfHours){
+		if(!isIntegerNumberOfHours){
 			error += createStudentNotIntegerNumberOfHoursError;
 		}
 

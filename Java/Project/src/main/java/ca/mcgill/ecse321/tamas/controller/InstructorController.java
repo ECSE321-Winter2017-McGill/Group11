@@ -12,11 +12,11 @@ import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 public class InstructorController {
 
-	private final String createJobPostingNullJobErrorMessage = "Must select Job!";
-	private final String createJobPostingNullJobDescriptionErrorMessage = "Job description cannot be empty!";
-	private final String createJobPostingNullSkillsRequiredErrorMessage = "Skills required cannot be empty!";
-	private final String createJobPostingNullExperienceRequiredErrorMessage = "Experience required cannot be empty!";
-	private final String createJobPostingNullPostDeadlineErrorMessage = "Job post deadline date cannot be empty!";
+	private final String createJobPostingNullJobErrorMessage = " Must select Job!";
+	private final String createJobPostingNullJobDescriptionErrorMessage = " Job description cannot be empty!";
+	private final String createJobPostingNullSkillsRequiredErrorMessage = " Skills required cannot be empty!";
+	private final String createJobPostingNullExperienceRequiredErrorMessage = " Experience required cannot be empty!";
+	private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
 	//private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!";
 
 
