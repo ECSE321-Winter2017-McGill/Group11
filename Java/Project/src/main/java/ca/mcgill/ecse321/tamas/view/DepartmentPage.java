@@ -46,8 +46,8 @@ public class DepartmentPage extends JFrame {
     private JTextField studentNameForApplyingField;
 
     //My own private fields
-    private final JRadioButton undergraduateRadioForCreatingJob;
-    private final JRadioButton graduateRadioForCreatingJob;
+    private final JRadioButton TARadio;
+    private final JRadioButton graderRadio;
     private final JRadioButton undergraduateRadioForRegister;
     private final JRadioButton graduateRadioForRegister;
     private JSpinner createNewJobSpinner;
@@ -224,29 +224,29 @@ public class DepartmentPage extends JFrame {
         contentPane.add(createAJobLabel);
 
 
-        undergraduateRadioForCreatingJob = new JRadioButton("Undergraduate");
-        graduateRadioForCreatingJob = new JRadioButton("Graduate");
+        TARadio = new JRadioButton("TA");
+        graderRadio = new JRadioButton("Grader");
 
         //Created a group for the radio
         ButtonGroup group = new ButtonGroup();
-        group.add(undergraduateRadioForCreatingJob);
-        group.add(graduateRadioForCreatingJob);
+        group.add(TARadio);
+        group.add(graderRadio);
 
-        undergraduateRadioForCreatingJob.addActionListener(new ActionListener() {
+        TARadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
         });
-        undergraduateRadioForCreatingJob.setBounds(533, 31, 130, 23);
-        contentPane.add(undergraduateRadioForCreatingJob);
+        TARadio.setBounds(533, 31, 130, 23);
+        contentPane.add(TARadio);
 
-        graduateRadioForCreatingJob.addActionListener(new ActionListener() {
+        graderRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
         });
-        graduateRadioForCreatingJob.setBounds(675, 31, 90, 23);
-        contentPane.add(graduateRadioForCreatingJob);
+        graderRadio.setBounds(675, 31, 90, 23);
+        contentPane.add(graderRadio);
 
 
         //TODO modify every spinner. NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
@@ -279,10 +279,10 @@ public class DepartmentPage extends JFrame {
 
                 String positionType;
 
-                if (undergraduateRadioForCreatingJob.isSelected())
-                    positionType = undergraduateRadioForCreatingJob.getText();
-                else if (graduateRadioForCreatingJob.isSelected())
-                    positionType = graduateRadioForCreatingJob.getText();
+                if (TARadio.isSelected())
+                    positionType = TARadio.getText();
+                else if (graderRadio.isSelected())
+                    positionType = graderRadio.getText();
                 else
                     positionType = null;
 
@@ -297,10 +297,7 @@ public class DepartmentPage extends JFrame {
                         0, 0, 0, 0, 0,
                         0, instructor);
 
-//                PositionType posType;
-//
-//                posType.Grader;
-
+                //TODO: TA/GRADER selection using PositionType Enum
 
                 //TODO: do some processing with courseNumberAndPosition and call createNewJob from controller
             }
