@@ -189,6 +189,10 @@ public class DepartmentPage extends JFrame {
         courseNumberField.setColumns(10);
 
         JButton registerStudentButton = new JButton("Register student");
+        registerStudentButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
         registerStudentButton.setBounds(260, 210, 232, 29);
         contentPane.add(registerStudentButton);
 
