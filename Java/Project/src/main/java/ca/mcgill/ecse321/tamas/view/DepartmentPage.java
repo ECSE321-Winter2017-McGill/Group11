@@ -60,8 +60,8 @@ public class DepartmentPage extends JFrame {
      */
     public DepartmentPage() {
 
-        //TODO create a department in order to get a department controller
-        Department department = new Department();
+        //create a department in order to get a department controller
+        final Department department = new Department();
         final DepartmentController controller = new DepartmentController(department);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,24 +103,51 @@ public class DepartmentPage extends JFrame {
         contentPane.add(jobDescriptionField);
         jobDescriptionField.setColumns(10);
 
+        final JLabel publishJobPostingErrorLabel = new JLabel("");
+        publishJobPostingErrorLabel.setForeground(Color.RED);
+        publishJobPostingErrorLabel.setBounds(10, 215, 202, 16);
+        contentPane.add(publishJobPostingErrorLabel);
+
+        //declare this spinner final since accessed from a inner class
+        final JSpinner publishJobSpinner = new JSpinner();
+        publishJobSpinner.setBounds(112, 35, 100, 26);
+        contentPane.add(publishJobSpinner);
+
         JButton publishJobPostingButton = new JButton("Publish job posting");
         publishJobPostingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
                 String skillsRequired, experienceRequired, jobDescription;
-                int courseNumber;
+                int jobID;
+                Job associatedJob = null;
+
+                if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("")) {
+                    publishJobPostingErrorLabel.setText("Please fill all the fields.");
+                    updateDisplay();
+                    return;
+                }
 
                 skillsRequired = skillsRequiredField.getText();
                 experienceRequired = experienceRequiredField.getText();
                 jobDescription = jobDescriptionField.getText();
 
-                //TODO: get courseByCode ?
+                jobID = (int) publishJobSpinner.getValue();
 
-                //TODO: Again (like for Apply for job), we need a getJobByID in order to add skillsRequired, exp, etc.
+                for (Job job: department.getAllJobs()) {
+                    if (job.getJobID() == jobID)
+                        associatedJob = job;
+                }
 
-                //TODO: 1.get the job 2. Mutate it 3. Get the course 4. Allocation ?
+                if (associatedJob != null) {
+                    associatedJob.setSkillsRequired(skillsRequired);
+                    associatedJob.setExperienceRequired(experienceRequired);
+                    associatedJob.setJobDescription(jobDescription);
+                    associatedJob.setState(JobStatus.Posted); //post the job
+                    publishJobPostingErrorLabel.setText(""); //it worked so remove the error
+                } else
+                    publishJobPostingErrorLabel.setText("An error occured, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
 
-
+                updateDisplay();
             }
         });
         publishJobPostingButton.setBounds(10, 185, 190, 29);
@@ -211,15 +238,6 @@ public class DepartmentPage extends JFrame {
         contentPane.add(studentHoursField);
         studentHoursField.setColumns(10);
 
-        JLabel courseNumberLabel = new JLabel("Course number");
-        courseNumberLabel.setBounds(10, 152, 90, 16);
-        contentPane.add(courseNumberLabel);
-
-        courseNumberField = new JTextField();
-        courseNumberField.setBounds(112, 147, 100, 26);
-        contentPane.add(courseNumberField);
-        courseNumberField.setColumns(10);
-
         JButton registerStudentButton = new JButton("Register student");
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -235,7 +253,7 @@ public class DepartmentPage extends JFrame {
                 numberOfHours = Integer.valueOf(studentHoursField.getText()); //TODO TRY-CATCH
                 studentJobPreference = jobPreferenceField.getText();
 
-                if (graduateRadioForRegister.isSelected()) //TODO user could have not selected any (right now default is undergraduate student)
+                if (graduateRadioForRegister.isSelected()) //TODO user could have not selected any option (right now default is undergraduate student)
                     isGrad = true;
 
                 controller.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
@@ -318,7 +336,7 @@ public class DepartmentPage extends JFrame {
         contentPane.add(graderRadio);
 
 
-        //TODO modify every spinner. NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
+        //TODO NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
 
         /***** These courses are temporary, we use them to test the rest of the functionalities*****/
         String[] profStrings = {"Prakash", "Daniel", "David"};
@@ -337,10 +355,6 @@ public class DepartmentPage extends JFrame {
         ((JSpinner.DefaultEditor) createNewJobSpinner.getEditor()).getTextField().setEditable(false);
         createNewJobSpinner.setBounds(533, 63, 221, 26);
         contentPane.add(createNewJobSpinner);
-
-        JSpinner jobIDSpinner = new JSpinner();
-        jobIDSpinner.setBounds(112, 35, 100, 26);
-        contentPane.add(jobIDSpinner);
 
         final JButton createNewJobButton = new JButton("Create new job");
         createNewJobButton.addActionListener(new ActionListener() {
@@ -377,8 +391,32 @@ public class DepartmentPage extends JFrame {
     }
 
     //useful for updating the createNewJobSpinner using the spinner model
-    public void setCreateNewJobSpinnerModel(SpinnerModel model) {
+    private void setCreateNewJobSpinnerModel(SpinnerModel model) {
         createNewJobSpinner.setModel(model);
+    }
+
+    private void updateDisplay() {
+
+        //update the **publish a job posting** component
+        skillsRequiredField.setText("");
+        experienceRequiredField.setText("");
+        jobDescriptionField.setText("");
+        //TODO: update the spinner
+
+        //update the **register a student** component
+        studentIDField.setText("");
+        studentNameField.setText("");
+        emailField.setText("");
+        studentYearField.setText("");
+        jobPreferenceField.setText("");
+        studentHoursField.setText("");
+        undergraduateRadioForRegister.setSelected(false);
+        graduateRadioForRegister.setSelected(false);
+
+        //update the **Apply for a Job** component
+        studentIDForApplyingField.setText("");
+        //TODO: updtate the spinner
+
     }
 
     //*****SETTERS AND GETTERS******
