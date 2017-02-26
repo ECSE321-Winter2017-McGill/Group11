@@ -30,6 +30,7 @@ import javax.swing.SpinnerListModel;
 import ca.mcgill.ecse321.tamas.model.Course;
 import ca.mcgill.ecse321.tamas.model.Instructor;
 import ca.mcgill.ecse321.tamas.model.PositionType;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class DepartmentPage extends JFrame {
 
@@ -42,6 +43,7 @@ public class DepartmentPage extends JFrame {
     private JTextField studentYearField;
     private JTextField jobPreferenceField;
     private JTextField studentIDField;
+    private JTextField studentHoursField;
     private JTextField courseNumberField;
     private JTextField studentNameForApplyingField;
 
@@ -142,14 +144,14 @@ public class DepartmentPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        undergraduateRadioForRegister.setBounds(255, 175, 124, 23);
+        undergraduateRadioForRegister.setBounds(260, 211, 124, 23);
         contentPane.add(undergraduateRadioForRegister);
 
         graduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        graduateRadioForRegister.setBounds(391, 175, 101, 23);
+        graduateRadioForRegister.setBounds(391, 211, 101, 23);
         contentPane.add(graduateRadioForRegister);
 
         JLabel studentYearLabel = new JLabel("Year");
@@ -179,6 +181,15 @@ public class DepartmentPage extends JFrame {
         contentPane.add(studentIDField);
         studentIDField.setColumns(10);
 
+        JLabel studentHoursLabel = new JLabel("Number of hours");
+        studentHoursLabel.setBounds(260, 175, 90, 16);
+        contentPane.add(studentHoursLabel);
+
+        studentHoursField = new JTextField();
+        studentHoursField.setBounds(362, 173, 130, 26);
+        contentPane.add(studentHoursField);
+        studentHoursField.setColumns(10);
+
         JLabel courseNumberLabel = new JLabel("Course number");
         courseNumberLabel.setBounds(10, 152, 90, 16);
         contentPane.add(courseNumberLabel);
@@ -191,9 +202,24 @@ public class DepartmentPage extends JFrame {
         JButton registerStudentButton = new JButton("Register student");
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                String studentID,studentName,studentEmail,studentJobPreference;
+                int studentYear;
+                Boolean isGrad = false;
+
+                studentID = studentIDField.getText();
+                studentName = studentNameField.getText();
+                studentEmail = emailField.getText();
+                studentYear = Integer.valueOf(studentYearField.getText()); //TODO TRY-CATCH
+                studentJobPreference = jobPreferenceField.getText();
+
+                if (graduateRadioForRegister.isSelected())
+                    isGrad = true;
+
+
             }
         });
-        registerStudentButton.setBounds(260, 210, 232, 29);
+        registerStudentButton.setBounds(260, 241, 232, 29);
         contentPane.add(registerStudentButton);
 
         JLabel applyForAJobLabel = new JLabel("Apply for a Job");
