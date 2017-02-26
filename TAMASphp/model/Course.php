@@ -316,9 +316,9 @@ class Course
     return 0;
   }
 
-  public function addJobVia($aPosType)
+  public function addJobVia($aPosType, $aPostingDeadlineDate)
   {
-    return new Job($aPosType, $this);
+    return new Job($aPosType, $aPostingDeadlineDate, $this);
   }
 
   public function addJob($aJob)
