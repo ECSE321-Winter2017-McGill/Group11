@@ -308,7 +308,7 @@ public class DepartmentPage extends JFrame {
                 }
 
                 //if the user selected a position type, find which one
-                if (graduateRadioForRegister.isSelected()) 
+                if (graduateRadioForRegister.isSelected())
                     isGrad = true;
 
                 //register the student
@@ -451,7 +451,7 @@ public class DepartmentPage extends JFrame {
 
                 String courseNumber = (String) createNewJobSpinner.getValue();
 
-                //TODO: Create an empty job and (empty?) instructor in order to create the job. (Will be done in deliverable 3)
+                //TODO: Create an empty job and (empty?) instructor in order to create the job. (Will be done in future deliverable when we will implement all the remaining functionalities)
             }
         });
         createNewJobButton.setBounds(533, 96, 221, 29);
@@ -480,6 +480,8 @@ public class DepartmentPage extends JFrame {
         studentYearField.setText("");
         jobPreferenceField.setText("");
         studentHoursField.setText("");
+
+        //TODO: there seems to be an issue here, the radio buttons do not get unselected
         undergraduateRadioForRegister.setSelected(false);
         graduateRadioForRegister.setSelected(false);
 
