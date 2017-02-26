@@ -142,7 +142,7 @@ public class DepartmentPage extends JFrame {
                 jobDescription = jobDescriptionField.getText();
 
                 //this get the value displayed by the spinner
-                jobID = (int) publishJobSpinner.getValue();
+                jobID = (int) publishJobSpinner.getValue(); //TODO: NOT user-friendly, should use a meaningful name instead of an ID
 
                 //find a corresponding job using jobID
                 for (Job job: department.getAllJobs()) {
@@ -300,7 +300,15 @@ public class DepartmentPage extends JFrame {
                     return;
                 }
 
-                if (graduateRadioForRegister.isSelected()) //TODO user could have not selected any option (right now default is undergraduate student)
+                //check if the user selected a position type
+                if (!graduateRadioForRegister.isSelected() && !undergraduateRadioForRegister.isSelected()) {
+                    registerAStudentErrorLabel.setText("Please select a position type.");
+                    updateDisplay();
+                    return;
+                }
+
+                //if the user selected a position type, find which one
+                if (graduateRadioForRegister.isSelected()) 
                     isGrad = true;
 
                 //register the student
@@ -443,6 +451,7 @@ public class DepartmentPage extends JFrame {
 
                 String courseNumber = (String) createNewJobSpinner.getValue();
 
+                //TODO: Create an empty job and (empty?) instructor in order to create the job. (Will be done in deliverable 3)
             }
         });
         createNewJobButton.setBounds(533, 96, 221, 29);
