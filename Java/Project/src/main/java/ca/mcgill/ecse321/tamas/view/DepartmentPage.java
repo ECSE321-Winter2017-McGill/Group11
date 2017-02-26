@@ -27,10 +27,7 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerListModel;
 
 //model classes
-import ca.mcgill.ecse321.tamas.model.Course;
-import ca.mcgill.ecse321.tamas.model.Instructor;
-import ca.mcgill.ecse321.tamas.model.PositionType;
-import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.*;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 //Controller class
@@ -109,6 +106,21 @@ public class DepartmentPage extends JFrame {
         JButton publishJobPostingButton = new JButton("Publish job posting");
         publishJobPostingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                String skillsRequired, experienceRequired, jobDescription;
+                int courseNumber;
+
+                skillsRequired = skillsRequiredField.getText();
+                experienceRequired = experienceRequiredField.getText();
+                jobDescription = jobDescriptionField.getText();
+
+                //TODO: get courseByCode ?
+
+                //TODO: Again (like for Apply for job), we need a getJobByID in order to add skillsRequired, exp, etc.
+
+                //TODO: 1.get the job 2. Mutate it 3. Get the course 4. Allocation ?
+
+
             }
         });
         publishJobPostingButton.setBounds(10, 185, 190, 29);
@@ -251,14 +263,25 @@ public class DepartmentPage extends JFrame {
         jobIDForApplyingLabel.setBounds(533, 215, 61, 16);
         contentPane.add(jobIDForApplyingLabel);
 
+        final JSpinner applyForJobSpinner = new JSpinner();
+        applyForJobSpinner.setBounds(636, 212, 126, 26);
+        contentPane.add(applyForJobSpinner);
+
         JButton applyForAJobButton = new JButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String studentID;
+                int studentID, jobID;
+                Student student;
+                Job job;
 
-                studentID = studentIDForApplyingField.getText();
-                
+                studentID = Integer.valueOf(studentIDForApplyingField.getText());
+                student = Student.getWithStudentID(studentID);
+
+                jobID = Integer.valueOf((String) applyForJobSpinner.getValue());
+                //TODO: we need a Job.getJobByID(int id)
+                //TODO: set status to applied ?
+
             }
         });
         applyForAJobButton.setBounds(533, 242, 232, 26);
@@ -332,7 +355,7 @@ public class DepartmentPage extends JFrame {
                 else
                     positionType = null;
 
-                //TODO: User could not select either of them ! ---> NULL
+                //TODO: User could not select either of them ---> NULL
 
                 String courseNumber = (String) createNewJobSpinner.getValue();
 
@@ -349,10 +372,6 @@ public class DepartmentPage extends JFrame {
         });
         createNewJobButton.setBounds(533, 96, 221, 29);
         contentPane.add(createNewJobButton);
-
-        JSpinner applyForJobSpinner = new JSpinner();
-        applyForJobSpinner.setBounds(636, 212, 126, 26);
-        contentPane.add(applyForJobSpinner);
 
         this.setSize(800,400);
     }
