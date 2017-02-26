@@ -75,9 +75,9 @@ public class DepartmentPage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel jobTitleLabel = new JLabel("Job title");
-        jobTitleLabel.setBounds(10, 40, 90, 16);
-        contentPane.add(jobTitleLabel);
+        JLabel jobIDLabel = new JLabel("Job ID");
+        jobIDLabel.setBounds(10, 40, 90, 16);
+        contentPane.add(jobIDLabel);
 
         JLabel skillsRequiredLabel = new JLabel("Skills required");
         skillsRequiredLabel.setBounds(10, 68, 90, 16);
@@ -218,7 +218,7 @@ public class DepartmentPage extends JFrame {
 
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
-                studentID = Integer.valueOf(studentIDField.getText());
+                studentID = Integer.valueOf(studentIDField.getText()); //TODO TRY-CATCH
                 studentYear = Integer.valueOf(studentYearField.getText()); //TODO TRY-CATCH
                 numberOfHours = Integer.valueOf(studentHoursField.getText()); //TODO TRY-CATCH
                 studentJobPreference = jobPreferenceField.getText();
@@ -227,7 +227,6 @@ public class DepartmentPage extends JFrame {
                     isGrad = true;
 
                 controller.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
-
 
             }
         });
@@ -311,9 +310,9 @@ public class DepartmentPage extends JFrame {
         createNewJobSpinner.setBounds(533, 63, 221, 26);
         contentPane.add(createNewJobSpinner);
 
-        JSpinner jobTitleSpinner = new JSpinner();
-        jobTitleSpinner.setBounds(112, 35, 100, 26);
-        contentPane.add(jobTitleSpinner);
+        JSpinner jobIDSpinner = new JSpinner();
+        jobIDSpinner.setBounds(112, 35, 100, 26);
+        contentPane.add(jobIDSpinner);
 
         final JButton createNewJobButton = new JButton("Create new job");
         createNewJobButton.addActionListener(new ActionListener() {
