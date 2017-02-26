@@ -436,9 +436,6 @@ public class DepartmentPage extends JFrame {
                         0, 0, 0, 0, 0,
                         0, instructor);
 
-                //TODO: TA/GRADER selection using PositionType Enum
-
-                //TODO: do some processing with courseNumberAndPosition and call createNewJob from controller
             }
         });
         createNewJobButton.setBounds(533, 96, 221, 29);
@@ -472,7 +469,7 @@ public class DepartmentPage extends JFrame {
 
         //update the **Apply for a Job** component
         studentIDForApplyingField.setText("");
-        //TODO: updtate the spinner
+        //TODO: update the spinner
 
     }
 
