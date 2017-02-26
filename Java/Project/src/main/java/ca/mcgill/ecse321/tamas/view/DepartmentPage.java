@@ -28,6 +28,7 @@ import javax.swing.SpinnerListModel;
 
 //model classes
 import ca.mcgill.ecse321.tamas.model.*;
+import com.sun.media.sound.InvalidFormatException;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
 //Controller class
@@ -316,6 +317,11 @@ public class DepartmentPage extends JFrame {
         applyForJobSpinner.setBounds(636, 212, 126, 26);
         contentPane.add(applyForJobSpinner);
 
+        final JLabel applyForAJobErrorLabel = new JLabel("");
+        applyForAJobErrorLabel.setForeground(Color.RED);
+        applyForAJobErrorLabel.setBounds(543, 282, 222, 16);
+        contentPane.add(applyForAJobErrorLabel);
+
         JButton applyForAJobButton = new JButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -324,7 +330,14 @@ public class DepartmentPage extends JFrame {
                 Student student;
                 Job job;
 
-                studentID = Integer.valueOf(studentIDForApplyingField.getText());
+                try {
+                    studentID = Integer.valueOf(studentIDForApplyingField.getText());
+                } catch (NumberFormatException exception) {
+                    applyForAJobErrorLabel.setText("Invalid student ID. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+                
                 student = Student.getWithStudentID(studentID);
 
                 jobID = Integer.valueOf((String) applyForJobSpinner.getValue());
