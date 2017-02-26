@@ -77,8 +77,11 @@ public class TestInstructorController {
 
         //Create Job
         PositionType posType = PositionType.Grader;
+        Calendar c = Calendar.getInstance();
+        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        Date postDeadLine = new Date(c.getTimeInMillis());
 
-        Job job = new Job(posType, course);
+        Job job = new Job(posType,postDeadLine, course);
         department.addAllJob(job);
         assertEquals(1, department.getAllJobs().size());
 
@@ -87,9 +90,8 @@ public class TestInstructorController {
         String jobDescription = "Learn Software Engineering";
         String skillsRequired = "COMP202";
         String experienceRequired = "None";
-        Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
-        Date postDeadLine = new Date(c.getTimeInMillis());
+        c.set(2017, Calendar.MARCH, 30, 9, 0, 0);
+        Date offerDeadLine = new Date(c.getTimeInMillis());
 
 
 
