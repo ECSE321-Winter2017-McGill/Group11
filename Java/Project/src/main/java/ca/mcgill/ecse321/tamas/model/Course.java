@@ -298,9 +298,9 @@ public class Course
     return 0;
   }
 
-  public Job addJob(PositionType aPosType)
+  public Job addJob(PositionType aPosType, Date aPostingDeadlineDate)
   {
-    return new Job(aPosType, this);
+    return new Job(aPosType, aPostingDeadlineDate, this);
   }
 
   public boolean addJob(Job aJob)

@@ -64,7 +64,7 @@ class Job{
 	PositionType posType;
 	lazy skillsRequired;
 	lazy experienceRequired;
-	lazy Date postingDeadlineDate;
+	Date postingDeadlineDate;
 	lazy Date offerDeadlineDate;
 	defaulted JobStatus state = JobStatus.Ready;
 
