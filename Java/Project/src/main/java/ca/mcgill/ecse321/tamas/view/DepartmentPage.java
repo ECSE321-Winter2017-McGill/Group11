@@ -49,7 +49,7 @@ public class DepartmentPage extends JFrame {
     private JTextField studentIDField;
     private JTextField studentHoursField;
     private JTextField courseNumberField;
-    private JTextField studentNameForApplyingField;
+    private JTextField studentIDForApplyingField;
 
     //My own private fields
     private final JRadioButton TARadio;
@@ -238,22 +238,27 @@ public class DepartmentPage extends JFrame {
         applyForAJobLabel.setBounds(591, 162, 110, 16);
         contentPane.add(applyForAJobLabel);
 
-        JLabel studentNameForApplyingLabel = new JLabel("Student Name");
-        studentNameForApplyingLabel.setBounds(533, 190, 61, 16);
-        contentPane.add(studentNameForApplyingLabel);
+        JLabel studentIDForApplyingLabel = new JLabel("Student ID");
+        studentIDForApplyingLabel.setBounds(533, 190, 61, 16);
+        contentPane.add(studentIDForApplyingLabel);
 
-        studentNameForApplyingField = new JTextField();
-        studentNameForApplyingField.setBounds(635, 185, 130, 26);
-        contentPane.add(studentNameForApplyingField);
-        studentNameForApplyingField.setColumns(10);
+        studentIDForApplyingField = new JTextField();
+        studentIDForApplyingField.setBounds(635, 185, 130, 26);
+        contentPane.add(studentIDForApplyingField);
+        studentIDForApplyingField.setColumns(10);
 
-        JLabel jobTitleForApplyingLabel = new JLabel("Job title");
-        jobTitleForApplyingLabel.setBounds(533, 215, 61, 16);
-        contentPane.add(jobTitleForApplyingLabel);
+        JLabel jobIDForApplyingLabel = new JLabel("Job title");
+        jobIDForApplyingLabel.setBounds(533, 215, 61, 16);
+        contentPane.add(jobIDForApplyingLabel);
 
         JButton applyForAJobButton = new JButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                String studentID;
+
+                studentID = studentIDForApplyingField.getText();
+                
             }
         });
         applyForAJobButton.setBounds(533, 242, 232, 26);
@@ -357,12 +362,6 @@ public class DepartmentPage extends JFrame {
         createNewJobSpinner.setModel(model);
     }
 
-    //TODO: either remove and use spinner model or use this method to set the spinner directly
-    private void addCourseToSpinner(Course course) {
-
-        createNewJobSpinner.setValue(100);
-    }
-
     //*****SETTERS AND GETTERS******
 
     public void setSkillsRequiredField(String text) {
@@ -457,11 +456,11 @@ public class DepartmentPage extends JFrame {
 
     public void setStudentNameForApplyingField(String text) {
 
-        studentNameForApplyingField.setText(text);
+        studentIDForApplyingField.setText(text);
     }
 
     public String getStudentForApplyingField() {
 
-        return studentNameForApplyingField.getText();
+        return studentIDForApplyingField.getText();
     }
 }
