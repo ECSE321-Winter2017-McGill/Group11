@@ -44,6 +44,13 @@ public class DepartmentController {
 
 	}
 
+	public void registerAStudent(int studentID, String studentName, String email, Boolean isGrad, int year, String jobPreference, int numberOfHours) {
+
+	    Student student = new Student(studentID,studentName,email,isGrad,year,jobPreference,numberOfHours);
+	    department.addAllStudent(student);
+	    PersistenceXStream.saveToXMLwithXStream(department);
+    }
+
 	/**
 	 * @param job
 	 * @param student

@@ -251,14 +251,14 @@ public class DepartmentPage extends JFrame {
 
         //TODO modify every spinner. NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
 
-        //temporary course object to test the spinner
-        String[] profStrings = {"Prakash", "David", "Mathieu"};
+        /***** These courses are temporary, we use them to test the rest of the functionalities*****/
+        String[] profStrings = {"Prakash", "Daniel", "David"};
 
         List<String> profStringsList = new ArrayList<String>();
 
-        profStringsList.add("TA for COMP302");
-        profStringsList.add("Grader for ECSE321");
-        profStringsList.add("TA for COMP206");
+        profStringsList.add("COMP302 Programming languages and paradigms");
+        profStringsList.add("ECSE321 Introduction to software engineering");
+        profStringsList.add("COMP206 Introduction to software systems");
 
         SpinnerListModel profModel = new SpinnerListModel(profStringsList);
 
@@ -277,22 +277,21 @@ public class DepartmentPage extends JFrame {
         createNewJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String positionType;
+                PositionType positionType;
 
                 if (TARadio.isSelected())
-                    positionType = TARadio.getText();
+                    positionType = PositionType.TA;
                 else if (graderRadio.isSelected())
-                    positionType = graderRadio.getText();
+                    positionType = PositionType.Grader;
                 else
                     positionType = null;
 
                 //TODO: User could not select either of them ! ---> NULL
 
-                String courseNumberAndPosition = (String) createNewJobSpinner.getValue();
-                String[] courseInformation = courseNumberAndPosition.split(" ");
+                String courseNumber = (String) createNewJobSpinner.getValue();
 
                 Instructor instructor = new Instructor("",0, "");
-                Course courseA = new Course(courseInformation[2], "", "",
+                Course courseA = new Course(courseNumber, "", "",
                         0, 0, 0, 0,
                         0, 0, 0, 0, 0,
                         0, instructor);
