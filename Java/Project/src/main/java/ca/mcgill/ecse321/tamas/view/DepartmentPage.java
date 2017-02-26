@@ -145,7 +145,7 @@ public class DepartmentPage extends JFrame {
                     associatedJob.setState(JobStatus.Posted); //post the job
                     publishJobPostingErrorLabel.setText(""); //it worked so remove the error
                 } else
-                    publishJobPostingErrorLabel.setText("An error occured, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+                    publishJobPostingErrorLabel.setText("An error occurred, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
 
                 updateDisplay();
             }
@@ -238,6 +238,11 @@ public class DepartmentPage extends JFrame {
         contentPane.add(studentHoursField);
         studentHoursField.setColumns(10);
 
+        final JLabel registerAStudentErrorLabel = new JLabel("");
+        registerAStudentErrorLabel.setForeground(Color.RED);
+        registerAStudentErrorLabel.setBounds(270, 282, 222, 16);
+        contentPane.add(registerAStudentErrorLabel);
+
         JButton registerStudentButton = new JButton("Register student");
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -246,12 +251,38 @@ public class DepartmentPage extends JFrame {
                 int studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
+                if (studentNameField.getText().equals("") || emailField.getText().equals("") || jobPreferenceField.getText().equals("")) {
+                    registerAStudentErrorLabel.setText("Please fill all the required forms.");
+                    updateDisplay();
+                    return;
+                }
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
-                studentID = Integer.valueOf(studentIDField.getText()); //TODO TRY-CATCH
-                studentYear = Integer.valueOf(studentYearField.getText()); //TODO TRY-CATCH
-                numberOfHours = Integer.valueOf(studentHoursField.getText()); //TODO TRY-CATCH
                 studentJobPreference = jobPreferenceField.getText();
+
+                try {
+                    studentID = Integer.valueOf(studentIDField.getText());
+                } catch (NumberFormatException exception) {
+                    registerAStudentErrorLabel.setText("Invalid student ID. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                try {
+                    studentYear = Integer.valueOf(studentYearField.getText());
+                } catch (NumberFormatException exception) {
+                    registerAStudentErrorLabel.setText("Invalid student year. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                try {
+                    numberOfHours = Integer.valueOf(studentHoursField.getText());
+                } catch (NumberFormatException exception) {
+                    registerAStudentErrorLabel.setText("Invalid student hours. Please try again.");
+                    updateDisplay();
+                    return;
+                }
 
                 if (graduateRadioForRegister.isSelected()) //TODO user could have not selected any option (right now default is undergraduate student)
                     isGrad = true;
