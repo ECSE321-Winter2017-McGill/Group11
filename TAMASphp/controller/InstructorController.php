@@ -32,7 +32,7 @@ class InstructorController
 			$error .= "@3Instructor name cannot be empty!";
 		}
 		if (strlen($error) != 0){
-			throw new Exception ( $error );
+			throw new Exception ( trim($error) );
 		}
 
 		//if inputs are valid
@@ -44,12 +44,15 @@ class InstructorController
 		//3. add instructor
 		$instructor = new Instructor($instructorName, $instructorID, $instructorEmail);
 		$dpt->addAllInstructor($instructor);
+			
+		//4. store data
+		$persis->writeDataToStore($dpt);
 
 
 
 	}
 
-	public function createJobPosting($aJob, $jobDescription, $skillsRequired, $experienceRequired) {
+	public function createJobPosting($aJobID, $jobDescription, $skillsRequired, $experienceRequired, $offerDeadlineDate) {
 		//1. load data
 		$persis= new PersistenceTamas();
 		$dpt = $persis -> loadDataFromStore();
@@ -57,14 +60,25 @@ class InstructorController
 		//2. find job
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
-			if(strcmp($job->getJobID, $aJob) == 0){
+			if(strcmp($job->getJobID, $aJobID) == 0){
 				$myJob = $job;
 			}
 		}
 
+		//3. remove current version of the job in question
+		$dpt->removeAllCourse($myJob);
+		//deletes the job saved in dpt equal to myJob
+
 
 		$error = "";
-		//2. validate inputs
+		//3. validate inputs
+
+		$jobDesc = InvalidInputException::validate_input($jobDescription);
+		$skillsReq = InvalidInputException::validate_input($skillsRequired);
+		$expReq = InvalidInputException::validate_input($experienceRequired);
+		$offerDate = InvalidInputException::validate_input($offerDeadlineDate);
+
+		//if there are issues...
 		if ($myjob == null ) {
 			$error .= "@1Job ";
 			if($aJob != NULL){
@@ -72,20 +86,36 @@ class InstructorController
 			}
 			$error .= " not found! ";
 		}
-		if ($jobDescription == null || strlen ( $jobDescription ) == 0) {
+		if ($jobDesc == null || strlen ( $jobDesc ) == 0) {
 			$error .= "@2Job description field cannot be empty!";
 		}
-		if ($skillsRequired == null || strlen ( $skillsRequired ) == 0) {
+		if ($skillsReq == null || strlen ( $skillsReq ) == 0) {
 			$error .= "@2Skills required field cannot be empty!";
 		}
-		if ($experienceRequired == null || strlen ( $experienceRequired ) == 0) {
+		if ($expReq == null || strlen ( $expReq) == 0) {
 			$error .= "@3Experience required field cannot be empty!";
+		}
+		if ($oferDate == null || strlen ( $offerDate ) == 0 || !strtotime($offerDate)) {
+			$error .= "@4Posting deadline date must be specified correctly (YYYY-MM-DD)! ";
 		}
 		if (strlen($error) != 0){
 			throw new Exception ( trim($error) );
 		}
 
+		//4. Convert date
+		$dateConv = date('Y-m-d', strtotime($offerDate));
 
+		//5. addding parameters to Job
+
+		//$myJob = new Job($job, $dateConv);
+		$myJob->setJobDescription($jobDesc);
+		$myJob->setSkillsRequired($skillsReq);
+		$myJob->setExperienceRequired($expReq);
+		$myJob->setOfferDeadlineDate($offerDate);
+
+		$myJob->setState(JobStatusEnum::Posted);
+		$dpt->addAllJob($myJob);
+		$persis->writeDataToStore($dpt);
 
 
 	}
