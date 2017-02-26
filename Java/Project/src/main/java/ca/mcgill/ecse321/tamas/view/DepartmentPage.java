@@ -417,16 +417,10 @@ public class DepartmentPage extends JFrame {
         createNewJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                PositionType positionType;
+                PositionType positionType = PositionType.TA; //for now, this will be the default value (to avoid situation when user select neither of the choices)
 
-                if (TARadio.isSelected())
-                    positionType = PositionType.TA;
-                else if (graderRadio.isSelected())
+                if (graderRadio.isSelected())
                     positionType = PositionType.Grader;
-                else
-                    positionType = null;
-
-                //TODO: User could not select either of them ---> NULL
 
                 String courseNumber = (String) createNewJobSpinner.getValue();
 
