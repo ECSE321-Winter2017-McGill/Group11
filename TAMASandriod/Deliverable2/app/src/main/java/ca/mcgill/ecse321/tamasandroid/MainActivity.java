@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -168,7 +169,10 @@ public class MainActivity extends AppCompatActivity {
         //the job (dummy job)
         Instructor dummyInstructor = new Instructor("Henry Smith", 123456789, "henry.smith@mail.uni.ca");
         Course dummyCourse = new Course("EECC 111", "Introduction", "W2017", 15, 0, 3, 120, 200, 5, 4, 20, 15, 500, dummyInstructor );
-        Job dummyJob = new Job(PositionType.TA, dummyCourse);
+        Calendar c = Calendar.getInstance();
+        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date dummyPostDeadLine = new java.sql.Date(c.getTimeInMillis());
+        Job dummyJob = new Job(PositionType.TA, dummyPostDeadLine,dummyCourse);
         //Description
         TextView tvDescription = (TextView) findViewById(R.id.newjobposting_description);
         //Required Skills
@@ -188,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
 
         InstructorController pc = new InstructorController(d);
 
+        d.addAllJob(dummyJob);
         pc.createJobPosting(dummyJob, tvDescription.getText().toString(), tvSkills.getText().toString(), tvExperience.getText().toString(), sqlDeadline);
 
         refreshData();
@@ -218,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
                     Job jobposting = null;
                     for(Job j : d.getAllJobs()){
                         String postingName = j.getPosType().toString() + j.getCorrespondingCourse().getName();
-                        if(postingName == jobName){
+                        if(postingName.contentEquals(jobName)){
                             jobposting = j;
                             break;
                         }
