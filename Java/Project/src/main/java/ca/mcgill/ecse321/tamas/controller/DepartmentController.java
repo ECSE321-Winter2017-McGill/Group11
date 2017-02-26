@@ -7,7 +7,8 @@ import ca.mcgill.ecse321.tamas.model.Job;
 import ca.mcgill.ecse321.tamas.model.PositionType;
 import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
-import ca.mcgill.ecse321.tamas.view.DepartmentPage;
+
+import java.sql.Date;
 
 public class DepartmentController {
 
@@ -31,12 +32,13 @@ public class DepartmentController {
 
 	/**
 	 * @param posType
+	 * @param postingDeadlineDate
 	 * @param course
 	 *
 	 */
-	public void createJob(PositionType posType, Course course){
+	public void createJob(PositionType posType, Date postingDeadlineDate, Course course){
 
-		Job job = new Job(posType, course);
+		Job job = new Job(posType,postingDeadlineDate, course);
 		department.addAllJob(job);
 		PersistenceXStream.saveToXMLwithXStream(department);
 

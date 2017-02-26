@@ -1,8 +1,9 @@
 package ca.mcgill.ecse321.tamas.view;
 
+
+//GUI classes
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -15,11 +16,24 @@ import javax.swing.JCheckBox;
 import java.awt.Font;
 import javax.swing.UIManager;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollBar;
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JToolBar;
+import javax.swing.JSpinner;
+import javax.swing.ButtonGroup;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerListModel;
+
+//model classes
+import ca.mcgill.ecse321.tamas.model.Course;
+import ca.mcgill.ecse321.tamas.model.Instructor;
+import ca.mcgill.ecse321.tamas.model.PositionType;
 
 public class DepartmentPage extends JFrame {
 
     private JPanel contentPane;
-    private JTextField positionTypeField;
     private JTextField skillsRequiredField;
     private JTextField experienceRequiredField;
     private JTextField jobDescriptionField;
@@ -30,56 +44,54 @@ public class DepartmentPage extends JFrame {
     private JTextField studentIDField;
     private JTextField courseNumberField;
     private JTextField studentNameForApplyingField;
-    private JTextField jobForApplyingField;
 
+    //My own private fields
+    private final JRadioButton undergraduateRadioForCreatingJob;
+    private final JRadioButton graduateRadioForCreatingJob;
+    private final JRadioButton undergraduateRadioForRegister;
+    private final JRadioButton graduateRadioForRegister;
+    private JSpinner createNewJobSpinner;
 
     /**
      * Create the frame.
      */
-
     public DepartmentPage() {
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
         contentPane = new JPanel();
-        contentPane.setBackground(UIManager.getColor("EditorPane.selectionBackground"));
+        contentPane.setBackground(new Color(240, 248, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JLabel positionTypeLabel = new JLabel("Position type");
-        positionTypeLabel.setBounds(10, 35, 90, 16);
-        contentPane.add(positionTypeLabel);
-
-        positionTypeField = new JTextField();
-        positionTypeField.setBounds(105, 30, 100, 26);
-        contentPane.add(positionTypeField);
-        positionTypeField.setColumns(10);
+        JLabel jobTitleLabel = new JLabel("Job title");
+        jobTitleLabel.setBounds(10, 40, 90, 16);
+        contentPane.add(jobTitleLabel);
 
         JLabel skillsRequiredLabel = new JLabel("Skills required");
-        skillsRequiredLabel.setBounds(10, 63, 90, 16);
+        skillsRequiredLabel.setBounds(10, 68, 90, 16);
         contentPane.add(skillsRequiredLabel);
 
         skillsRequiredField = new JTextField();
-        skillsRequiredField.setBounds(105, 58, 100, 26);
+        skillsRequiredField.setBounds(112, 63, 100, 26);
         contentPane.add(skillsRequiredField);
         skillsRequiredField.setColumns(10);
 
         JLabel experienceRequiredLabel = new JLabel("Exp. required");
-        experienceRequiredLabel.setBounds(10, 91, 90, 16);
+        experienceRequiredLabel.setBounds(10, 96, 90, 16);
         contentPane.add(experienceRequiredLabel);
 
         experienceRequiredField = new JTextField();
-        experienceRequiredField.setBounds(105, 86, 100, 26);
+        experienceRequiredField.setBounds(112, 91, 100, 26);
         contentPane.add(experienceRequiredField);
         experienceRequiredField.setColumns(10);
 
         JLabel jobDescriptionLabel = new JLabel("Job description");
-        jobDescriptionLabel.setBounds(10, 119, 90, 16);
+        jobDescriptionLabel.setBounds(10, 124, 90, 16);
         contentPane.add(jobDescriptionLabel);
 
         jobDescriptionField = new JTextField();
-        jobDescriptionField.setBounds(105, 114, 100, 26);
+        jobDescriptionField.setBounds(112, 119, 100, 26);
         contentPane.add(jobDescriptionField);
         jobDescriptionField.setColumns(10);
 
@@ -88,20 +100,20 @@ public class DepartmentPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        publishJobPostingButton.setBounds(10, 175, 190, 29);
+        publishJobPostingButton.setBounds(10, 185, 190, 29);
         contentPane.add(publishJobPostingButton);
 
         JLabel studentNameLabel = new JLabel("Student name");
-        studentNameLabel.setBounds(215, 63, 90, 16);
+        studentNameLabel.setBounds(260, 63, 90, 16);
         contentPane.add(studentNameLabel);
 
         studentNameField = new JTextField();
-        studentNameField.setBounds(310, 58, 130, 26);
+        studentNameField.setBounds(362, 58, 130, 26);
         contentPane.add(studentNameField);
         studentNameField.setColumns(10);
 
         JLabel emailLabel = new JLabel("Email");
-        emailLabel.setBounds(215, 91, 61, 16);
+        emailLabel.setBounds(260, 91, 61, 16);
         contentPane.add(emailLabel);
 
         JLabel publishJobLabel = new JLabel("Publish A Job Posting");
@@ -111,117 +123,210 @@ public class DepartmentPage extends JFrame {
 
         JLabel RegisterStudentLabel = new JLabel("Register a Student");
         RegisterStudentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        RegisterStudentLabel.setBounds(260, 7, 140, 20);
+        RegisterStudentLabel.setBounds(307, 6, 140, 20);
         contentPane.add(RegisterStudentLabel);
 
         emailField = new JTextField();
-        emailField.setBounds(310, 86, 130, 26);
+        emailField.setBounds(362, 86, 130, 26);
         contentPane.add(emailField);
         emailField.setColumns(10);
 
-        JRadioButton undergraduateRadio = new JRadioButton("Undergraduate");
-        undergraduateRadio.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            }
-        });
-        undergraduateRadio.setBounds(217, 115, 124, 23);
-        contentPane.add(undergraduateRadio);
+        undergraduateRadioForRegister = new JRadioButton("Undergraduate");
+        graduateRadioForRegister = new JRadioButton("Graduate");
 
-        JRadioButton graduateRadio = new JRadioButton("Graduate");
-        graduateRadio.addActionListener(new ActionListener() {
+        ButtonGroup group1 = new ButtonGroup();
+        group1.add(undergraduateRadioForRegister);
+        group1.add(graduateRadioForRegister);
+
+        undergraduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        graduateRadio.setBounds(339, 115, 101, 23);
-        contentPane.add(graduateRadio);
+        undergraduateRadioForRegister.setBounds(255, 175, 124, 23);
+        contentPane.add(undergraduateRadioForRegister);
+
+        graduateRadioForRegister.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        graduateRadioForRegister.setBounds(391, 175, 101, 23);
+        contentPane.add(graduateRadioForRegister);
 
         JLabel studentYearLabel = new JLabel("Year");
-        studentYearLabel.setBounds(215, 147, 61, 16);
+        studentYearLabel.setBounds(260, 119, 61, 16);
         contentPane.add(studentYearLabel);
 
         studentYearField = new JTextField();
-        studentYearField.setBounds(310, 142, 130, 26);
+        studentYearField.setBounds(362, 114, 130, 26);
         contentPane.add(studentYearField);
         studentYearField.setColumns(10);
 
         JLabel jobPreferenceLabel = new JLabel("Job preference");
-        jobPreferenceLabel.setBounds(215, 175, 90, 16);
+        jobPreferenceLabel.setBounds(260, 147, 90, 16);
         contentPane.add(jobPreferenceLabel);
 
         jobPreferenceField = new JTextField();
-        jobPreferenceField.setBounds(310, 170, 130, 26);
+        jobPreferenceField.setBounds(362, 142, 130, 26);
         contentPane.add(jobPreferenceField);
         jobPreferenceField.setColumns(10);
 
         JLabel studentIDLabel = new JLabel("Student ID");
-        studentIDLabel.setBounds(215, 35, 90, 16);
+        studentIDLabel.setBounds(260, 35, 90, 16);
         contentPane.add(studentIDLabel);
 
         studentIDField = new JTextField();
-        studentIDField.setBounds(310, 30, 130, 26);
+        studentIDField.setBounds(362, 30, 130, 26);
         contentPane.add(studentIDField);
         studentIDField.setColumns(10);
 
         JLabel courseNumberLabel = new JLabel("Course number");
-        courseNumberLabel.setBounds(10, 147, 90, 16);
+        courseNumberLabel.setBounds(10, 152, 90, 16);
         contentPane.add(courseNumberLabel);
 
         courseNumberField = new JTextField();
-        courseNumberField.setBounds(105, 142, 100, 26);
+        courseNumberField.setBounds(112, 147, 100, 26);
         contentPane.add(courseNumberField);
         courseNumberField.setColumns(10);
 
-        JButton registerStudentButton = new JButton("Register");
-        registerStudentButton.setBounds(323, 204, 117, 29);
+        JButton registerStudentButton = new JButton("Register student");
+        registerStudentButton.setBounds(260, 210, 232, 29);
         contentPane.add(registerStudentButton);
 
         JLabel applyForAJobLabel = new JLabel("Apply for a Job");
         applyForAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        applyForAJobLabel.setBounds(60, 208, 110, 16);
+        applyForAJobLabel.setBounds(591, 162, 110, 16);
         contentPane.add(applyForAJobLabel);
 
         JLabel studentNameForApplyingLabel = new JLabel("Student Name");
-        studentNameForApplyingLabel.setBounds(10, 233, 61, 16);
+        studentNameForApplyingLabel.setBounds(533, 190, 61, 16);
         contentPane.add(studentNameForApplyingLabel);
 
         studentNameForApplyingField = new JTextField();
-        studentNameForApplyingField.setBounds(87, 228, 130, 26);
+        studentNameForApplyingField.setBounds(635, 185, 130, 26);
         contentPane.add(studentNameForApplyingField);
         studentNameForApplyingField.setColumns(10);
 
-        JLabel JobForApplyingLabel = new JLabel("Job");
-        JobForApplyingLabel.setBounds(10, 256, 61, 16);
-        contentPane.add(JobForApplyingLabel);
-
-        jobForApplyingField = new JTextField();
-        jobForApplyingField.setBounds(87, 251, 130, 26);
-        contentPane.add(jobForApplyingField);
-        jobForApplyingField.setColumns(10);
+        JLabel jobTitleForApplyingLabel = new JLabel("Job title");
+        jobTitleForApplyingLabel.setBounds(533, 215, 61, 16);
+        contentPane.add(jobTitleForApplyingLabel);
 
         JButton applyForAJobButton = new JButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        applyForAJobButton.setBounds(225, 233, 100, 43);
+        applyForAJobButton.setBounds(533, 242, 232, 26);
         contentPane.add(applyForAJobButton);
+
+        JLabel createAJobLabel = new JLabel("Create a Job");
+        createAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        createAJobLabel.setBounds(591, 6, 140, 20);
+        contentPane.add(createAJobLabel);
+
+
+        undergraduateRadioForCreatingJob = new JRadioButton("Undergraduate");
+        graduateRadioForCreatingJob = new JRadioButton("Graduate");
+
+        //Created a group for the radio
+        ButtonGroup group = new ButtonGroup();
+        group.add(undergraduateRadioForCreatingJob);
+        group.add(graduateRadioForCreatingJob);
+
+        undergraduateRadioForCreatingJob.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        undergraduateRadioForCreatingJob.setBounds(533, 31, 130, 23);
+        contentPane.add(undergraduateRadioForCreatingJob);
+
+        graduateRadioForCreatingJob.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        graduateRadioForCreatingJob.setBounds(675, 31, 90, 23);
+        contentPane.add(graduateRadioForCreatingJob);
+
+
+        //TODO modify every spinner. NOTE: THE CODE BELOW IS TEMPORARY (only for testing) DO NOT REMOVE OR ALTER
+
+        //temporary course object to test the spinner
+        String[] profStrings = {"Prakash", "David", "Mathieu"};
+
+        List<String> profStringsList = new ArrayList<String>();
+
+        profStringsList.add("TA for COMP302");
+        profStringsList.add("Grader for ECSE321");
+        profStringsList.add("TA for COMP206");
+
+        SpinnerListModel profModel = new SpinnerListModel(profStringsList);
+
+
+        //spinners
+        createNewJobSpinner = new JSpinner(profModel);
+        ((JSpinner.DefaultEditor) createNewJobSpinner.getEditor()).getTextField().setEditable(false);
+        createNewJobSpinner.setBounds(533, 63, 221, 26);
+        contentPane.add(createNewJobSpinner);
+
+        JSpinner jobTitleSpinner = new JSpinner();
+        jobTitleSpinner.setBounds(112, 35, 100, 26);
+        contentPane.add(jobTitleSpinner);
+
+        final JButton createNewJobButton = new JButton("Create new job");
+        createNewJobButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                String positionType;
+
+                if (undergraduateRadioForCreatingJob.isSelected())
+                    positionType = undergraduateRadioForCreatingJob.getText();
+                else if (graduateRadioForCreatingJob.isSelected())
+                    positionType = graduateRadioForCreatingJob.getText();
+                else
+                    positionType = null;
+
+                //TODO: User could not select either of them ! ---> NULL
+
+                String courseNumberAndPosition = (String) createNewJobSpinner.getValue();
+                String[] courseInformation = courseNumberAndPosition.split(" ");
+
+                Instructor instructor = new Instructor("",0, "");
+                Course courseA = new Course(courseInformation[2], "", "",
+                        0, 0, 0, 0,
+                        0, 0, 0, 0, 0,
+                        0, instructor);
+
+//                PositionType posType;
+//
+//                posType.Grader;
+
+
+                //TODO: do some processing with courseNumberAndPosition and call createNewJob from controller
+            }
+        });
+        createNewJobButton.setBounds(533, 96, 221, 29);
+        contentPane.add(createNewJobButton);
+
+        JSpinner applyForJobSpinner = new JSpinner();
+        applyForJobSpinner.setBounds(636, 212, 126, 26);
+        contentPane.add(applyForJobSpinner);
 
         this.setSize(800,400);
     }
 
+    //useful for updating the createNewJobSpinner using the spinner model
+    public void setCreateNewJobSpinnerModel(SpinnerModel model) {
+        createNewJobSpinner.setModel(model);
+    }
 
+    //TODO: either remove and use spinner model or use this method to set the spinner directly
+    private void addCourseToSpinner(Course course) {
+
+        createNewJobSpinner.setValue(100);
+    }
 
     //*****SETTERS AND GETTERS******
-
-    public void setPositionTypeField(String text) {
-
-        positionTypeField.setText(text);
-    }
-
-    public String getPositionTypeField() {
-
-        return positionTypeField.getText();
-    }
 
     public void setSkillsRequiredField(String text) {
 
@@ -230,7 +335,7 @@ public class DepartmentPage extends JFrame {
 
     public String getSkillsRequiredField() {
 
-        return positionTypeField.getText();
+        return skillsRequiredField.getText();
     }
 
     public void setExperienceRequiredField(String text) {
@@ -321,15 +426,5 @@ public class DepartmentPage extends JFrame {
     public String getStudentForApplyingField() {
 
         return studentNameForApplyingField.getText();
-    }
-
-    public void setJobForApplyingField(String text) {
-
-        jobForApplyingField.setText(text);
-    }
-
-    public String getJobForApplyingField() {
-
-        return jobForApplyingField.getText();
     }
 }

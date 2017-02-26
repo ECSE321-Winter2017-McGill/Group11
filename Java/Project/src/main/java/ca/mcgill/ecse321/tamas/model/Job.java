@@ -43,13 +43,13 @@ public class Job
   // CONSTRUCTOR
   //------------------------
 
-  public Job(PositionType aPosType, Course aCorrespondingCourse)
+  public Job(PositionType aPosType, Date aPostingDeadlineDate, Course aCorrespondingCourse)
   {
     jobDescription = null;
     posType = aPosType;
     skillsRequired = null;
     experienceRequired = null;
-    postingDeadlineDate = null;
+    postingDeadlineDate = aPostingDeadlineDate;
     offerDeadlineDate = null;
     resetState();
     jobID = nextJobID++;

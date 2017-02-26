@@ -1,65 +1,73 @@
-<?php
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-#CreateJobPostingPage
-#CreateReviewPage
-#UpdateAllocationPage
-#InstrCoursePage
-#UpdateInstrInfoPage
-#CourseInfoPage
-#JobPostingInfoPage
-#JobPostingListPage
-#ViewReviewPage
+    <title>Instructor Home Page</title>
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<ul class="nav nav-tabs">
-				<li class="active">
-					<a href="#">Home</a>
-				</li>
-				<li>
-					<a href="#">Profile</a>
-				</li>
-				<li>
-					<a href="#">Course List</a>
-				</li>
-				<li class="disabled">
-					<a href="#">Messages</a>
-				</li>
-				<li class="dropdown pull-right">
-					 <a href="#" data-toggle="dropdown" class="dropdown-toggle">TA & Grader Related<strong class="caret"></strong></a>
-					<ul class="dropdown-menu">
-						<li>
-							<a href="#">Create Job Posting</a>
-						</li>
-						<li>
-							<a href="#">Job Posting List</a>
-						</li>
-						<li>
-							<a href="#">Modify Allocation</a>
-						</li>
-						<li class="divider">
-						</li>
-						<li>
-							<a href="#">Write Review</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-md-12">
-			<div class="page-header">
-				<h1>
-					LayoutIt! <small>Interface Builder for Bootstrap</small>
-				</h1>
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+	</head>
+	<body>
+
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li class="active">
+						<a href="#">Home</a>
+					</li>
+					<li class="disabled">
+						<a href="#">Profile</a>
+					</li>
+					<li class="disabled">
+						<a href="#">Course List</a>
+					</li>
+					<li class="dropdown pull">
+						 <a href="#" data-toggle="dropdown" class="dropdown-toggle">TA and Grader Related<strong class="caret"></strong></a>
+						<ul class="dropdown-menu">
+							<li>
+								<a href="CreateJobPosting.php">Create Job Posting</a>
+							</li>
+							<li class="disabled">
+								<a href="#">Job Posting List</a>
+							</li>
+							<li class="disabled">
+								<a href="#">Modify Allocation</a>
+							</li>
+							<li class="divider">
+							</li>
+							<li class="disabled">
+								<a href="#">Write Review</a>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
-			<p>
-				Lorem ipsum dolor sit amet, <strong>consectetur adipiscing elit</strong>. Aliquam eget sapien sapien. Curabitur in metus urna. In hac habitasse platea dictumst. Phasellus eu sem sapien, sed vestibulum velit. Nam purus nibh, lacinia non faucibus et, pharetra in dolor. Sed iaculis posuere diam ut cursus. <em>Morbi commodo sodales nisi id sodales. Proin consectetur, nisi id commodo imperdiet, metus nunc consequat lectus, id bibendum diam velit et dui.</em> Proin massa magna, vulputate nec bibendum nec, posuere nec lacus. <small>Aliquam mi erat, aliquam vel luctus eu, pharetra quis elit. Nulla euismod ultrices massa, et feugiat ipsum consequat eu.</small>
-			</p>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="page-header">
+					<h1>
+						TAMAS <small>Instructor Home Page</small>
+					</h1>
+				</div>
+				<p>
+					Currently only has the following function: Create Job Posting.
+				</p>
+			</div>
 		</div>
 	</div>
-</div>
 
-php>
+	<script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/scripts.js"></script>
+  </body>
+</html>

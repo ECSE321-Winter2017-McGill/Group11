@@ -43,9 +43,9 @@ public class InstructorController {
 	 * @param jobDescription
 	 * @param skillsRequired
 	 * @param experienceRequired
-	 * @param postingDeadlineDate
+	 * @param offerDeadlineDate
 	 */
-	public void createJobPosting(Job job, String jobDescription, String skillsRequired, String experienceRequired, Date postingDeadlineDate) throws InvalidInputException{
+	public void createJobPosting(Job job, String jobDescription, String skillsRequired, String experienceRequired, Date offerDeadlineDate) throws InvalidInputException{
 
 		String error = "";
 
@@ -61,7 +61,7 @@ public class InstructorController {
 		if(experienceRequired == null || experienceRequired.trim().length() == 0){
 			error = error + createJobPostingNullExperienceRequiredErrorMessage;
 		}
-		if(postingDeadlineDate == null){
+		if(offerDeadlineDate == null){
 			error = error + createJobPostingNullPostDeadlineErrorMessage;
 		}
 		if (error.length()>0){
@@ -71,7 +71,7 @@ public class InstructorController {
 		job.setJobDescription(jobDescription);
 		job.setSkillsRequired(skillsRequired);
 		job.setExperienceRequired(experienceRequired);
-		job.setPostingDeadlineDate(postingDeadlineDate);
+		job.setOfferDeadlineDate(offerDeadlineDate);
 
 		job.setState(JobStatus.Posted);
 		PersistenceXStream.saveToXMLwithXStream(department);

@@ -11,12 +11,18 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Objects;
 
 import ca.mcgill.ecse321.tamas.controller.DepartmentController;
+import ca.mcgill.ecse321.tamas.controller.InstructorController;
 import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
 import ca.mcgill.ecse321.tamas.controller.StudentController;
 import ca.mcgill.ecse321.tamas.model.Course;
@@ -26,6 +32,9 @@ import ca.mcgill.ecse321.tamas.model.Job;
 import ca.mcgill.ecse321.tamas.model.PositionType;
 import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
+
+import static ca.mcgill.ecse321.tamasandroid.R.id.jobpostingspinner;
+import static ca.mcgill.ecse321.tamasandroid.R.id.studentspinner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
         tvHours.setText("");
 
-        // Initialize the data in the participant spinner
-        Spinner spinner = (Spinner) findViewById(R.id.studentspinner);
+        // Initialize the data in the student spinner
+        Spinner spinner = (Spinner) findViewById(studentspinner);
         ArrayAdapter<CharSequence> participantAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
         participantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -103,13 +112,18 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(participantAdapter);
 
 
-        // Initialize the data in the participant spinner
+        // Initialize the data in the jobposting spinner
         Spinner spinner2 = (Spinner) findViewById(R.id.jobpostingspinner);
-        ArrayAdapter<PositionType> jobPostingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        //ArrayAdapter<PositionType> jobPostingAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> jobPostingAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        //jobPostingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         jobPostingAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
+
         for (Job i: d.getAllJobs() ) {
-            jobPostingAdapter.add(i.getPosType());
+           // jobPostingAdapter.add(i.getPosType());
+            String posting = i.getPosType().toString() + i.getCorrespondingCourse().getName();
+            jobPostingAdapter.add(posting);
         }
         spinner2.setAdapter(jobPostingAdapter);
 
@@ -150,44 +164,81 @@ public class MainActivity extends AppCompatActivity {
         refreshData();
     }
 
-    public void addJob(View v) throws InvalidInputException {
+    public void addJobPosting(View v) throws InvalidInputException {
         //variables to create job posting
         //the job (dummy job)
         Instructor dummyInstructor = new Instructor("Henry Smith", 123456789, "henry.smith@mail.uni.ca");
         Course dummyCourse = new Course("EECC 111", "Introduction", "W2017", 15, 0, 3, 120, 200, 5, 4, 20, 15, 500, dummyInstructor );
-        //Job dummyJob = new Job(PositionType.TA, dummyCourse);
+        Calendar c = Calendar.getInstance();
+        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date dummyPostDeadLine = new java.sql.Date(c.getTimeInMillis());
+        Job dummyJob = new Job(PositionType.TA, dummyPostDeadLine,dummyCourse);
         //Description
-        //TextView tvDescription = (TextView) findViewById(R.id.newjobposting_description);
+        TextView tvDescription = (TextView) findViewById(R.id.newjobposting_description);
         //Required Skills
-        //TextView tvSkills = (TextView) findViewById(R.id.newjobposting_skills);
+        TextView tvSkills = (TextView) findViewById(R.id.newjobposting_skills);
         //Required Experience
-        //TextView tvExperience = (TextView) findViewById(R.id.newjobposting_experience);
+        TextView tvExperience = (TextView) findViewById(R.id.newjobposting_experience);
         //Date
-        /*TextView tvDate = (TextView) findViewById(R.id.newjobposting_date);
+        TextView tvDate = (TextView) findViewById(R.id.newjobposting_date);
         SimpleDateFormat temp = new SimpleDateFormat("dd-MM-yyyy");
         Date date = null;
         try {
-            date = temp.parse(tvDate.getText().toString());
+            date = (Date) temp.parse(tvDate.getText().toString());
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        java.sql.Date sqlDeadline = new java.sql.Date(date.getTime()); */
-        //position type
-        TextView tvPostion = (TextView) findViewById(R.id.newjob_position);
-        String position = tvPostion.getText().toString();
-        PositionType choice = null;
-        if(position.equals("TA")){
-            choice = PositionType.TA;
-        }
-        else if(position.equals("Grader")) {
-            choice = PositionType.Grader;
-        }
+        java.sql.Date sqlDeadline = new java.sql.Date(date.getTime());
 
-        DepartmentController pc = new DepartmentController(d);
+        InstructorController pc = new InstructorController(d);
 
-        //pc.createJobPosting(dummyJob, tvDescription.getText().toString(), tvSkills.getText().toString(), tvExperience.getText().toString(), sqlDeadline);
-        pc.createJob(choice, dummyCourse);
+        d.addAllJob(dummyJob);
+        pc.createJobPosting(dummyJob, tvDescription.getText().toString(), tvSkills.getText().toString(), tvExperience.getText().toString(), sqlDeadline);
+
         refreshData();
+    }
+
+    public void applyToJob(View v){
+        Button applyToJobButton = (Button) findViewById(R.id.register);
+        final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
+        final Spinner postingSpinner = (Spinner) findViewById(R.id.jobpostingspinner);
+        applyToJobButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if(studentSpinner.getSelectedItem() != null && postingSpinner.getSelectedItem() != null){
+                    StudentController s = new StudentController(d);
+
+                    String studentName = studentSpinner.getSelectedItem().toString();
+
+                    Student applicant = null;
+                    for(Student a : d.getAllStudents()){
+                        if(a.getName() == studentName){
+                            applicant = a;
+                            break;
+                        }
+                    }
+
+                    String jobName = postingSpinner.getSelectedItem().toString();
+                    Job jobposting = null;
+                    for(Job j : d.getAllJobs()){
+                        String postingName = j.getPosType().toString() + j.getCorrespondingCourse().getName();
+                        if(postingName.contentEquals(jobName)){
+                            jobposting = j;
+                            break;
+                        }
+                    }
+
+                    try {
+                        s.applyToJobPosting(jobposting, applicant);
+                    } catch (InvalidInputException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+
     }
     public void showDatePickerDialog(View v) {
         TextView tf = (TextView) v;
