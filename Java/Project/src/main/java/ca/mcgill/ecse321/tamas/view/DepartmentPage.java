@@ -2,37 +2,29 @@ package ca.mcgill.ecse321.tamas.view;
 
 
 //GUI classes
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JCheckBox;
 import java.awt.Font;
-import javax.swing.UIManager;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollBar;
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JToolBar;
-import javax.swing.JSpinner;
-import javax.swing.ButtonGroup;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerListModel;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
 
 //model classes
+import ca.mcgill.ecse321.tamas.controller.InstructorController;
+import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
+import ca.mcgill.ecse321.tamas.controller.StudentController;
 import ca.mcgill.ecse321.tamas.model.*;
-import com.sun.media.sound.InvalidFormatException;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 //Controller class
 import ca.mcgill.ecse321.tamas.controller.DepartmentController;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.SqlDateModel;
 
 public class DepartmentPage extends JFrame {
 
@@ -55,6 +47,20 @@ public class DepartmentPage extends JFrame {
     private final JRadioButton undergraduateRadioForRegister;
     private final JRadioButton graduateRadioForRegister;
     private JSpinner createNewJobSpinner;
+    private JDatePickerImpl offerDeadlineDatePicker;
+
+
+    private JComboBox<String> jobListForPublishJobPosting;
+    private JComboBox<String> jobListForStudentApplyJob;
+    private JComboBox<String> courseList;
+
+
+    private Integer selectedJobForPublishJobPosting = -1;
+    private Integer selectedJobForStudentApply = -1;
+    private Integer selectedCourse = -1;
+
+    Department department;
+
 
     /**
      * Create the frame.
@@ -66,10 +72,11 @@ public class DepartmentPage extends JFrame {
      * the interesting code lives. There are 4 major event handlers, one for each button. Note that
      *  the event handler for "Creating a job" is not complete at all, I will write it for deliverable 3*/
 
-    public DepartmentPage() {
+    public DepartmentPage(final Department department) {
 
+        this.department = department;
         //create a department in order to get a department controller
-        final Department department = new Department();
+
         final DepartmentController controller = new DepartmentController(department);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -111,15 +118,35 @@ public class DepartmentPage extends JFrame {
         contentPane.add(jobDescriptionField);
         jobDescriptionField.setColumns(10);
 
+        final JLabel offerDeadlineLabel = new JLabel("Offer Deadline");
+        offerDeadlineLabel.setBounds(10, 152, 90, 16);
+        contentPane.add(offerDeadlineLabel);
+
+        SqlDateModel model = new SqlDateModel();
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+        offerDeadlineDatePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter(){});
+        offerDeadlineDatePicker.setBounds(112,147,100,26);
+        contentPane.add(offerDeadlineDatePicker);
+
         final JLabel publishJobPostingErrorLabel = new JLabel("");
         publishJobPostingErrorLabel.setForeground(Color.RED);
         publishJobPostingErrorLabel.setBounds(10, 215, 202, 16);
         contentPane.add(publishJobPostingErrorLabel);
 
         //declare this spinner final since accessed from a inner class
+        /*
         final JSpinner publishJobSpinner = new JSpinner();
         publishJobSpinner.setBounds(112, 35, 100, 26);
         contentPane.add(publishJobSpinner);
+
+        */
+        jobListForPublishJobPosting = new JComboBox<String>(new String[0]);
+        jobListForPublishJobPosting.setBounds(112,35,100,26);
+        contentPane.add(jobListForPublishJobPosting);
 
         JButton publishJobPostingButton = new JButton("Publish job posting");
         publishJobPostingButton.addActionListener(new ActionListener() {
@@ -130,7 +157,7 @@ public class DepartmentPage extends JFrame {
                 Job associatedJob = null;
 
                 //if one of the fields is empty, display an error and reset the display
-                if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("")) {
+                if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("") || offerDeadlineDatePicker.getModel().getValue() == null) {
                     publishJobPostingErrorLabel.setText("Please fill all the fields.");
                     updateDisplay();
                     return;
@@ -142,19 +169,16 @@ public class DepartmentPage extends JFrame {
                 jobDescription = jobDescriptionField.getText();
 
                 //this get the value displayed by the spinner
-                jobID = (int) publishJobSpinner.getValue(); //TODO: NOT user-friendly, should use a meaningful name instead of an ID
-
-                //find a corresponding job using jobID
-                for (Job job: department.getAllJobs()) {
-                    if (job.getJobID() == jobID)
-                        associatedJob = job;
-                }
+                //jobID = (int) publishJobSpinner.getValue(); //TODO: NOT user-friendly, should use a meaningful name instead of an ID
 
                 //if the job was found, add the new attributes. Otherwise, display an error.
-                if (associatedJob != null) {
-                    associatedJob.setSkillsRequired(skillsRequired);
-                    associatedJob.setExperienceRequired(experienceRequired);
-                    associatedJob.setJobDescription(jobDescription);
+                if (selectedJobForPublishJobPosting >= 0) {
+                    associatedJob = department.getAllJob(selectedJobForPublishJobPosting);
+                    InstructorController instructorController = new InstructorController(department);
+                    try {
+                        instructorController.createJobPosting(associatedJob, jobDescription, skillsRequired, experienceRequired, (Date) offerDeadlineDatePicker.getModel().getValue() );
+                    } catch (InvalidInputException e1) {
+                    }
                     associatedJob.setState(JobStatus.Posted); //post the job
                     publishJobPostingErrorLabel.setText(""); //it worked so remove the error
                 } else
@@ -337,9 +361,9 @@ public class DepartmentPage extends JFrame {
         jobIDForApplyingLabel.setBounds(533, 215, 61, 16);
         contentPane.add(jobIDForApplyingLabel);
 
-        final JSpinner applyForJobSpinner = new JSpinner();
-        applyForJobSpinner.setBounds(636, 212, 126, 26);
-        contentPane.add(applyForJobSpinner);
+        jobListForStudentApplyJob = new JComboBox<String>(new String[0]);
+        jobListForStudentApplyJob.setBounds(636,212,126,26);
+        contentPane.add(jobListForStudentApplyJob);
 
         final JLabel applyForAJobErrorLabel = new JLabel("");
         applyForAJobErrorLabel.setForeground(Color.RED);
@@ -365,28 +389,30 @@ public class DepartmentPage extends JFrame {
 
                 //find the associated student
                 student = Student.getWithStudentID(studentID); //TODO: the student might not exist
-                if (student == null) {
-                    applyForAJobErrorLabel.setText("This student is not registered.");
-                    updateDisplay();
-                    return;
-                }
 
                 //store the job ID from the spinner
-                jobID = (int) applyForJobSpinner.getValue(); //TODO: A more user-friendly way would be to use a job name
 
                 //search through all the jobs of the department to find the corresponding job object
                 for (Job job: department.getAllJobs()) {
-                    if (job.getJobID() == jobID)
+                    String tmp = job.getCorrespondingCourse().getName() + "-" + job.getPosType().toString();
+                    if (jobListForStudentApplyJob.getItemAt(selectedJobForStudentApply) != null && tmp.contentEquals(jobListForStudentApplyJob.getItemAt(selectedJobForStudentApply))) {
                         associatedJob = job;
+                        break;
+                    }
+
                 }
 
                 //if the job was found (which should be the case, since the choices come from a spinner)
-                if (associatedJob != null) {
-                    associatedJob.setState(JobStatus.AppliedTo); //post the job
-                    applyForAJobErrorLabel.setText(""); //it worked so remove the error
 
-                } else
-                    applyForAJobErrorLabel.setText("An error occurred, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+                    StudentController studentController = new StudentController(department);
+                    try {
+                        studentController.applyToJobPosting(associatedJob,student);
+                        applyForAJobErrorLabel.setText(""); //it worked so remove the error
+
+                    } catch (InvalidInputException e1) {
+                        applyForAJobErrorLabel.setText(e1.getMessage()); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+
+                    }
 
                 updateDisplay();
 
@@ -425,44 +451,70 @@ public class DepartmentPage extends JFrame {
         graderRadio.setBounds(675, 31, 90, 23);
         contentPane.add(graderRadio);
 
+        //This is a dummy instructor
+        Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
 
-        //TODO: This commented code is for later, it's how to add elements to a spinner
-//        String[] profStrings = {"Prakash", "Daniel", "David"};
-//
-//        List<String> profStringsList = new ArrayList<String>();
-//
-//        profStringsList.add("COMP302");
-//        profStringsList.add("ECSE321");
-//        profStringsList.add("COMP206");
-//
-//        SpinnerListModel profModel = new SpinnerListModel(profStringsList);
-//        createNewJobSpinner = new JSpinner(profModel);
+        //These are some dummy course for testing purposes of the prototype application
+        if(department.getAllCourses().size()<2) {
+            final Course dummyCourse1 = new Course("ECSE100", "Computer Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
+            Course dummyCourse2 = new Course("ECSE200", "Software Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
+            Course dummyCourse3 = new Course("ECSE300", "Electrical Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
 
+            department.addAllCourse(dummyCourse1);
+            department.addAllCourse(dummyCourse2);
+            department.addAllCourse(dummyCourse3);
+        }
 
         //spinners
-        createNewJobSpinner = new JSpinner();
-        ((JSpinner.DefaultEditor) createNewJobSpinner.getEditor()).getTextField().setEditable(false);
-        createNewJobSpinner.setBounds(533, 63, 221, 26);
-        contentPane.add(createNewJobSpinner);
+        courseList = new JComboBox<String>(new String[0]);
+        courseList.setBounds(533, 63, 221, 26);
+        contentPane.add(courseList);
 
         final JButton createNewJobButton = new JButton("Create new job");
         createNewJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                //This is code the allows the use to test publish job posting and apply to job
 
                 PositionType positionType = PositionType.TA; //for now, this will be the default value (to avoid situation when user select neither of the choices)
 
                 if (graderRadio.isSelected())
                     positionType = PositionType.Grader;
+                //Create dummy post Deadline to create job (TESTING PURPOSES)
+                Calendar c = Calendar.getInstance();
+                c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+                Date dummyPostDeadLine = new Date(c.getTimeInMillis());
 
-                int courseNumber = (int) createNewJobSpinner.getValue();
 
-                //TODO: Create an empty job and (empty?) instructor in order to create the job. (Will be done in future deliverable when we will implement all the remaining functionalities)
+               controller.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
+                updateDisplay();
             }
         });
         createNewJobButton.setBounds(533, 96, 221, 29);
         contentPane.add(createNewJobButton);
 
+        courseList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedCourse = cb.getSelectedIndex();
+            }
+        });
+
+        jobListForPublishJobPosting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForPublishJobPosting = cb.getSelectedIndex();
+            }
+        });
+
+        jobListForStudentApplyJob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForStudentApply = cb.getSelectedIndex();
+            }
+        });
         this.setSize(800,400);
+
+        updateDisplay();
     }
 
     //useful for updating the createNewJobSpinner using the spinner model
@@ -493,6 +545,34 @@ public class DepartmentPage extends JFrame {
         //update the **Apply for a Job** component
         studentIDForApplyingField.setText("");
         //TODO: update the spinner
+
+        courseList.removeAllItems();
+        for(Course c: department.getAllCourses()){
+            courseList.addItem(c.getName());
+        }
+        selectedCourse = -1;
+        courseList.setSelectedIndex(selectedCourse);
+
+        jobListForPublishJobPosting.removeAllItems();
+        for(Job j: department.getAllJobs()){
+            String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+            jobListForPublishJobPosting.addItem(tmp);
+        }
+        selectedJobForPublishJobPosting = -1;
+        jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
+
+        jobListForStudentApplyJob.removeAllItems();
+        for(Job j: department.getAllJobs()){
+            if(j.getState() == JobStatus.Posted){
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                jobListForStudentApplyJob.addItem(tmp);
+            }
+        }
+        selectedJobForStudentApply = -1;
+        jobListForStudentApplyJob.setSelectedIndex(selectedJobForStudentApply);
+
+        offerDeadlineDatePicker.getModel().setValue(null);
+
 
     }
 
@@ -596,5 +676,27 @@ public class DepartmentPage extends JFrame {
     public String getStudentForApplyingField() {
 
         return studentIDForApplyingField.getText();
+    }
+
+    private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+        private static final long serialVersionUID = -2169252224419341678L;
+
+        private String datePattern = "yyyy-MM-dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+
+            return "";
+        }
     }
 }
