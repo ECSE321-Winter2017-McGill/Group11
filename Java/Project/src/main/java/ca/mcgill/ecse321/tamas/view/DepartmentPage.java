@@ -365,6 +365,11 @@ public class DepartmentPage extends JFrame {
 
                 //find the associated student
                 student = Student.getWithStudentID(studentID); //TODO: the student might not exist
+                if (student == null) {
+                    applyForAJobErrorLabel.setText("This student is not registered.");
+                    updateDisplay();
+                    return;
+                }
 
                 //store the job ID from the spinner
                 jobID = (int) applyForJobSpinner.getValue(); //TODO: A more user-friendly way would be to use a job name

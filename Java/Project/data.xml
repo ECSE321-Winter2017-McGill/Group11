@@ -5,12 +5,12 @@
   <allStudents id="5">
     <ca.mcgill.ecse321.tamas.model.Student id="6">
       <studentID>260685906</studentID>
-      <name>Mathieu Lapoite</name>
-      <email>mathieu.lapointe3@mail.mcgill.ca</email>
+      <name>Mathieu</name>
+      <email>mathieu@mcgill</email>
       <isGrad>false</isGrad>
       <year>2</year>
       <jobPreference>None</jobPreference>
-      <numberOfHours>8</numberOfHours>
+      <numberOfHours>4</numberOfHours>
       <previousJobExperiences id="7"/>
       <jobsAppliedTo id="8"/>
       <offeredJobs id="9"/>
