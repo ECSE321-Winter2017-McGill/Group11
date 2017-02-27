@@ -449,7 +449,7 @@ public class DepartmentPage extends JFrame {
                 if (graderRadio.isSelected())
                     positionType = PositionType.Grader;
 
-                String courseNumber = (String) createNewJobSpinner.getValue();
+                int courseNumber = (int) createNewJobSpinner.getValue();
 
                 //TODO: Create an empty job and (empty?) instructor in order to create the job. (Will be done in future deliverable when we will implement all the remaining functionalities)
             }
