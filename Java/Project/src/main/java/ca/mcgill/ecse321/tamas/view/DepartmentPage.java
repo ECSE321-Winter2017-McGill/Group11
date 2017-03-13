@@ -404,15 +404,15 @@ public class DepartmentPage extends JFrame {
 
                 //if the job was found (which should be the case, since the choices come from a spinner)
 
-                    StudentController studentController = new StudentController(department);
-                    try {
-                        studentController.applyToJobPosting(associatedJob,student);
-                        applyForAJobErrorLabel.setText(""); //it worked so remove the error
+                StudentController studentController = new StudentController(department);
+                try {
+                    studentController.applyToJobPosting(associatedJob,student);
+                    applyForAJobErrorLabel.setText(""); //it worked so remove the error
 
-                    } catch (InvalidInputException e1) {
-                        applyForAJobErrorLabel.setText(e1.getMessage()); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+                } catch (InvalidInputException e1) {
+                    applyForAJobErrorLabel.setText(e1.getMessage()); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
 
-                    }
+                }
 
                 updateDisplay();
 
@@ -485,7 +485,7 @@ public class DepartmentPage extends JFrame {
                 Date dummyPostDeadLine = new Date(c.getTimeInMillis());
 
 
-               controller.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
+                controller.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
                 updateDisplay();
             }
         });
