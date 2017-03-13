@@ -336,7 +336,16 @@ public class DepartmentPage extends JFrame {
                     isGrad = true;
 
                 //register the student
+
+                for (Student student : department.getAllStudents()) {
+                    if (Integer.toString(student.getStudentID()).equals(studentID) || student.getEmail().equals(studentEmail)) {
+                        registerAStudentErrorLabel.setText("This student is already existent.");
+                        updateDisplay();
+                        return;
+                    }
+                }
                 controller.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
+                updateDisplay();
 
             }
         });
