@@ -88,42 +88,56 @@
                 <taHourlyRate>20</taHourlyRate>
                 <graderHourlyRate>20</graderHourlyRate>
                 <budget>3000</budget>
-                <jobs id="26"/>
-                <instructors id="27">
+                <jobs id="26">
+                  <Job id="27">
+                    <posType>Grader</posType>
+                    <postingDeadlineDate id="28">2017-03-16</postingDeadlineDate>
+                    <state>Ready</state>
+                    <jobID>1</jobID>
+                    <allocatedStudent id="29"/>
+                    <previousWorker id="30"/>
+                    <applicant id="31"/>
+                    <offerReceiver id="32"/>
+                    <employee id="33"/>
+                    <correspondingCourse reference="25"/>
+                  </Job>
+                </jobs>
+                <instructors id="34">
                   <Instructor reference="20"/>
                 </instructors>
               </Course>
             </courses>
-            <reviewText id="28"/>
+            <reviewText id="35"/>
           </Instructor>
         </instructors>
       </correspondingCourse>
     </Job>
+    <Job reference="27"/>
   </allJobs>
-  <allCourses id="29">
+  <allCourses id="36">
     <Course reference="22"/>
     <Course reference="17"/>
     <Course reference="25"/>
   </allCourses>
-  <allInstructors id="30">
-    <Instructor id="31">
+  <allInstructors id="37">
+    <Instructor id="38">
       <name>James</name>
       <instructorID>123456</instructorID>
       <email>james@mcgill.ca</email>
-      <courses id="32"/>
-      <reviewText id="33"/>
+      <courses id="39"/>
+      <reviewText id="40"/>
     </Instructor>
-    <Instructor id="34">
+    <Instructor id="41">
       <name>Elizabeth</name>
       <instructorID>654321</instructorID>
       <email>elizabeth@mcgill.ca</email>
-      <courses id="35"/>
-      <reviewText id="36"/>
+      <courses id="42"/>
+      <reviewText id="43"/>
     </Instructor>
   </allInstructors>
-  <allStudents id="37">
+  <allStudents id="44">
     <Student reference="9"/>
-    <Student id="38">
+    <Student id="45">
       <studentID>999999999</studentID>
       <name>mathieu</name>
       <email>math@mail.ca</email>
@@ -131,13 +145,13 @@
       <year>3</year>
       <jobPreference>none</jobPreference>
       <numberOfHours>3</numberOfHours>
-      <previousJobExperiences id="39"/>
-      <jobsAppliedTo id="40"/>
-      <offeredJobs id="41"/>
-      <currentJobs id="42"/>
-      <reviewText id="43"/>
+      <previousJobExperiences id="46"/>
+      <jobsAppliedTo id="47"/>
+      <offeredJobs id="48"/>
+      <currentJobs id="49"/>
+      <reviewText id="50"/>
     </Student>
-    <Student id="44">
+    <Student id="51">
       <studentID>999999999</studentID>
       <name>bob</name>
       <email>mat@gmail.ca</email>
@@ -145,13 +159,13 @@
       <year>12</year>
       <jobPreference>none</jobPreference>
       <numberOfHours>5</numberOfHours>
-      <previousJobExperiences id="45"/>
-      <jobsAppliedTo id="46"/>
-      <offeredJobs id="47"/>
-      <currentJobs id="48"/>
-      <reviewText id="49"/>
+      <previousJobExperiences id="52"/>
+      <jobsAppliedTo id="53"/>
+      <offeredJobs id="54"/>
+      <currentJobs id="55"/>
+      <reviewText id="56"/>
     </Student>
-    <Student id="50">
+    <Student id="57">
       <studentID>999999999</studentID>
       <name>bob</name>
       <email>mathieu@gmail.ca</email>
@@ -159,12 +173,12 @@
       <year>2</year>
       <jobPreference>none</jobPreference>
       <numberOfHours>6</numberOfHours>
-      <previousJobExperiences id="51"/>
-      <jobsAppliedTo id="52"/>
-      <offeredJobs id="53"/>
-      <currentJobs id="54"/>
-      <reviewText id="55"/>
+      <previousJobExperiences id="58"/>
+      <jobsAppliedTo id="59"/>
+      <offeredJobs id="60"/>
+      <currentJobs id="61"/>
+      <reviewText id="62"/>
     </Student>
   </allStudents>
-  <allReviews id="56"/>
+  <allReviews id="63"/>
 </ca.mcgill.ecse321.tamas.model.Department>

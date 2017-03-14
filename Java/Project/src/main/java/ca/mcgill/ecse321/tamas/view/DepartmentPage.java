@@ -40,6 +40,14 @@ public class DepartmentPage extends JFrame {
     private JTextField studentHoursField;
     private JTextField courseNumberField;
     private JTextField studentIDForApplyingField;
+    private JTextField courseNameField;
+    private JTextField courseCodeField;
+    private JTextField numberOfLecturesField;
+    private JTextField numberOfLabsField;
+    private JTextField numberStudentEnrolledField;
+    private JTextField hoursField;
+    private JTextField taHourlyRateField;
+    private JTextField creditsField;
 
     //My own private fields
     private final JRadioButton TARadio;
@@ -75,9 +83,10 @@ public class DepartmentPage extends JFrame {
     public DepartmentPage(final Department department) {
 
         this.department = department;
-        //create a department in order to get a department controller
 
         final DepartmentController controller = new DepartmentController(department);
+
+        JTabbedPane tabbedPane = new JTabbedPane();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
@@ -521,7 +530,94 @@ public class DepartmentPage extends JFrame {
                 selectedJobForStudentApply = cb.getSelectedIndex();
             }
         });
-        this.setSize(800,400);
+
+
+        JLabel createACourseLabel = new JLabel("Create a Course");
+        createACourseLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        createACourseLabel.setBounds(70, 295, 125, 16);
+        contentPane.add(createACourseLabel);
+
+        JLabel courseNameLabel = new JLabel("Course name");
+        courseNameLabel.setBounds(10, 323, 90, 16);
+        contentPane.add(courseNameLabel);
+
+        JLabel courseCodeLabel = new JLabel("Course code");
+        courseCodeLabel.setBounds(10, 351, 90, 16);
+        contentPane.add(courseCodeLabel);
+
+        JLabel numberOfLecturesLabel = new JLabel("Number of lectures");
+        numberOfLecturesLabel.setBounds(10, 379, 90, 16);
+        contentPane.add(numberOfLecturesLabel);
+
+        JLabel numberOfLabsLabel = new JLabel("Number of labs");
+        numberOfLabsLabel.setBounds(10, 407, 90, 16);
+        contentPane.add(numberOfLabsLabel);
+
+        JLabel numberStudentEnrolledLabel = new JLabel("Number student enrolled");
+        numberStudentEnrolledLabel.setBounds(10, 435, 90, 16);
+        contentPane.add(numberStudentEnrolledLabel);
+
+        JLabel hoursLabel = new JLabel("Hours");
+        hoursLabel.setBounds(10, 463, 90, 16);
+        contentPane.add(hoursLabel);
+
+        JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
+        taHourlyRateLabel.setBounds(10, 491, 90, 16);
+        contentPane.add(taHourlyRateLabel);
+
+        JLabel creditsLabel = new JLabel("Credits");
+        creditsLabel.setBounds(10, 519, 90, 16);
+        contentPane.add(creditsLabel);
+
+        courseNameField = new JTextField();
+        courseNameField.setBounds(112, 318, 100, 26);
+        contentPane.add(courseNameField);
+        courseNameField.setColumns(10);
+
+        courseCodeField = new JTextField();
+        courseCodeField.setBounds(112, 346, 100, 26);
+        contentPane.add(courseCodeField);
+        courseCodeField.setColumns(10);
+
+        numberOfLecturesField = new JTextField();
+        numberOfLecturesField.setBounds(112, 374, 100, 26);
+        contentPane.add(numberOfLecturesField);
+        numberOfLecturesField.setColumns(10);
+
+        numberOfLabsField = new JTextField();
+        numberOfLabsField.setBounds(112, 402, 100, 26);
+        contentPane.add(numberOfLabsField);
+        numberOfLabsField.setColumns(10);
+
+        numberStudentEnrolledField = new JTextField();
+        numberStudentEnrolledField.setBounds(112, 430, 100, 26);
+        contentPane.add(numberStudentEnrolledField);
+        numberStudentEnrolledField.setColumns(10);
+
+        hoursField = new JTextField();
+        hoursField.setBounds(112, 458, 100, 26);
+        contentPane.add(hoursField);
+        hoursField.setColumns(10);
+
+        taHourlyRateField = new JTextField();
+        taHourlyRateField.setBounds(112, 486, 100, 26);
+        contentPane.add(taHourlyRateField);
+        taHourlyRateField.setColumns(10);
+
+        creditsField = new JTextField();
+        creditsField.setBounds(112, 514, 100, 26);
+        contentPane.add(creditsField);
+        creditsField.setColumns(10);
+
+        JButton createACourseButton = new JButton("Create a Course");
+        createACourseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        createACourseButton.setBounds(10, 547, 202, 29);
+        contentPane.add(createACourseButton);
+
+        this.setSize(800,600);
 
         updateDisplay();
     }
