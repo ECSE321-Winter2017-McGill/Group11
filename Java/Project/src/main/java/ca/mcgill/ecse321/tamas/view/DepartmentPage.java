@@ -617,7 +617,7 @@ public class DepartmentPage extends JFrame {
         createACourseButton.setBounds(10, 547, 202, 29);
         contentPane.add(createACourseButton);
 
-        this.setSize(800,600);
+        this.setSize(800,620);
 
         updateDisplay();
     }
