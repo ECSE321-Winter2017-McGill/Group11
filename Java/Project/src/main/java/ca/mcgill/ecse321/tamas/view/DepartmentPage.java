@@ -86,7 +86,7 @@ public class DepartmentPage extends JFrame {
 
         final DepartmentController controller = new DepartmentController(department);
 
-        JTabbedPane tabbedPane = new JTabbedPane();
+        setTitle("Department");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
@@ -609,9 +609,21 @@ public class DepartmentPage extends JFrame {
         contentPane.add(creditsField);
         creditsField.setColumns(10);
 
+        JLabel createCourseErrorLabel = new JLabel("");
+        createCourseErrorLabel.setForeground(Color.RED);
+        createCourseErrorLabel.setBounds(10, 588, 202, 16);
+        contentPane.add(createCourseErrorLabel);
+
         JButton createACourseButton = new JButton("Create a Course");
         createACourseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                String courseName, courseCode;
+                int numberOfLectures, numberOfLabs, numberOfStudents, hours, hourlyRateTA, numberOfCredits;
+
+                if (courseNameField.getText().equals("") || courseCodeField.getText().equals("")) {
+
+                }
             }
         });
         createACourseButton.setBounds(10, 547, 202, 29);
