@@ -88,8 +88,6 @@ public class StudentController {
 			throw new InvalidInputException(error);
 		}
 
-
-
 		Student student = new Student(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
 		department.addAllStudent(student);
 		PersistenceXStream.saveToXMLwithXStream(department);

@@ -84,7 +84,7 @@ public class DepartmentPage extends JFrame {
 
         this.department = department;
 
-        final DepartmentController controller = new DepartmentController(department);
+        final DepartmentController departmentController = new DepartmentController(department);
 
         setTitle("Department");
 
@@ -165,31 +165,34 @@ public class DepartmentPage extends JFrame {
                 int jobID;
                 Job associatedJob = null;
 
-                //if one of the fields is empty, display an error and reset the display
-                if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("") || offerDeadlineDatePicker.getModel().getValue() == null) {
-                    publishJobPostingErrorLabel.setText("Please fill all the fields.");
-                    updateDisplay();
-                    return;
-                }
+//                //if one of the fields is empty, display an error and reset the display
+//                if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("") || offerDeadlineDatePicker.getModel().getValue() == null) {
+//                    publishJobPostingErrorLabel.setText("Please fill all the fields.");
+//                    updateDisplay();
+//                    return;
+//                }
 
                 //the fields are non-empty, so proceed to storing there value
                 skillsRequired = skillsRequiredField.getText();
                 experienceRequired = experienceRequiredField.getText();
                 jobDescription = jobDescriptionField.getText();
 
-                //this get the value displayed by the spinner
-                //jobID = (int) publishJobSpinner.getValue(); //TODO: NOT user-friendly, should use a meaningful name instead of an ID
-
                 //if the job was found, add the new attributes. Otherwise, display an error.
                 if (selectedJobForPublishJobPosting >= 0) {
+
                     associatedJob = department.getAllJob(selectedJobForPublishJobPosting);
                     InstructorController instructorController = new InstructorController(department);
+
                     try {
                         instructorController.createJobPosting(associatedJob, jobDescription, skillsRequired, experienceRequired, (Date) offerDeadlineDatePicker.getModel().getValue() );
+                        associatedJob.setState(JobStatus.Posted); //post the job
+                        publishJobPostingErrorLabel.setText(""); //it worked so remove the error
+
                     } catch (InvalidInputException e1) {
+                        publishJobPostingErrorLabel.setText(e1.getMessage());
+                        updateDisplay();
                     }
-                    associatedJob.setState(JobStatus.Posted); //post the job
-                    publishJobPostingErrorLabel.setText(""); //it worked so remove the error
+
                 } else
                     publishJobPostingErrorLabel.setText("An error occurred, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
 
@@ -297,12 +300,13 @@ public class DepartmentPage extends JFrame {
                 int studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
-                //if one of the field is empty, display an error and update the display
-                if (studentNameField.getText().equals("") || emailField.getText().equals("") || jobPreferenceField.getText().equals("")) {
-                    registerAStudentErrorLabel.setText("Please fill all the required forms.");
-                    updateDisplay();
-                    return;
-                }
+//                //if one of the field is empty, display an error and update the display
+//                if (studentNameField.getText().equals("") || emailField.getText().equals("") || jobPreferenceField.getText().equals("")) {
+//                    registerAStudentErrorLabel.setText("Please fill all the required forms.");
+//                    updateDisplay();
+//                    return;
+//                }
+
                 //proceed with storing the field values since they are all non-empty
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
@@ -353,7 +357,7 @@ public class DepartmentPage extends JFrame {
                         return;
                     }
                 }
-                controller.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
+                departmentController.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
                 updateDisplay();
 
             }
@@ -503,7 +507,7 @@ public class DepartmentPage extends JFrame {
                 Date dummyPostDeadLine = new Date(c.getTimeInMillis());
 
 
-                controller.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
+                departmentController.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
                 updateDisplay();
             }
         });
@@ -609,7 +613,7 @@ public class DepartmentPage extends JFrame {
         contentPane.add(creditsField);
         creditsField.setColumns(10);
 
-        JLabel createCourseErrorLabel = new JLabel("");
+        final JLabel createCourseErrorLabel = new JLabel("");
         createCourseErrorLabel.setForeground(Color.RED);
         createCourseErrorLabel.setBounds(10, 588, 202, 16);
         contentPane.add(createCourseErrorLabel);
@@ -618,12 +622,74 @@ public class DepartmentPage extends JFrame {
         createACourseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String courseName, courseCode;
+                String courseName = null;
+                String courseCode = null;
                 int numberOfLectures, numberOfLabs, numberOfStudents, hours, hourlyRateTA, numberOfCredits;
 
                 if (courseNameField.getText().equals("") || courseCodeField.getText().equals("")) {
-
+                    createCourseErrorLabel.setText("Please fill all the required forms.");
+                    updateDisplay();
+                    return;
                 }
+
+                //convert the number of lectures if possible.
+                try {
+                    numberOfLectures = Integer.valueOf(numberOfLecturesField.getText());
+                } catch (NumberFormatException exception) {
+                    createCourseErrorLabel.setText("Invalid number of lectures. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                //convert the number of labs if possible.
+                try {
+                    numberOfLabs = Integer.valueOf(numberOfLabsField.getText());
+                } catch (NumberFormatException exception) {
+                    createCourseErrorLabel.setText("Invalid number of labs. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                //convert the number of student enrolled if possible.
+                try {
+                    numberOfStudents = Integer.valueOf(numberStudentEnrolledField.getText());
+                } catch (NumberFormatException exception) {
+                    createCourseErrorLabel.setText("Invalid number of student enrolled. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                //convert the number of hours if possible.
+                try {
+                    hours = Integer.valueOf(hoursField.getText());
+                } catch (NumberFormatException exception) {
+                    createCourseErrorLabel.setText("Invalid number of hours. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                //convert the TA hourly rate if possible.
+                try {
+                    hourlyRateTA = Integer.valueOf(taHourlyRateField.getText());
+                } catch (NumberFormatException exception) {
+                    createCourseErrorLabel.setText("Invalid TA hourly rate. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                //convert the number of credits if possible.
+                try {
+                    numberOfCredits = Integer.valueOf(creditsField.getText());
+                } catch (NumberFormatException exception) {
+                    createCourseErrorLabel.setText("Invalid number of credits. Please try again.");
+                    updateDisplay();
+                    return;
+                }
+
+                //TODO: create a dummy instructor here.
+                Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
+                final Course course = new Course(courseName, "Computer Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
+
             }
         });
         createACourseButton.setBounds(10, 547, 202, 29);
