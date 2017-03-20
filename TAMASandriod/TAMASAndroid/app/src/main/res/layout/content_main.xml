@@ -37,8 +37,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="@string/updateInfo_button"
-            android:onClick="updateInfos"
+            android:onClick="updateInfo"
             android:id="@+id/updateInfo" />
+
+        <Button
+            android:layout_width="353dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/ViewJobPost_button"
+            android:onClick="viewPost"
+            android:id="@+id/viewPost" />
 
         <Button
             android:layout_width="353dp"
@@ -48,8 +56,23 @@
             android:onClick="viewOffers"
             android:id="@+id/viewOffers" />
 
+        <Button
+            android:layout_width="353dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/viewReview_button"
+            android:onClick="viewReviews"
+            android:id="@+id/viewReviews" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:hint="@string/description"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/studentDescription"/>
     </LinearLayout>
 
 

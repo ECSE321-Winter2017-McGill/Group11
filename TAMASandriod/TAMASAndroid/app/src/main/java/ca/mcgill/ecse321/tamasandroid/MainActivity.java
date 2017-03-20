@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +17,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //the description of the student
+        TextView description = (TextView) findViewById(R.id.studentDescription);
+        description.setText("Will be used to display the information of the student");
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -51,10 +57,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /** Called when the user taps the View offer button */
+    //Will access the view offers tab for job offers
     public void viewOffers(View view) {
-        // Do something in response to button
         Intent intent = new Intent(this, ViewOfferActivity.class);
+        startActivity(intent);
+    }
+
+    //Enter the menu to update info if something has changed
+    public void updateInfo(View view){
+        Intent intent = new Intent(this, UpdateInfoActivity.class);
+        startActivity(intent);
+    }
+
+    //View the job posting
+    public void viewPost(View view){
+        Intent intent = new Intent(this, ViewJobPostingActivity.class);
+        startActivity(intent);
+    }
+
+    //View the reviews from instructors
+    public void viewReviews(View view){
+        Intent intent = new Intent(this, ViewReviewsActivity.class);
         startActivity(intent);
     }
 }
