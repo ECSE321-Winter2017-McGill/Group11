@@ -592,6 +592,7 @@
     <string name="applytojob_button">Apply</string>
     <string name="bottom_sheet_behavior" translatable="false">android.support.design.widget.BottomSheetBehavior</string>
     <string name="character_counter_pattern" translatable="false">%1$d / %2$d</string>
+    <string name="error_label"/>
     <string name="jobposting_dummy">Dummy Job</string>
     <string name="jobpostingspinner_label">Job Posting</string>
     <string name="jobspinner_label">Job</string>
@@ -603,11 +604,8 @@
     <string name="newjob_hint">Job Name</string>
     <string name="newjobposting_date_first">02-02-2017</string>
     <string name="newjobposting_date_label">Deadline</string>
-    <string name="newparticipant2_hint">ID</string>
-    <string name="newparticipant_button">Add Participant</string>
-    <string name="newparticipant_hint">Who?</string>
-    <string name="newstudent1_hint">Who</string>
-    <string name="newstudent2_hint">ID</string>
+    <string name="newstudent1_hint">Student Name</string>
+    <string name="newstudent2_hint">Student ID</string>
     <string name="newstudent_button">Add student</string>
     <string name="newstudent_hint">Add Student</string>
     <string name="participantspinner_label">Students</string>

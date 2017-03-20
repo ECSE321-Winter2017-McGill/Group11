@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">TAMASAndroid</string>
+    <string name="action_settings">Settings</string>
+    <string name="viewJobOffers_button">View Job Offers</string>
+    <string name="viewJobOffer_button">View Job Offer</string>
+    <string name="updateInfo_button">Update Student Info</string>
+    <string name="updatestudent_name">New Name</string>
+    <string name="updatestudent_jobPreference">New Preference</string>
+    <string name="update">Update</string>
+    <string name="updatestudent_email">New Email</string>
+</resources>

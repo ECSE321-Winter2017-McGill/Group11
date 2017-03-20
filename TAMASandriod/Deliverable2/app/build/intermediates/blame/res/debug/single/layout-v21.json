@@ -1,18 +1,18 @@
 [
     {
-        "merged": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
-        "source": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_action.xml"
+        "merged": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
+        "source": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_template_icon_group.xml"
     },
     {
-        "merged": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
-        "source": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_template_custom_big.xml"
+        "merged": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
+        "source": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_action_tombstone.xml"
     },
     {
-        "merged": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action_tombstone.xml",
-        "source": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_action_tombstone.xml"
+        "merged": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_action.xml",
+        "source": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_action.xml"
     },
     {
-        "merged": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_icon_group.xml",
-        "source": "C:\\Edward\\Mcgill\\semesters\\winter 2017\\Intro to software\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_template_icon_group.xml"
+        "merged": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\res\\merged\\debug\\layout-v21\\notification_template_custom_big.xml",
+        "source": "C:\\Users\\Edward Zhao\\Documents\\GitHub\\Group11\\TAMASandriod\\Deliverable2\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\25.1.0\\res\\layout-v21\\notification_template_custom_big.xml"
     }
 ]

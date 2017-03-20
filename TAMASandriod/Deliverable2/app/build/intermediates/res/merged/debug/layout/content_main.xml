@@ -26,6 +26,21 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:id="@+id/linearLayout">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+                <TextView
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:text="@string/error_label"
+                    android:id="@+id/errorlabel"
+                    android:textColor="@android:color/holo_red_light"/>
+
+
+
+            </LinearLayout>
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -87,19 +102,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/newstudent_email"
-                android:hint="School Email"/>
+                android:hint="Student Email"/>
 
-            <EditText
+
+            <CheckBox
+                android:text="Check if Graduate Student"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/newstudent_grad"
-                android:hint="Enter Yes is graduate student, No if not"/>
+                android:id="@+id/isGrad_checkBox" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/newstudent_year"
-                android:hint="Student year"/>
+                android:hint="Student Year"/>
 
             <EditText
                 android:layout_width="match_parent"
