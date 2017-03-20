@@ -85,6 +85,7 @@ public class DepartmentPage extends JFrame {
         this.department = department;
 
         final DepartmentController departmentController = new DepartmentController(department);
+        final StudentController studentController = new StudentController(department);
 
         setTitle("Department");
 
@@ -300,13 +301,6 @@ public class DepartmentPage extends JFrame {
                 int studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
-//                //if one of the field is empty, display an error and update the display
-//                if (studentNameField.getText().equals("") || emailField.getText().equals("") || jobPreferenceField.getText().equals("")) {
-//                    registerAStudentErrorLabel.setText("Please fill all the required forms.");
-//                    updateDisplay();
-//                    return;
-//                }
-
                 //proceed with storing the field values since they are all non-empty
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
@@ -348,15 +342,6 @@ public class DepartmentPage extends JFrame {
                 if (graduateRadioForRegister.isSelected())
                     isGrad = true;
 
-                //register the student
-
-                for (Student student : department.getAllStudents()) {
-                    if (Integer.toString(student.getStudentID()).equals(studentID) || student.getEmail().equals(studentEmail)) {
-                        registerAStudentErrorLabel.setText("This student is already existent.");
-                        updateDisplay();
-                        return;
-                    }
-                }
                 departmentController.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
                 updateDisplay();
 
