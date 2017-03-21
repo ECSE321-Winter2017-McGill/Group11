@@ -74,18 +74,13 @@ public class DepartmentPage extends JFrame {
      * Create the frame.
      */
 
-    //TODO: READ ME
-    /* in DepartmentPage() below, you will find the construction of the Swing UI as well as
-     * the event handlers. Event handlers are used when a button is click so this where most of
-     * the interesting code lives. There are 4 major event handlers, one for each button. Note that
-     *  the event handler for "Creating a job" is not complete at all, I will write it for deliverable 3*/
-
     public DepartmentPage(final Department department) {
 
         this.department = department;
 
         final DepartmentController departmentController = new DepartmentController(department);
         final StudentController studentController = new StudentController(department);
+        final InstructorController instructorController = new InstructorController(department);
 
         setTitle("Department");
 
@@ -166,14 +161,6 @@ public class DepartmentPage extends JFrame {
                 int jobID;
                 Job associatedJob = null;
 
-//                //if one of the fields is empty, display an error and reset the display
-//                if (skillsRequiredField.getText().equals("") || experienceRequiredField.getText().equals("") || jobDescriptionField.getText().equals("") || offerDeadlineDatePicker.getModel().getValue() == null) {
-//                    publishJobPostingErrorLabel.setText("Please fill all the fields.");
-//                    updateDisplay();
-//                    return;
-//                }
-
-                //the fields are non-empty, so proceed to storing there value
                 skillsRequired = skillsRequiredField.getText();
                 experienceRequired = experienceRequiredField.getText();
                 jobDescription = jobDescriptionField.getText();
@@ -297,54 +284,29 @@ public class DepartmentPage extends JFrame {
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String studentName,studentEmail,studentJobPreference;
-                int studentID, studentYear, numberOfHours;
+                String studentName,studentEmail,studentJobPreference, studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
                 //proceed with storing the field values since they are all non-empty
                 studentName = studentNameField.getText();
                 studentEmail = emailField.getText();
                 studentJobPreference = jobPreferenceField.getText();
-
-                //convert the student ID (if possible) as well as student year and number of hours
-                try {
-                    studentID = Integer.valueOf(studentIDField.getText());
-                } catch (NumberFormatException exception) {
-                    registerAStudentErrorLabel.setText("Invalid student ID. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                try {
-                    studentYear = Integer.valueOf(studentYearField.getText());
-                } catch (NumberFormatException exception) {
-                    registerAStudentErrorLabel.setText("Invalid student year. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                try {
-                    numberOfHours = Integer.valueOf(studentHoursField.getText());
-                } catch (NumberFormatException exception) {
-                    registerAStudentErrorLabel.setText("Invalid student hours. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                //check if the user selected a position type
-                if (!graduateRadioForRegister.isSelected() && !undergraduateRadioForRegister.isSelected()) {
-                    registerAStudentErrorLabel.setText("Please select a position type.");
-                    updateDisplay();
-                    return;
-                }
+                studentID = studentIDField.getText();
+                studentYear = studentYearField.getText();
+                numberOfHours = studentHoursField.getText();
 
                 //if the user selected a position type, find which one
                 if (graduateRadioForRegister.isSelected())
                     isGrad = true;
 
-                departmentController.registerAStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
-                updateDisplay();
+                try {
+                    studentController.createStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
+                    registerAStudentErrorLabel.setText("");
+                } catch (InvalidInputException e1) {
+                    registerAStudentErrorLabel.setText(e1.getMessage());
+                }
 
+                updateDisplay();
             }
         });
         registerStudentButton.setBounds(260, 241, 232, 29);
@@ -395,9 +357,8 @@ public class DepartmentPage extends JFrame {
                 }
 
                 //find the associated student
-                student = Student.getWithStudentID(studentID); //TODO: the student might not exist
+                student = Student.getWithStudentID(studentID);
 
-                //store the job ID from the spinner
 
                 //search through all the jobs of the department to find the corresponding job object
                 for (Job job: department.getAllJobs()) {
@@ -406,12 +367,8 @@ public class DepartmentPage extends JFrame {
                         associatedJob = job;
                         break;
                     }
-
                 }
 
-                //if the job was found (which should be the case, since the choices come from a spinner)
-
-                StudentController studentController = new StudentController(department);
                 try {
                     studentController.applyToJobPosting(associatedJob,student);
                     applyForAJobErrorLabel.setText(""); //it worked so remove the error
@@ -550,7 +507,7 @@ public class DepartmentPage extends JFrame {
         hoursLabel.setBounds(10, 463, 90, 16);
         contentPane.add(hoursLabel);
 
-        JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
+        final JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
         taHourlyRateLabel.setBounds(10, 491, 90, 16);
         contentPane.add(taHourlyRateLabel);
 
@@ -607,74 +564,20 @@ public class DepartmentPage extends JFrame {
         createACourseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String courseName = null;
-                String courseCode = null;
-                int numberOfLectures, numberOfLabs, numberOfStudents, hours, hourlyRateTA, numberOfCredits;
+                String courseName, courseCode, numberOfLectures, numberOfLabs, numberOfStudents,hours, hourlyRateTA, numberOfCredits;
 
-                if (courseNameField.getText().equals("") || courseCodeField.getText().equals("")) {
-                    createCourseErrorLabel.setText("Please fill all the required forms.");
-                    updateDisplay();
-                    return;
-                }
-
-                //convert the number of lectures if possible.
-                try {
-                    numberOfLectures = Integer.valueOf(numberOfLecturesField.getText());
-                } catch (NumberFormatException exception) {
-                    createCourseErrorLabel.setText("Invalid number of lectures. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                //convert the number of labs if possible.
-                try {
-                    numberOfLabs = Integer.valueOf(numberOfLabsField.getText());
-                } catch (NumberFormatException exception) {
-                    createCourseErrorLabel.setText("Invalid number of labs. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                //convert the number of student enrolled if possible.
-                try {
-                    numberOfStudents = Integer.valueOf(numberStudentEnrolledField.getText());
-                } catch (NumberFormatException exception) {
-                    createCourseErrorLabel.setText("Invalid number of student enrolled. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                //convert the number of hours if possible.
-                try {
-                    hours = Integer.valueOf(hoursField.getText());
-                } catch (NumberFormatException exception) {
-                    createCourseErrorLabel.setText("Invalid number of hours. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                //convert the TA hourly rate if possible.
-                try {
-                    hourlyRateTA = Integer.valueOf(taHourlyRateField.getText());
-                } catch (NumberFormatException exception) {
-                    createCourseErrorLabel.setText("Invalid TA hourly rate. Please try again.");
-                    updateDisplay();
-                    return;
-                }
-
-                //convert the number of credits if possible.
-                try {
-                    numberOfCredits = Integer.valueOf(creditsField.getText());
-                } catch (NumberFormatException exception) {
-                    createCourseErrorLabel.setText("Invalid number of credits. Please try again.");
-                    updateDisplay();
-                    return;
-                }
+                courseName = courseNameField.getText();
+                courseCode = courseCodeField.getText();
+                numberOfLectures = numberOfLecturesField.getText();
+                numberOfLabs = numberOfLabsField.getText();
+                numberOfStudents = numberStudentEnrolledField.getText();
+                hours = hoursField.getText();
+                hourlyRateTA = taHourlyRateField.getText();
+                numberOfCredits = creditsField.getText();
 
                 //TODO: create a dummy instructor here.
                 Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
-                final Course course = new Course(courseName, "Computer Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
-
+                //departmentController.createCourse(courseCode,courseName,"",numberOfCredits,numberOfLabs,0,hours,numberOfStudents,0,0,hourlyRateTA,0,0,dummyInstructor);
             }
         });
         createACourseButton.setBounds(10, 547, 202, 29);

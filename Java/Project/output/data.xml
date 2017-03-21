@@ -183,6 +183,20 @@
       <currentJobs id="62"/>
       <reviewText id="63"/>
     </Student>
+    <Student id="64">
+      <studentID>260</studentID>
+      <name>Mathieu</name>
+      <email>mathieu.lapointe@mail</email>
+      <isGrad>false</isGrad>
+      <year>2</year>
+      <jobPreference>none</jobPreference>
+      <numberOfHours>3</numberOfHours>
+      <previousJobExperiences id="65"/>
+      <jobsAppliedTo id="66"/>
+      <offeredJobs id="67"/>
+      <currentJobs id="68"/>
+      <reviewText id="69"/>
+    </Student>
   </allStudents>
-  <allReviews id="64"/>
+  <allReviews id="70"/>
 </ca.mcgill.ecse321.tamas.model.Department>
