@@ -18,7 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //create a dummy student
+
         //the description of the student
+
         TextView description = (TextView) findViewById(R.id.studentDescription);
         description.setText("Will be used to display the information of the student");
 

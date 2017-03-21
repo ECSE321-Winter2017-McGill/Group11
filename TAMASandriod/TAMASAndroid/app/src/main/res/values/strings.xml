@@ -11,4 +11,6 @@
     <string name="ViewJobPost_button">View Job Postings</string>
     <string name="viewReview_button">View reviews</string>
     <string name="description">Current Information of Student</string>
+    <string name="jobpostingspinner_label">Job postings</string>
+    <string name="applyToJob">Apply</string>
 </resources>
