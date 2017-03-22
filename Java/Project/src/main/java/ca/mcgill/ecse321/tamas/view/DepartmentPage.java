@@ -38,16 +38,19 @@ public class DepartmentPage extends JFrame {
     private JTextField jobPreferenceField;
     private JTextField studentIDField;
     private JTextField studentHoursField;
-    private JTextField courseNumberField;
     private JTextField studentIDForApplyingField;
     private JTextField courseNameField;
     private JTextField courseCodeField;
-    private JTextField numberOfLecturesField;
+    private JTextField numberOfTutorialsField;
     private JTextField numberOfLabsField;
     private JTextField numberStudentEnrolledField;
     private JTextField hoursField;
     private JTextField taHourlyRateField;
     private JTextField creditsField;
+    private JTextField numberOfTAsNeededField;
+    private JTextField numberOfGradersNeededField;
+    private JTextField graderHourlyRateField;
+    private JTextField budgetField;
 
     //My own private fields
     private final JRadioButton TARadio;
@@ -61,11 +64,13 @@ public class DepartmentPage extends JFrame {
     private JComboBox<String> jobListForPublishJobPosting;
     private JComboBox<String> jobListForStudentApplyJob;
     private JComboBox<String> courseList;
+    private JComboBox<String> semesterJComboBox;
 
 
     private Integer selectedJobForPublishJobPosting = -1;
     private Integer selectedJobForStudentApply = -1;
     private Integer selectedCourse = -1;
+    private Integer selectedSemesterForCreateACourse = -1;
 
     Department department;
 
@@ -82,7 +87,7 @@ public class DepartmentPage extends JFrame {
         final StudentController studentController = new StudentController(department);
         final InstructorController instructorController = new InstructorController(department);
 
-        setTitle("Department");
+        setTitle("Department's Page");
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
@@ -182,7 +187,7 @@ public class DepartmentPage extends JFrame {
                     }
 
                 } else
-                    publishJobPostingErrorLabel.setText("An error occurred, please try again."); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+                    publishJobPostingErrorLabel.setText("Please select a job.");
 
                 updateDisplay();
             }
@@ -477,113 +482,181 @@ public class DepartmentPage extends JFrame {
             }
         });
 
-
         JLabel createACourseLabel = new JLabel("Create a Course");
         createACourseLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        createACourseLabel.setBounds(70, 295, 125, 16);
+        createACourseLabel.setBounds(37, 240, 125, 16);
         contentPane.add(createACourseLabel);
 
         JLabel courseNameLabel = new JLabel("Course name");
-        courseNameLabel.setBounds(10, 323, 90, 16);
+        courseNameLabel.setBounds(10, 273, 90, 16);
         contentPane.add(courseNameLabel);
 
         JLabel courseCodeLabel = new JLabel("Course code");
-        courseCodeLabel.setBounds(10, 351, 90, 16);
+        courseCodeLabel.setBounds(10, 301, 90, 16);
         contentPane.add(courseCodeLabel);
 
-        JLabel numberOfLecturesLabel = new JLabel("Number of lectures");
-        numberOfLecturesLabel.setBounds(10, 379, 90, 16);
-        contentPane.add(numberOfLecturesLabel);
+        JLabel numberOfTutorialsLabel = new JLabel("Number of tutorials");
+        numberOfTutorialsLabel.setBounds(10, 357, 90, 16);
+        contentPane.add(numberOfTutorialsLabel);
 
         JLabel numberOfLabsLabel = new JLabel("Number of labs");
-        numberOfLabsLabel.setBounds(10, 407, 90, 16);
+        numberOfLabsLabel.setBounds(10, 385, 90, 16);
         contentPane.add(numberOfLabsLabel);
 
         JLabel numberStudentEnrolledLabel = new JLabel("Number student enrolled");
-        numberStudentEnrolledLabel.setBounds(10, 435, 90, 16);
+        numberStudentEnrolledLabel.setBounds(10, 413, 90, 16);
         contentPane.add(numberStudentEnrolledLabel);
 
         JLabel hoursLabel = new JLabel("Hours");
-        hoursLabel.setBounds(10, 463, 90, 16);
+        hoursLabel.setBounds(10, 441, 90, 16);
         contentPane.add(hoursLabel);
 
-        final JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
-        taHourlyRateLabel.setBounds(10, 491, 90, 16);
+        JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
+        taHourlyRateLabel.setBounds(10, 527, 90, 16);
         contentPane.add(taHourlyRateLabel);
 
         JLabel creditsLabel = new JLabel("Credits");
-        creditsLabel.setBounds(10, 519, 90, 16);
+        creditsLabel.setBounds(10, 610, 90, 16);
         contentPane.add(creditsLabel);
 
         courseNameField = new JTextField();
-        courseNameField.setBounds(112, 318, 100, 26);
+        courseNameField.setBounds(112, 268, 100, 26);
         contentPane.add(courseNameField);
         courseNameField.setColumns(10);
 
         courseCodeField = new JTextField();
-        courseCodeField.setBounds(112, 346, 100, 26);
+        courseCodeField.setBounds(112, 296, 100, 26);
         contentPane.add(courseCodeField);
         courseCodeField.setColumns(10);
 
-        numberOfLecturesField = new JTextField();
-        numberOfLecturesField.setBounds(112, 374, 100, 26);
-        contentPane.add(numberOfLecturesField);
-        numberOfLecturesField.setColumns(10);
+        numberOfTutorialsField = new JTextField();
+        numberOfTutorialsField.setBounds(112, 352, 100, 26);
+        contentPane.add(numberOfTutorialsField);
+        numberOfTutorialsField.setColumns(10);
 
         numberOfLabsField = new JTextField();
-        numberOfLabsField.setBounds(112, 402, 100, 26);
+        numberOfLabsField.setBounds(112, 380, 100, 26);
         contentPane.add(numberOfLabsField);
         numberOfLabsField.setColumns(10);
 
         numberStudentEnrolledField = new JTextField();
-        numberStudentEnrolledField.setBounds(112, 430, 100, 26);
+        numberStudentEnrolledField.setBounds(112, 408, 100, 26);
         contentPane.add(numberStudentEnrolledField);
         numberStudentEnrolledField.setColumns(10);
 
         hoursField = new JTextField();
-        hoursField.setBounds(112, 458, 100, 26);
+        hoursField.setBounds(112, 436, 100, 26);
         contentPane.add(hoursField);
         hoursField.setColumns(10);
 
         taHourlyRateField = new JTextField();
-        taHourlyRateField.setBounds(112, 486, 100, 26);
+        taHourlyRateField.setBounds(112, 522, 100, 26);
         contentPane.add(taHourlyRateField);
         taHourlyRateField.setColumns(10);
 
         creditsField = new JTextField();
-        creditsField.setBounds(112, 514, 100, 26);
+        creditsField.setBounds(112, 605, 100, 26);
         contentPane.add(creditsField);
         creditsField.setColumns(10);
 
         final JLabel createCourseErrorLabel = new JLabel("");
         createCourseErrorLabel.setForeground(Color.RED);
-        createCourseErrorLabel.setBounds(10, 588, 202, 16);
+        createCourseErrorLabel.setBounds(10, 684, 202, 16);
         contentPane.add(createCourseErrorLabel);
+
+        JLabel lblCreateAnInstructor = new JLabel("Create an Instructor");
+        lblCreateAnInstructor.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        lblCreateAnInstructor.setBounds(307, 295, 152, 16);
+        contentPane.add(lblCreateAnInstructor);
+
+        JLabel semesterLabel = new JLabel("Semester");
+        semesterLabel.setBounds(10, 329, 94, 16);
+        contentPane.add(semesterLabel);
+
+        semesterJComboBox = new JComboBox();
+        semesterJComboBox.setBounds(112, 325, 100, 27);
+        contentPane.add(semesterJComboBox);
+
+        semesterJComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedSemesterForCreateACourse = cb.getSelectedIndex();
+            }
+        });
+
+        JLabel numberOfTAsNeededLabel = new JLabel("TAs needed");
+        numberOfTAsNeededLabel.setBounds(10, 469, 90, 16);
+        contentPane.add(numberOfTAsNeededLabel);
+
+        numberOfTAsNeededField = new JTextField();
+        numberOfTAsNeededField.setBounds(112, 464, 100, 26);
+        contentPane.add(numberOfTAsNeededField);
+        numberOfTAsNeededField.setColumns(10);
+
+        JLabel numberOfGradersNeededLabel = new JLabel("Graders needed");
+        numberOfGradersNeededLabel.setBounds(10, 497, 90, 16);
+        contentPane.add(numberOfGradersNeededLabel);
+
+        numberOfGradersNeededField = new JTextField();
+        numberOfGradersNeededField.setBounds(112, 492, 100, 26);
+        contentPane.add(numberOfGradersNeededField);
+        numberOfGradersNeededField.setColumns(10);
+
+        JLabel graderHourlyRateLabel = new JLabel("Graders hourly rate");
+        graderHourlyRateLabel.setBounds(10, 555, 90, 16);
+        contentPane.add(graderHourlyRateLabel);
+
+        graderHourlyRateField = new JTextField();
+        graderHourlyRateField.setBounds(112, 550, 100, 26);
+        contentPane.add(graderHourlyRateField);
+        graderHourlyRateField.setColumns(10);
+
+        JLabel budgetLabel = new JLabel("Budget");
+        budgetLabel.setBounds(10, 583, 90, 16);
+        contentPane.add(budgetLabel);
+
+        budgetField = new JTextField();
+        budgetField.setBounds(112, 578, 100, 26);
+        contentPane.add(budgetField);
+        budgetField.setColumns(10);
+
 
         JButton createACourseButton = new JButton("Create a Course");
         createACourseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String courseName, courseCode, numberOfLectures, numberOfLabs, numberOfStudents,hours, hourlyRateTA, numberOfCredits;
+                String courseName, courseCode, semester, numberOfLabs, numberOfTutorials, numberOfStudents,hours, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, numberOfCredits, budget;
 
                 courseName = courseNameField.getText();
                 courseCode = courseCodeField.getText();
-                numberOfLectures = numberOfLecturesField.getText();
+
                 numberOfLabs = numberOfLabsField.getText();
                 numberOfStudents = numberStudentEnrolledField.getText();
                 hours = hoursField.getText();
                 hourlyRateTA = taHourlyRateField.getText();
                 numberOfCredits = creditsField.getText();
 
-                //TODO: create a dummy instructor here.
-                Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
-                //departmentController.createCourse(courseCode,courseName,"",numberOfCredits,numberOfLabs,0,hours,numberOfStudents,0,0,hourlyRateTA,0,0,dummyInstructor);
+                if (selectedSemesterForCreateACourse >= 0) {
+
+                    //TESTING PURPOSES
+                    Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
+
+                    try {
+                        departmentController.createCourse(courseCode, courseName, "",numberOfCredits, numberOfLabs,"",hours,numberOfStudents,"","",hourlyRateTA,"","",dummyInstructor);
+                        createCourseErrorLabel.setText("");
+                    } catch (InvalidInputException e1) {
+                        createCourseErrorLabel.setText(e1.getMessage());
+                    }
+                } else
+                    createCourseErrorLabel.setText("Please select a semester!");
+
+                updateDisplay();
             }
         });
-        createACourseButton.setBounds(10, 547, 202, 29);
+        createACourseButton.setBounds(10, 643, 202, 29);
         contentPane.add(createACourseButton);
 
-        this.setSize(800,620);
+        this.setSize(800,800);
 
         updateDisplay();
     }
@@ -599,7 +672,6 @@ public class DepartmentPage extends JFrame {
         skillsRequiredField.setText("");
         experienceRequiredField.setText("");
         jobDescriptionField.setText("");
-        //TODO: update the spinner
 
         //update the **register a student** component
         studentIDField.setText("");
@@ -608,14 +680,12 @@ public class DepartmentPage extends JFrame {
         studentYearField.setText("");
         jobPreferenceField.setText("");
         studentHoursField.setText("");
-
-        //TODO: there seems to be an issue here, the radio buttons do not get unselected
+        
         undergraduateRadioForRegister.setSelected(false);
         graduateRadioForRegister.setSelected(false);
 
         //update the **Apply for a Job** component
         studentIDForApplyingField.setText("");
-        //TODO: update the spinner
 
         courseList.removeAllItems();
         for(Course c: department.getAllCourses()){
@@ -642,111 +712,14 @@ public class DepartmentPage extends JFrame {
         selectedJobForStudentApply = -1;
         jobListForStudentApplyJob.setSelectedIndex(selectedJobForStudentApply);
 
+        semesterJComboBox.removeAllItems();
+        semesterJComboBox.addItem("Fall");
+        semesterJComboBox.addItem("Winter");
+        selectedSemesterForCreateACourse = -1;
+        semesterJComboBox.setSelectedIndex(selectedSemesterForCreateACourse);
+
         offerDeadlineDatePicker.getModel().setValue(null);
 
-
-    }
-
-    //*****SETTERS AND GETTERS******
-
-    public void setSkillsRequiredField(String text) {
-
-        skillsRequiredField.setText(text);
-    }
-
-    public String getSkillsRequiredField() {
-
-        return skillsRequiredField.getText();
-    }
-
-    public void setExperienceRequiredField(String text) {
-
-        experienceRequiredField.setText(text);
-    }
-
-    public String getExperienceRequiredField() {
-
-        return experienceRequiredField.getText();
-    }
-
-    public void setJobDescriptionField(String text) {
-
-        jobDescriptionField.setText(text);
-    }
-
-    public String getJobDescription() {
-
-        return jobDescriptionField.getText();
-    }
-
-    public void setCourseNumberField(String text) {
-
-        courseNumberField.setText(text);
-    }
-
-    public String getCourseNumber() {
-
-        return courseNumberField.getText();
-    }
-
-    public void setStudentIDField(String text) {
-
-        studentIDField.setText(text);
-    }
-
-    public String getStudentIDField() {
-
-        return studentIDField.getText();
-    }
-
-    public void setStudentNameField(String text) {
-
-        studentNameField.setText(text);
-    }
-
-    public String getStudentNameField() {
-
-        return studentNameField.getText();
-    }
-
-    public void setEmailField(String text) {
-
-        emailField.setText(text);
-    }
-
-    public String getEmailField() {
-
-        return emailField.getText();
-    }
-
-    public void setStudentYearField(String text) {
-
-        studentYearField.setText(text);
-    }
-
-    public String getStudentYearField() {
-
-        return studentYearField.getText();
-    }
-
-    public void setJobPreferenceField(String text) {
-
-        jobDescriptionField.setText(text);
-    }
-
-    public String getJobPreferenceField() {
-
-        return jobPreferenceField.getText();
-    }
-
-    public void setStudentNameForApplyingField(String text) {
-
-        studentIDForApplyingField.setText(text);
-    }
-
-    public String getStudentForApplyingField() {
-
-        return studentIDForApplyingField.getText();
     }
 
     private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
