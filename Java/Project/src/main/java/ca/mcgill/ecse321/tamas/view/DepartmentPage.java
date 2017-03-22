@@ -629,20 +629,26 @@ public class DepartmentPage extends JFrame {
 
                 courseName = courseNameField.getText();
                 courseCode = courseCodeField.getText();
-
                 numberOfLabs = numberOfLabsField.getText();
+                numberOfTutorials = numberOfTutorialsField.getText();
                 numberOfStudents = numberStudentEnrolledField.getText();
                 hours = hoursField.getText();
+                numberOfTAsNeeded = numberOfTAsNeededField.getText();
+                numberOfGradersNeeded = numberOfGradersNeededField.getText();
                 hourlyRateTA = taHourlyRateField.getText();
+                graderHourlyRate = graderHourlyRateField.getText();
                 numberOfCredits = creditsField.getText();
+                budget = budgetField.getText();
 
                 if (selectedSemesterForCreateACourse >= 0) {
 
+                    semester = semesterJComboBox.getSelectedItem().toString();
+
                     //TESTING PURPOSES
-                    Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
+                    Instructor dummyInstructor = new Instructor("John Doe", 12346, "john.doe2@mcgill.ca");
 
                     try {
-                        departmentController.createCourse(courseCode, courseName, "",numberOfCredits, numberOfLabs,"",hours,numberOfStudents,"","",hourlyRateTA,"","",dummyInstructor);
+                        departmentController.createCourse(courseCode, courseName, semester,numberOfCredits, numberOfLabs,numberOfTutorials,hours,numberOfStudents,numberOfTAsNeeded,numberOfGradersNeeded,hourlyRateTA,graderHourlyRate,budget,dummyInstructor);
                         createCourseErrorLabel.setText("");
                     } catch (InvalidInputException e1) {
                         createCourseErrorLabel.setText(e1.getMessage());
