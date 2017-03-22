@@ -18,6 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity"></activity>
         <activity
             android:name=".ViewOfferActivity"
             android:parentActivityName=".MainActivity" />
@@ -26,10 +27,11 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ViewJobPostingActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".ViewReviewsActivity"
-            android:parentActivityName=".MainActivity">
-        </activity>
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".ViewReviewsActivity"
+            android:parentActivityName=".LoginActivity"></activity>
+
     </application>
 
 </manifest>

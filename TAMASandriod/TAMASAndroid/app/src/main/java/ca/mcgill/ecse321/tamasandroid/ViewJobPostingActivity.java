@@ -31,7 +31,7 @@ public class ViewJobPostingActivity extends AppCompatActivity {
 
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
-        addJobPosting();
+        //addJobPosting();
         refreshData();
     }
 
