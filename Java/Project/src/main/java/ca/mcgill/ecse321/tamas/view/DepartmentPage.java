@@ -651,8 +651,9 @@ public class DepartmentPage extends JFrame {
                     } catch (InvalidInputException e1) {
                         createCourseErrorLabel.setText(e1.getMessage());
                     }
-                } else
+                } else {
                     createCourseErrorLabel.setText("Please select a semester!");
+                }
 
                 updateDisplay();
             }
@@ -692,9 +693,28 @@ public class DepartmentPage extends JFrame {
         contentPane.add(instructorEmailField);
         instructorEmailField.setColumns(10);
 
+        final JLabel createInstructorErrorLabel = new JLabel("");
+        createInstructorErrorLabel.setForeground(Color.RED);
+        createInstructorErrorLabel.setBounds(260, 454, 232, 16);
+        contentPane.add(createInstructorErrorLabel);
+
         JButton createInstructorButton = new JButton("Create new instructor");
         createInstructorButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+                String instructorName, instructorID, instructorEmail;
+
+                instructorName = createAnInstructorNameField.getText();
+                instructorID = instructorIDField.getText();
+                instructorEmail = instructorEmailField.getText();
+
+                try {
+                    instructorController.createInstructor(instructorName,instructorID,instructorEmail);
+                    createInstructorErrorLabel.setText("");
+
+                } catch (InvalidInputException e1) {
+                    createInstructorErrorLabel.setText(e1.getMessage());
+                }
             }
         });
         createInstructorButton.setBounds(260, 423, 232, 29);

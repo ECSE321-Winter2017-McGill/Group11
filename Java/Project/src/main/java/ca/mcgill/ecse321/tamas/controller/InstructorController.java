@@ -19,6 +19,10 @@ public class InstructorController {
 	private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
 	//private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!";
 
+    private final String createInstructorNotIntegerIDError = " Input a numeric ID number!";
+    private final String createInstructorNullInstructorNameError = " Instructor name cannot be empty!";
+    private final String createInstructorNullInstructorEmailError = " Instructor email cannot be empty!";
+
 
 
 
@@ -30,7 +34,31 @@ public class InstructorController {
 		
 	}
 
-	public void createInstructor(String name, int instructorID, String email){
+	public void createInstructor(String name, String instructorIDString, String email) throws InvalidInputException {
+
+	    String error = "";
+		int instructorID = -999;
+		boolean isInstructorID = true;
+
+        try{
+            instructorID = Integer.parseInt(instructorIDString);
+        }catch (NumberFormatException e){
+            isInstructorID = false;
+        }
+
+        if (!isInstructorID) {
+            error += createInstructorNotIntegerIDError;
+        }
+        if (name == null || name.length() == 0) {
+            error += createInstructorNullInstructorNameError;
+        }
+        if (email == null || email.length() == 0) {
+            error += createInstructorNullInstructorEmailError;
+        }
+
+        if (error.length()>0){
+            throw new InvalidInputException(error);
+        }
 
 		Instructor instructor = new Instructor(name, instructorID, email);
 		department.addAllInstructor(instructor);

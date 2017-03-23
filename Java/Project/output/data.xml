@@ -138,10 +138,24 @@
       <courses id="43"/>
       <reviewText id="44"/>
     </Instructor>
+    <Instructor id="45">
+      <name>Daniel Varro</name>
+      <instructorID>99999999</instructorID>
+      <email>daniel.varro@mail.mcgill.ca</email>
+      <courses id="46"/>
+      <reviewText id="47"/>
+    </Instructor>
+    <Instructor id="48">
+      <name>r</name>
+      <instructorID>2</instructorID>
+      <email>2</email>
+      <courses id="49"/>
+      <reviewText id="50"/>
+    </Instructor>
   </allInstructors>
-  <allStudents id="45">
+  <allStudents id="51">
     <Student reference="9"/>
-    <Student id="46">
+    <Student id="52">
       <studentID>999999999</studentID>
       <name>mathieu</name>
       <email>math@mail.ca</email>
@@ -149,20 +163,6 @@
       <year>3</year>
       <jobPreference>none</jobPreference>
       <numberOfHours>3</numberOfHours>
-      <previousJobExperiences id="47"/>
-      <jobsAppliedTo id="48"/>
-      <offeredJobs id="49"/>
-      <currentJobs id="50"/>
-      <reviewText id="51"/>
-    </Student>
-    <Student id="52">
-      <studentID>999999999</studentID>
-      <name>bob</name>
-      <email>mat@gmail.ca</email>
-      <isGrad>false</isGrad>
-      <year>12</year>
-      <jobPreference>none</jobPreference>
-      <numberOfHours>5</numberOfHours>
       <previousJobExperiences id="53"/>
       <jobsAppliedTo id="54"/>
       <offeredJobs id="55"/>
@@ -172,11 +172,11 @@
     <Student id="58">
       <studentID>999999999</studentID>
       <name>bob</name>
-      <email>mathieu@gmail.ca</email>
+      <email>mat@gmail.ca</email>
       <isGrad>false</isGrad>
-      <year>2</year>
+      <year>12</year>
       <jobPreference>none</jobPreference>
-      <numberOfHours>6</numberOfHours>
+      <numberOfHours>5</numberOfHours>
       <previousJobExperiences id="59"/>
       <jobsAppliedTo id="60"/>
       <offeredJobs id="61"/>
@@ -184,6 +184,20 @@
       <reviewText id="63"/>
     </Student>
     <Student id="64">
+      <studentID>999999999</studentID>
+      <name>bob</name>
+      <email>mathieu@gmail.ca</email>
+      <isGrad>false</isGrad>
+      <year>2</year>
+      <jobPreference>none</jobPreference>
+      <numberOfHours>6</numberOfHours>
+      <previousJobExperiences id="65"/>
+      <jobsAppliedTo id="66"/>
+      <offeredJobs id="67"/>
+      <currentJobs id="68"/>
+      <reviewText id="69"/>
+    </Student>
+    <Student id="70">
       <studentID>260</studentID>
       <name>Mathieu</name>
       <email>mathieu.lapointe@mail</email>
@@ -191,12 +205,12 @@
       <year>2</year>
       <jobPreference>none</jobPreference>
       <numberOfHours>3</numberOfHours>
-      <previousJobExperiences id="65"/>
-      <jobsAppliedTo id="66"/>
-      <offeredJobs id="67"/>
-      <currentJobs id="68"/>
-      <reviewText id="69"/>
+      <previousJobExperiences id="71"/>
+      <jobsAppliedTo id="72"/>
+      <offeredJobs id="73"/>
+      <currentJobs id="74"/>
+      <reviewText id="75"/>
     </Student>
   </allStudents>
-  <allReviews id="70"/>
+  <allReviews id="76"/>
 </ca.mcgill.ecse321.tamas.model.Department>
