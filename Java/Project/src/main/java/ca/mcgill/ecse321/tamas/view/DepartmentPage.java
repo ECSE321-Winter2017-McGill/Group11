@@ -51,6 +51,9 @@ public class DepartmentPage extends JFrame {
     private JTextField numberOfGradersNeededField;
     private JTextField graderHourlyRateField;
     private JTextField budgetField;
+    private JTextField createAnInstructorNameField;
+    private JTextField instructorIDField;
+    private JTextField instructorEmailField;
 
     //My own private fields
     private final JRadioButton TARadio;
@@ -564,11 +567,6 @@ public class DepartmentPage extends JFrame {
         createCourseErrorLabel.setBounds(10, 684, 202, 16);
         contentPane.add(createCourseErrorLabel);
 
-        JLabel lblCreateAnInstructor = new JLabel("Create an Instructor");
-        lblCreateAnInstructor.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        lblCreateAnInstructor.setBounds(307, 295, 152, 16);
-        contentPane.add(lblCreateAnInstructor);
-
         JLabel semesterLabel = new JLabel("Semester");
         semesterLabel.setBounds(10, 329, 94, 16);
         contentPane.add(semesterLabel);
@@ -661,6 +659,51 @@ public class DepartmentPage extends JFrame {
         });
         createACourseButton.setBounds(10, 643, 202, 29);
         contentPane.add(createACourseButton);
+
+        JLabel lblCreateAnInstructor = new JLabel("Create an Instructor");
+        lblCreateAnInstructor.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        lblCreateAnInstructor.setBounds(307, 310, 152, 16);
+        contentPane.add(lblCreateAnInstructor);
+
+        JLabel createAnInstructorNameLabel = new JLabel("Full name");
+        createAnInstructorNameLabel.setBounds(260, 338, 90, 16);
+        contentPane.add(createAnInstructorNameLabel);
+
+        createAnInstructorNameField = new JTextField();
+        createAnInstructorNameField.setBounds(362, 333, 130, 26);
+        contentPane.add(createAnInstructorNameField);
+        createAnInstructorNameField.setColumns(10);
+
+        JLabel instructorIDLabel = new JLabel("Instructor ID");
+        instructorIDLabel.setBounds(260, 367, 90, 16);
+        contentPane.add(instructorIDLabel);
+
+        instructorIDField = new JTextField();
+        instructorIDField.setBounds(362, 362, 130, 26);
+        contentPane.add(instructorIDField);
+        instructorIDField.setColumns(10);
+
+        JLabel instructorEmailLabel = new JLabel("Email");
+        instructorEmailLabel.setBounds(260, 395, 90, 16);
+        contentPane.add(instructorEmailLabel);
+
+        instructorEmailField = new JTextField();
+        instructorEmailField.setBounds(362, 390, 130, 26);
+        contentPane.add(instructorEmailField);
+        instructorEmailField.setColumns(10);
+
+        JButton createInstructorButton = new JButton("Create new instructor");
+        createInstructorButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        createInstructorButton.setBounds(260, 423, 232, 29);
+        contentPane.add(createInstructorButton);
+
+        JLabel lblNewLabel = new JLabel("");
+        lblNewLabel.setForeground(Color.RED);
+        lblNewLabel.setBounds(260, 454, 232, 16);
+        contentPane.add(lblNewLabel);
 
         this.setSize(800,800);
 
