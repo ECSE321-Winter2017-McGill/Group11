@@ -193,7 +193,7 @@ public class DepartmentController {
 	 */
 	public void createAllocation(Job job, Student student){
 
-		////HAVE TO COMPLETE\\\\
+
 		PersistenceXStream.saveToXMLwithXStream(department);
 
 	}

@@ -68,12 +68,16 @@ public class DepartmentPage extends JFrame {
     private JComboBox<String> jobListForStudentApplyJob;
     private JComboBox<String> courseList;
     private JComboBox<String> semesterJComboBox;
+    private JComboBox<String> createAllocationStudentComboBox;
+    private JComboBox<String> createAllocationJobComboBox;
 
 
     private Integer selectedJobForPublishJobPosting = -1;
     private Integer selectedJobForStudentApply = -1;
     private Integer selectedCourse = -1;
     private Integer selectedSemesterForCreateACourse = -1;
+    private Integer selectedStudentForCreateAllocation = -1;
+    private Integer selectedJobForCreateAllocation = -1;
 
     Department department;
 
@@ -724,6 +728,72 @@ public class DepartmentPage extends JFrame {
         lblNewLabel.setForeground(Color.RED);
         lblNewLabel.setBounds(260, 454, 232, 16);
         contentPane.add(lblNewLabel);
+
+        JLabel createAllocationLabel = new JLabel("Create/Remove Allocation");
+        createAllocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        createAllocationLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        createAllocationLabel.setBounds(260, 492, 229, 16);
+        contentPane.add(createAllocationLabel);
+
+        JLabel createAllocationStudentLabel = new JLabel("Student");
+        createAllocationStudentLabel.setBounds(260, 555, 90, 16);
+        contentPane.add(createAllocationStudentLabel);
+
+        createAllocationStudentComboBox = new JComboBox();
+        createAllocationStudentComboBox.setBounds(376, 551, 116, 27);
+        contentPane.add(createAllocationStudentComboBox);
+
+        createAllocationStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedStudentForCreateAllocation = cb.getSelectedIndex();
+            }
+        });
+
+        JLabel createAllocationJobLabel = new JLabel("Job");
+        createAllocationJobLabel.setBounds(260, 583, 90, 16);
+        contentPane.add(createAllocationJobLabel);
+
+        createAllocationJobComboBox = new JComboBox();
+        createAllocationJobComboBox.setBounds(376, 579, 116, 27);
+        contentPane.add(createAllocationJobComboBox);
+
+        createAllocationJobComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForCreateAllocation = cb.getSelectedIndex();
+            }
+        });
+
+        final JRadioButton createAllocationRadio = new JRadioButton("Create");
+        createAllocationRadio.setBounds(260, 523, 81, 23);
+        contentPane.add(createAllocationRadio);
+
+        JRadioButton removeAllocationRadio = new JRadioButton("Remove");
+        removeAllocationRadio.setBounds(392, 523, 100, 23);
+        contentPane.add(removeAllocationRadio);
+
+        JButton createAllocationButton = new JButton("Create/Remove");
+        createAllocationButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                boolean isCreateAReview = true;
+
+                if (!createAllocationRadio.isSelected()) {
+                    isCreateAReview = false;
+                }
+
+
+            }
+        });
+        createAllocationButton.setBounds(260, 610, 232, 29);
+        contentPane.add(createAllocationButton);
+
+        JLabel createAllocationErrorLabel = new JLabel("");
+        createAllocationErrorLabel.setForeground(Color.RED);
+        createAllocationErrorLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        createAllocationErrorLabel.setBounds(260, 648, 232, 16);
+        contentPane.add(createAllocationErrorLabel);
 
         this.setSize(800,800);
 
