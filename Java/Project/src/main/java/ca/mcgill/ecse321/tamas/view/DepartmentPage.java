@@ -760,26 +760,6 @@ public class DepartmentPage extends JFrame {
             }
         });
 
-//        undergraduateRadioForRegister = new JRadioButton("Undergraduate");
-//        graduateRadioForRegister = new JRadioButton("Graduate");
-//
-//        ButtonGroup group1 = new ButtonGroup();
-//        group1.add(undergraduateRadioForRegister);
-//        group1.add(graduateRadioForRegister);
-//
-//        undergraduateRadioForRegister.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//            }
-//        });
-//        undergraduateRadioForRegister.setBounds(260, 211, 124, 23);
-//        contentPane.add(undergraduateRadioForRegister);
-//
-//        graduateRadioForRegister.addActionListener(new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//            }
-//        });
-//        graduateRadioForRegister.setBounds(391, 211, 101, 23);
-//        contentPane.add(graduateRadioForRegister);
 
         final JRadioButton createAllocationRadio = new JRadioButton("Create");
         final JRadioButton removeAllocationRadio = new JRadioButton("Remove");
@@ -865,6 +845,40 @@ public class DepartmentPage extends JFrame {
         });
         createAllocationButton.setBounds(260, 610, 232, 29);
         contentPane.add(createAllocationButton);
+
+        JLabel createOfferLabel = new JLabel("Create Offer");
+        createOfferLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        createOfferLabel.setBounds(606, 310, 110, 16);
+        contentPane.add(createOfferLabel);
+
+        JLabel createOfferStudentLabel = new JLabel("Student");
+        createOfferStudentLabel.setBounds(543, 352, 61, 16);
+        contentPane.add(createOfferStudentLabel);
+
+        JComboBox createOfferStudentComboBox = new JComboBox();
+        createOfferStudentComboBox.setBounds(635, 346, 130, 27);
+        contentPane.add(createOfferStudentComboBox);
+
+        JLabel createOfferJobLabel = new JLabel("Job");
+        createOfferJobLabel.setBounds(543, 385, 61, 16);
+        contentPane.add(createOfferJobLabel);
+
+        JComboBox createOfferJobComboBox = new JComboBox();
+        createOfferJobComboBox.setBounds(635, 381, 130, 27);
+        contentPane.add(createOfferJobComboBox);
+
+        JButton createOfferButton = new JButton("Create offer");
+        createOfferButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            }
+        });
+        createOfferButton.setBounds(533, 423, 232, 29);
+        contentPane.add(createOfferButton);
+
+        JLabel createOfferErrorLabel = new JLabel("");
+        createOfferErrorLabel.setForeground(Color.RED);
+        createOfferErrorLabel.setBounds(533, 464, 232, 16);
+        contentPane.add(createOfferErrorLabel);
 
         this.setSize(800,800);
 
