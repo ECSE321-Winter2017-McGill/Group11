@@ -724,11 +724,6 @@ public class DepartmentPage extends JFrame {
         createInstructorButton.setBounds(260, 423, 232, 29);
         contentPane.add(createInstructorButton);
 
-        JLabel lblNewLabel = new JLabel("");
-        lblNewLabel.setForeground(Color.RED);
-        lblNewLabel.setBounds(260, 454, 232, 16);
-        contentPane.add(lblNewLabel);
-
         JLabel createAllocationLabel = new JLabel("Create/Remove Allocation");
         createAllocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         createAllocationLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
@@ -765,22 +760,104 @@ public class DepartmentPage extends JFrame {
             }
         });
 
+//        undergraduateRadioForRegister = new JRadioButton("Undergraduate");
+//        graduateRadioForRegister = new JRadioButton("Graduate");
+//
+//        ButtonGroup group1 = new ButtonGroup();
+//        group1.add(undergraduateRadioForRegister);
+//        group1.add(graduateRadioForRegister);
+//
+//        undergraduateRadioForRegister.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//            }
+//        });
+//        undergraduateRadioForRegister.setBounds(260, 211, 124, 23);
+//        contentPane.add(undergraduateRadioForRegister);
+//
+//        graduateRadioForRegister.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//            }
+//        });
+//        graduateRadioForRegister.setBounds(391, 211, 101, 23);
+//        contentPane.add(graduateRadioForRegister);
+
         final JRadioButton createAllocationRadio = new JRadioButton("Create");
+        final JRadioButton removeAllocationRadio = new JRadioButton("Remove");
+
+        ButtonGroup group3 = new ButtonGroup();
+        group3.add(createAllocationRadio);
+        group3.add(removeAllocationRadio);
+
+        createAllocationRadio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
         createAllocationRadio.setBounds(260, 523, 81, 23);
         contentPane.add(createAllocationRadio);
 
-        JRadioButton removeAllocationRadio = new JRadioButton("Remove");
+        removeAllocationRadio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
         removeAllocationRadio.setBounds(392, 523, 100, 23);
         contentPane.add(removeAllocationRadio);
+
+        final JLabel createAllocationErrorLabel = new JLabel("");
+        createAllocationErrorLabel.setForeground(Color.RED);
+        createAllocationErrorLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+        createAllocationErrorLabel.setBounds(260, 648, 232, 16);
+        contentPane.add(createAllocationErrorLabel);
 
         JButton createAllocationButton = new JButton("Create/Remove");
         createAllocationButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                boolean isCreateAReview = true;
+                boolean selectedCreateAllocation = false;
+                boolean selectedRemoveAllocation = false;
+                String jobString, studentString;
+                Job job = null;
+                Student student = null;
 
-                if (!createAllocationRadio.isSelected()) {
-                    isCreateAReview = false;
+                if (createAllocationRadio.isSelected()) {
+                    selectedCreateAllocation = true;
+                }
+                if (removeAllocationRadio.isSelected()) {
+                    selectedRemoveAllocation = true;
+                }
+
+                if ((selectedCreateAllocation == true || selectedRemoveAllocation == true) && selectedJobForCreateAllocation >= 0 && selectedStudentForCreateAllocation >= 0) {
+
+                    studentString = createAllocationStudentComboBox.getSelectedItem().toString();
+                    jobString = createAllocationJobComboBox.getSelectedItem().toString();
+
+                    //search through all the jobs of the department to find the corresponding job object
+                    for (Job j: department.getAllJobs()) {
+                        String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                        if (createAllocationJobComboBox.getItemAt(selectedJobForCreateAllocation) != null && tmp.contentEquals(createAllocationJobComboBox.getItemAt(selectedJobForCreateAllocation))) {
+                            job = j;
+                            break;
+                        }
+                    }
+
+                    //search through all students of the department to find corresponding student object
+                    for (Student s: department.getAllStudents()) {
+                        String tmp = s.getEmail();
+                        if (createAllocationStudentComboBox.getItemAt(selectedStudentForCreateAllocation) != null && tmp.contentEquals(createAllocationStudentComboBox.getItemAt(selectedStudentForCreateAllocation))) {
+                            student = s;
+                            break;
+                        }
+                    }
+
+                        if (selectedCreateAllocation) {
+                            departmentController.createAllocation(job,student);
+                        } else {
+                            departmentController.removeAllocation(job,student);
+                        }
+
+                } else {
+                    createAllocationErrorLabel.setText("Please selected all the fields.");
                 }
 
 
@@ -788,12 +865,6 @@ public class DepartmentPage extends JFrame {
         });
         createAllocationButton.setBounds(260, 610, 232, 29);
         contentPane.add(createAllocationButton);
-
-        JLabel createAllocationErrorLabel = new JLabel("");
-        createAllocationErrorLabel.setForeground(Color.RED);
-        createAllocationErrorLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        createAllocationErrorLabel.setBounds(260, 648, 232, 16);
-        contentPane.add(createAllocationErrorLabel);
 
         this.setSize(800,800);
 
@@ -856,6 +927,23 @@ public class DepartmentPage extends JFrame {
         semesterJComboBox.addItem("Winter");
         selectedSemesterForCreateACourse = -1;
         semesterJComboBox.setSelectedIndex(selectedSemesterForCreateACourse);
+
+        createAllocationStudentComboBox.removeAllItems();
+        for (Student s: department.getAllStudents()) {
+            createAllocationStudentComboBox.addItem(s.getEmail());
+        }
+        selectedStudentForCreateAllocation = -1;
+        createAllocationStudentComboBox.setSelectedIndex(selectedStudentForCreateAllocation);
+
+        createAllocationJobComboBox.removeAllItems();
+        for (Job j: department.getAllJobs()) {
+            if (j.getState() == JobStatus.Posted) {
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                createAllocationJobComboBox.addItem(tmp);
+            }
+        }
+        selectedJobForCreateAllocation = -1;
+        createAllocationJobComboBox.setSelectedIndex(selectedJobForCreateAllocation);
 
         offerDeadlineDatePicker.getModel().setValue(null);
 
