@@ -9,21 +9,29 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
+import ca.mcgill.ecse321.tamas.controller.StudentController;
+import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.Student;
+import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
+
+import static ca.mcgill.ecse321.tamasandroid.R.id.studentspinner;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Department d = null;
+    private String fileName;
+    String error = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //create a dummy student
-
-        //the description of the student
-
-        TextView description = (TextView) findViewById(R.id.studentDescription);
-        description.setText("Will be used to display the information of the student");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -36,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
+        d = PersistenceXStream.initializeModelManager(fileName);
+        refreshData();
     }
 
     @Override
@@ -60,27 +72,75 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //Will access the view offers tab for job offers
-    public void viewOffers(View view) {
-        Intent intent = new Intent(this, ViewOfferActivity.class);
-        startActivity(intent);
+    private void refreshData(){
+        TextView tvName = (TextView) findViewById(R.id.newstudent_name);
+        tvName.setText("");
+        TextView tvId = (TextView) findViewById(R.id.newstudent_id);
+        tvId.setText("");
+        TextView tvEmail = (TextView) findViewById(R.id.newstudent_email);
+        tvEmail.setText("");
+        TextView tvYear = (TextView) findViewById(R.id.newstudent_year);
+        tvYear.setText("");
+        TextView tvPreference = (TextView) findViewById(R.id.newstudent_preference);
+        tvPreference.setText("");
+        TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
+        tvHours.setText("");
+
+        // Initialize the data in the student spinner
+        Spinner spinner = (Spinner) findViewById(studentspinner);
+        ArrayAdapter<CharSequence> participantAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        participantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        for (Student s : d.getAllStudents()) {
+            participantAdapter.add(s.getName());
+        }
+        spinner.setAdapter(participantAdapter);
     }
 
-    //Enter the menu to update info if something has changed
-    public void updateInfo(View view){
-        Intent intent = new Intent(this, UpdateInfoActivity.class);
-        startActivity(intent);
+    public void addStudent(View v) {
+        //variables for create student from text view
+        //Name
+        TextView tvName = (TextView) findViewById(R.id.newstudent_name);
+        //Id number
+        TextView tvId = (TextView) findViewById(R.id.newstudent_id);
+        String ID = tvId.getText().toString();
+
+        //email
+        TextView tvEmail = (TextView) findViewById(R.id.newstudent_email);
+        //isGrad?
+        CheckBox gradCheckBox = (CheckBox) findViewById(R.id.isGrad_checkBox);
+        boolean isGrad = false;
+        isGrad = gradCheckBox.isChecked();
+
+        //year
+        TextView tvYear = (TextView) findViewById(R.id.newstudent_year);
+        String year = tvYear.getText().toString();
+
+        //Job preference
+        TextView tvPreference = (TextView) findViewById(R.id.newstudent_preference);
+        //Number of Hours
+        TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
+        String hours = tvHours.getText().toString();
+
+        StudentController pc = new StudentController(d);
+        try {
+            pc.createStudent(ID, tvName.getText().toString(), tvEmail.getText().toString(), isGrad, year, tvPreference.getText().toString(), hours);
+            error = "";
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+
+        refreshData();
     }
 
-    //View the job posting
-    public void viewPost(View view){
-        Intent intent = new Intent(this, ViewJobPostingActivity.class);
-        startActivity(intent);
-    }
+    public void loginActivity(View view){
+        final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
 
-    //View the reviews from instructors
-    public void viewReviews(View view){
-        Intent intent = new Intent(this, ViewReviewsActivity.class);
+        //have to use the data gottenand login as the student
+
+
+
+        Intent intent = new Intent(this, MainPageActivity.class);
         startActivity(intent);
     }
 }
