@@ -885,20 +885,51 @@ public class DepartmentPage extends JFrame {
             }
         });
 
+        final JLabel createOfferErrorLabel = new JLabel("");
+        createOfferErrorLabel.setForeground(Color.RED);
+        createOfferErrorLabel.setBounds(533, 464, 232, 16);
+        contentPane.add(createOfferErrorLabel);
+
         JButton createOfferButton = new JButton("Create offer");
         createOfferButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                String studentString, jobString;
+                Student student = null;
+                Job job = null;
 
+                if (selectedJobForCreateOffer >= 0 && selectedStudentForCreateOffer >= 0) {
+
+                    studentString = createOfferStudentComboBox.getSelectedItem().toString();
+                    jobString = createOfferJobComboBox.getSelectedItem().toString();
+
+                    //search through all students of the department to find corresponding student object
+                    for (Student s: department.getAllStudents()) {
+                        String tmp = s.getEmail();
+                        if (createOfferStudentComboBox.getItemAt(selectedStudentForCreateOffer) != null && tmp.contentEquals(createOfferStudentComboBox.getItemAt(selectedStudentForCreateOffer))) {
+                            student = s;
+                            break;
+                        }
+                    }
+
+                    //search through all the jobs of the department to find the corresponding job object
+                    for (Job j: department.getAllJobs()) {
+                        String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                        if (createOfferJobComboBox.getItemAt(selectedJobForCreateOffer) != null && tmp.contentEquals(createOfferJobComboBox.getItemAt(selectedJobForCreateOffer))) {
+                            job = j;
+                            break;
+                        }
+                    }
+
+                    departmentController.createJobOffer(job,student);
+
+                } else {
+                    createOfferErrorLabel.setText("Please select all the fields.");
+                }
 
             }
         });
         createOfferButton.setBounds(533, 423, 232, 29);
         contentPane.add(createOfferButton);
-
-        JLabel createOfferErrorLabel = new JLabel("");
-        createOfferErrorLabel.setForeground(Color.RED);
-        createOfferErrorLabel.setBounds(533, 464, 232, 16);
-        contentPane.add(createOfferErrorLabel);
 
         this.setSize(800,800);
 

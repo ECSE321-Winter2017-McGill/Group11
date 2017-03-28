@@ -212,7 +212,8 @@ public class DepartmentController {
 	 * @param student
 	 */
 	public void createJobOffer(Job job, Student student){
-		PersistenceXStream.saveToXMLwithXStream(department);
+
+	    PersistenceXStream.saveToXMLwithXStream(department);
 	}
 
 	
