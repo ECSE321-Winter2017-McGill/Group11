@@ -70,6 +70,8 @@ public class DepartmentPage extends JFrame {
     private JComboBox<String> semesterJComboBox;
     private JComboBox<String> createAllocationStudentComboBox;
     private JComboBox<String> createAllocationJobComboBox;
+    private JComboBox<String> createOfferStudentComboBox;
+    private JComboBox<String> createOfferJobComboBox;
 
 
     private Integer selectedJobForPublishJobPosting = -1;
@@ -78,6 +80,8 @@ public class DepartmentPage extends JFrame {
     private Integer selectedSemesterForCreateACourse = -1;
     private Integer selectedStudentForCreateAllocation = -1;
     private Integer selectedJobForCreateAllocation = -1;
+    private Integer selectedStudentForCreateOffer = -1;
+    private Integer selectedJobForCreateOffer = -1;
 
     Department department;
 
@@ -840,7 +844,7 @@ public class DepartmentPage extends JFrame {
                     createAllocationErrorLabel.setText("Please selected all the fields.");
                 }
 
-
+                updateDisplay();
             }
         });
         createAllocationButton.setBounds(260, 610, 232, 29);
@@ -855,21 +859,37 @@ public class DepartmentPage extends JFrame {
         createOfferStudentLabel.setBounds(543, 352, 61, 16);
         contentPane.add(createOfferStudentLabel);
 
-        JComboBox createOfferStudentComboBox = new JComboBox();
+        createOfferStudentComboBox = new JComboBox();
         createOfferStudentComboBox.setBounds(635, 346, 130, 27);
         contentPane.add(createOfferStudentComboBox);
+
+        createOfferStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedStudentForCreateOffer = cb.getSelectedIndex();
+            }
+        });
 
         JLabel createOfferJobLabel = new JLabel("Job");
         createOfferJobLabel.setBounds(543, 385, 61, 16);
         contentPane.add(createOfferJobLabel);
 
-        JComboBox createOfferJobComboBox = new JComboBox();
+        createOfferJobComboBox = new JComboBox();
         createOfferJobComboBox.setBounds(635, 381, 130, 27);
         contentPane.add(createOfferJobComboBox);
+
+        createOfferJobComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForCreateOffer = cb.getSelectedIndex();
+            }
+        });
 
         JButton createOfferButton = new JButton("Create offer");
         createOfferButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+
+
             }
         });
         createOfferButton.setBounds(533, 423, 232, 29);
@@ -958,6 +978,23 @@ public class DepartmentPage extends JFrame {
         }
         selectedJobForCreateAllocation = -1;
         createAllocationJobComboBox.setSelectedIndex(selectedJobForCreateAllocation);
+
+        createOfferStudentComboBox.removeAllItems();
+        for (Student s: department.getAllStudents()) {
+            createOfferStudentComboBox.addItem(s.getEmail());
+        }
+        selectedStudentForCreateOffer = -1;
+        createOfferStudentComboBox.setSelectedIndex(selectedStudentForCreateOffer);
+
+        createOfferJobComboBox.removeAllItems();
+        for (Job j: department.getAllJobs()) {
+            if (j.getState() == JobStatus.Posted) {
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                createOfferJobComboBox.addItem(tmp);
+            }
+        }
+        selectedJobForCreateOffer = -1;
+        createOfferJobComboBox.setSelectedIndex(selectedJobForCreateOffer);
 
         offerDeadlineDatePicker.getModel().setValue(null);
 
