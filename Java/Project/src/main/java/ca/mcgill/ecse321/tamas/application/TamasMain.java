@@ -2,7 +2,7 @@ package ca.mcgill.ecse321.tamas.application;
 
 import ca.mcgill.ecse321.tamas.model.Department;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
-import ca.mcgill.ecse321.tamas.view.DepartmentPage;
+import ca.mcgill.ecse321.tamas.view.BetaDepartmentPage;
 
 import java.awt.*;
 
@@ -19,7 +19,7 @@ public class TamasMain {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
                 try {
-                    DepartmentPage frame = new DepartmentPage(department);
+                    BetaDepartmentPage frame = new BetaDepartmentPage(department);
                     frame.setVisible(true);
                 } catch (Exception e) {
                     e.printStackTrace();
