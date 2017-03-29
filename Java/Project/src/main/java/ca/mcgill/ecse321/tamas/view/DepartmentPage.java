@@ -22,6 +22,7 @@ import ca.mcgill.ecse321.tamas.model.*;
 
 //Controller class
 import ca.mcgill.ecse321.tamas.controller.DepartmentController;
+import com.alee.laf.button.WebButton;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.SqlDateModel;
@@ -169,7 +170,7 @@ public class DepartmentPage extends JFrame {
         jobListForPublishJobPosting.setBounds(112,35,100,26);
         contentPane.add(jobListForPublishJobPosting);
 
-        JButton publishJobPostingButton = new JButton("Publish job posting");
+        WebButton publishJobPostingButton = new WebButton("Publish job posting");
         publishJobPostingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -296,7 +297,7 @@ public class DepartmentPage extends JFrame {
         registerAStudentErrorLabel.setBounds(270, 282, 222, 16);
         contentPane.add(registerAStudentErrorLabel);
 
-        JButton registerStudentButton = new JButton("Register student");
+        WebButton registerStudentButton = new WebButton("Register student");
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -355,7 +356,7 @@ public class DepartmentPage extends JFrame {
         applyForAJobErrorLabel.setBounds(543, 282, 222, 16);
         contentPane.add(applyForAJobErrorLabel);
 
-        JButton applyForAJobButton = new JButton("Apply!");
+        WebButton applyForAJobButton = new WebButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -450,7 +451,7 @@ public class DepartmentPage extends JFrame {
         courseList.setBounds(533, 63, 221, 26);
         contentPane.add(courseList);
 
-        final JButton createNewJobButton = new JButton("Create new job");
+        final WebButton createNewJobButton = new WebButton("Create new job");
         createNewJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //This is code the allows the use to test publish job posting and apply to job
@@ -627,7 +628,7 @@ public class DepartmentPage extends JFrame {
         budgetField.setColumns(10);
 
 
-        JButton createACourseButton = new JButton("Create a Course");
+        WebButton createACourseButton = new WebButton("Create a Course");
         createACourseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -706,7 +707,7 @@ public class DepartmentPage extends JFrame {
         createInstructorErrorLabel.setBounds(260, 454, 232, 16);
         contentPane.add(createInstructorErrorLabel);
 
-        JButton createInstructorButton = new JButton("Create new instructor");
+        WebButton createInstructorButton = new WebButton("Create new instructor");
         createInstructorButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -794,7 +795,7 @@ public class DepartmentPage extends JFrame {
         createAllocationErrorLabel.setBounds(260, 648, 232, 16);
         contentPane.add(createAllocationErrorLabel);
 
-        JButton createAllocationButton = new JButton("Create/Remove");
+        WebButton createAllocationButton = new WebButton("Create/Remove");
         createAllocationButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
@@ -890,7 +891,7 @@ public class DepartmentPage extends JFrame {
         createOfferErrorLabel.setBounds(533, 464, 232, 16);
         contentPane.add(createOfferErrorLabel);
 
-        JButton createOfferButton = new JButton("Create offer");
+        WebButton createOfferButton = new WebButton("Create offer");
         createOfferButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String studentString, jobString;
