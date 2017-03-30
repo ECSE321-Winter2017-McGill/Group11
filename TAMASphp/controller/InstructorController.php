@@ -55,15 +55,18 @@ class InstructorController
 		$dpt = $persis -> loadDataFromStore();
 
 		//2. find job
+		//REVIEW****************
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
 			if(strcmp($job->getJobID(), $aJobID) == 0){
 				$myJob = $job;
+				break;
 			}
 		}
+		//END REVIEW****************
 
 		//3. remove current version of the job in question
-		$dpt->removeAllCourse($myJob);
+		$dpt->removeAllJob($myJob);
 		//deletes the job saved in dpt equal to myJob
 
 		$error = "";
@@ -117,13 +120,99 @@ class InstructorController
 			$myJob->setOfferDeadlineDate($dateConv);
 	
 			$myJob->setState(JobStatusEnum::Posted);
+			//REVIEW****************
 			$dpt->addAllJob($myJob);
+			//END REVIEW****************
 			$persis->writeDataToStore($dpt);
 		}
 	}
 
-	public function modifyAllocaion($job, $student){
-
+	public function modifyAllocaion($ajobID, $allocatedStudentID, $appliedStudentID){
+		
+		//1. load data
+		$persis= new PersistenceTamas();
+		$dpt = $persis -> loadDataFromStore();
+		
+		//2. find job
+		//REVIEW****************
+		$myJob = NULL;
+		foreach ($dpt->getAllJobs() as $job){
+			if(strcmp($job->getJobID(), $ajobID) == 0){
+				$myJob = $job;
+				break;
+			}
+		}
+		//END REVIEW****************
+		$dpt->removeAllJob($myJob);
+		
+		
+		$myAllocStud = NULL;
+		$myApplStud = NULL;
+		
+		if($myJob != null){
+				//3. find allocated student
+			//REVIEW****************
+			foreach ($myJob->getAllocatedStudent() as $student){
+				if(strcmp($student->getStudentID(), $allocatedStudentID) == 0){
+					$myAllocStud = $student;
+					break;
+				}
+			}
+			//END REVIEW****************
+			
+			//4. find applied student
+			//REVIEW****************
+			foreach ($myJob->getApplicantt() as $student){
+				if(strcmp($student->getStudentID(), $appliedStudentID) == 0){
+					$myApplStud = $student;
+					break;
+				}
+			}
+		}
+		
+		//END REVIEW****************
+		
+		
+		//5. validating inputs
+		$error = "";
+		
+		if ($myJob == null) {
+			$error .= "@1Job ";
+			if($aJobID != null){
+				$error .= $aJobID;
+			}
+			$error .= " not found! ";
+		}
+		if ($myAllocStud == null) {
+			$error .= "@1Allocated student ";
+			if($allocatedStudentID != null){
+				$error .= $allocatedStudentID;
+			}
+			$error .= " not found in job! ";
+		}
+		if ($myApplStud == null) {
+			$error .= "@1Applied student ";
+			if($appliedStudentID != null){
+				$error .= $appliedStudentID;
+			}
+			$error .= " not found in job! ";
+		}
+		if (strlen($error) > 0){
+			throw new Exception (trim($error));
+			// throw exceptions, if need be
+		}
+		else{
+			$myJob->addAllocatedStudent($myApplStud);
+			$myJob->removeAllocatedStudent($myAllocStud);
+			$myJob->removeApplicant($myApplStud);
+			
+			$dpt->addAllJob($myJob);
+			
+			$persis->writeDataToStore($dpt);
+		}
+		
+			//2. load data from persistence
+		
 	}
 
 	public function createReview($instructor, $reviewContent, $job, $student){
