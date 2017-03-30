@@ -129,7 +129,7 @@ public class DepartmentController {
         if (!isNumberOfTutorials) {
             error += createCourseNotIntegerNumberOfTutorialsError;
         }
-        if (isNumberOfHours) {
+        if (!isNumberOfHours) {
             error += createCourseNotIntegerNumberOfHoursError;
         }
         if (!isStudentsEnrolled) {
