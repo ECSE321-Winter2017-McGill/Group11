@@ -465,7 +465,11 @@ public class DepartmentPage extends JFrame {
                 Date dummyPostDeadLine = new Date(c.getTimeInMillis());
 
 
-                departmentController.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
+                try {
+                    departmentController.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
+                } catch (InvalidInputException e1) {
+
+                }
                 updateDisplay();
             }
         });
@@ -835,9 +839,17 @@ public class DepartmentPage extends JFrame {
                     }
 
                         if (selectedCreateAllocation) {
-                            departmentController.createAllocation(job,student);
+                            try {
+                                departmentController.createAllocation(job, student);
+                            } catch (InvalidInputException e1) {
+                                createAllocationErrorLabel.setText(e1.getMessage());
+                            }
                         } else {
-                            departmentController.removeAllocation(job,student);
+                            try {
+                                departmentController.removeAllocation(job,student);
+                            } catch (InvalidInputException e1) {
+                                createAllocationErrorLabel.setText(e1.getMessage());
+                            }
                         }
 
                 } else {
@@ -920,7 +932,11 @@ public class DepartmentPage extends JFrame {
                         }
                     }
 
-                    departmentController.createJobOffer(job,student);
+                    try {
+                        departmentController.createJobOffer(job,student);
+                    } catch (InvalidInputException e1) {
+                        createOfferErrorLabel.setText(e1.getMessage());
+                    }
 
                 } else {
                     createOfferErrorLabel.setText("Please select all the fields.");
