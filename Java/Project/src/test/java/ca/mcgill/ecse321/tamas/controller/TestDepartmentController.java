@@ -39,6 +39,8 @@ public class TestDepartmentController {
     @Test
     public void testCreateCourse() {
 
+        String error = "";
+
         assertEquals(0, department.getAllCourses().size());
         assertEquals(0, department.getAllInstructors().size());
 
@@ -70,9 +72,43 @@ public class TestDepartmentController {
 
         try {
             departmentController.createCourse(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructorA);
-        } catch(InvalidInputException e1) {
-            System.out.println(e1.getMessage());
+        } catch(InvalidInputException e) {
             fail();
         }
+        assertEquals(1,department.numberOfAllCourses());
+
+        try {
+            departmentController.createCourse(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,null);
+        } catch(InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals("Invalid instructor!", error);
+        assertEquals(1,department.numberOfAllCourses());
+
+        try {
+            departmentController.createCourse("","","","","","","","","","","","","",instructorA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a numeric number of credits! Input a numeric number of labs! Input a numeric number of tutorials! Input a numeric number of hours! Input a numeric number of student enrolled! Input a numeric number of TAs needed! Input a numeric number of graders needed! Input a numeric TA hourly rate! Input a numeric Grader hourly rate! Input a numeric budget! Course code cannot be empty! Course name cannot be empty!",error);
+        assertEquals(1,department.numberOfAllCourses());
+
+        try {
+            departmentController.createCourse(null,null,null,null,null,null,null,null,null,null,null,null,null,instructorA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a numeric number of credits! Input a numeric number of labs! Input a numeric number of tutorials! Input a numeric number of hours! Input a numeric number of student enrolled! Input a numeric number of TAs needed! Input a numeric number of graders needed! Input a numeric TA hourly rate! Input a numeric Grader hourly rate! Input a numeric budget! Course code cannot be empty! Course name cannot be empty!",error);
+        assertEquals(1,department.numberOfAllCourses());
+
+        try {
+            departmentController.createCourse("-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1","-1",instructorA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a non-negative number of credits! Input a non-negative number of labs! Input a non-negative number of tutorials! Input a non-negative number of hours! Input a non-negative number of student enrolled! Input a non-negative number of TAs needed! Input a non-negative number of graders needed! Input a non-negative TA hourly rate! Input a non-negative grader hourly rate! Input a non-negative budget!", error);
+        assertEquals(1,department.numberOfAllCourses());
+
     }
+
 }

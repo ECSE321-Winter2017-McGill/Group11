@@ -21,11 +21,24 @@ public class DepartmentController {
     private final String createCourseNotIntegerNumberOfGradersNeededError = " Input a numeric number of graders needed!";
     private final String createCourseNotIntegerTAHourlyRateError = " Input a numeric TA hourly rate!";
     private final String createCourseNotIntegerGraderHourlyRateError = " Input a numeric Grader hourly rate!";
+
     private final String createCourseNotIntegerBudgetError = " Input a numeric budget!";
     private final String createCourseNullCourseCodeError = " Course code cannot be empty!";
     private final String createCourseNullCourseNameError = " Course name cannot be empty!";
+    private final String createCourseNullInstructorError = "Invalid instructor!";
 
-	private Department department;
+    private final String createCourseNegativeNumberOfCredits = " Input a non-negative number of credits!";
+    private final String createCourseNegativeNumberOfLabsError = " Input a non-negative number of labs!";
+    private final String createCourseNegativeNumberOfTutorialsError = " Input a non-negative number of tutorials!";
+    private final String createCourseNegativeNumberOfHoursError = " Input a non-negative number of hours!";
+    private final String createCourseNegativeNumberOfStudentEnrolledError = " Input a non-negative number of student enrolled!";
+    private final String createCourseNegativeNumberOfTAsNeededError = " Input a non-negative number of TAs needed!";
+    private final String createCourseNegativeNumberOfGradersNeededError = " Input a non-negative number of graders needed!";
+    private final String createCourseNegativeNumberTAHourlyRateError = " Input a non-negative TA hourly rate!";
+    private final String createCourseNegativeNumberGraderHourlyRateError = " Input a non-negative grader hourly rate!";
+    private final String createCourseNegativeBudgetError = " Input a non-negative budget!";
+
+    private Department department;
 
 	public DepartmentController(Department department){
 
@@ -122,34 +135,64 @@ public class DepartmentController {
 
         if (!isNumberOfCredits) {
             error += createCourseNotIntegerNumberOfCreditsError;
+        } else if (numberOfCredits < 0) {
+            error += createCourseNegativeNumberOfCredits;
         }
+
         if (!isNumberOfLabs) {
             error += createCourseNotIntegerNumberOfLabsError;
+        } else if (numberOfLabs < 0) {
+            error += createCourseNegativeNumberOfLabsError;
         }
+
         if (!isNumberOfTutorials) {
             error += createCourseNotIntegerNumberOfTutorialsError;
+        } else if (numberOfTutorials < 0) {
+            error += createCourseNegativeNumberOfTutorialsError;
         }
+
         if (!isNumberOfHours) {
             error += createCourseNotIntegerNumberOfHoursError;
+        } else if (numberOfHours < 0) {
+            error += createCourseNegativeNumberOfHoursError;
         }
+
         if (!isStudentsEnrolled) {
             error += createCourseNotIntegerNumberOfStudentEnrolledError;
+        } else if (studentsEnrolled < 0) {
+            error += createCourseNegativeNumberOfStudentEnrolledError;
         }
+
         if (!isTasNeeded) {
             error += createCourseNotIntegerNumberOfTAsNeededError;
+        } else if (tasNeeded < 0) {
+            error += createCourseNegativeNumberOfTAsNeededError;
         }
+
         if (!isGraderNeeded) {
             error += createCourseNotIntegerNumberOfGradersNeededError;
+        } else if (gradersNeeded < 0) {
+            error += createCourseNegativeNumberOfGradersNeededError;
         }
+
         if (!isTaHourlyRate) {
             error += createCourseNotIntegerTAHourlyRateError;
+        } else if (taHourlyRate < 0) {
+            error += createCourseNegativeNumberTAHourlyRateError;
         }
+
         if (!isGraderHourlyRate) {
             error += createCourseNotIntegerGraderHourlyRateError;
+        } else if (graderHourlyRate < 0) {
+            error += createCourseNegativeNumberGraderHourlyRateError;
         }
+
         if (!isBudget) {
             error += createCourseNotIntegerBudgetError;
+        } else  if (budget < 0) {
+            error += createCourseNegativeBudgetError;
         }
+
         if (code == null || code.length() == 0) {
             error += createCourseNullCourseCodeError;
         }
@@ -157,9 +200,14 @@ public class DepartmentController {
             error += createCourseNullCourseNameError;
         }
 
+        if (instructor == null) {
+            error += createCourseNullInstructorError;
+        }
+
         if (error.length()>0){
             throw new InvalidInputException(error);
         }
+
 
 		Course course = new Course(code, name, semester, numberOfCredits, numberOfLabs, numberOfTutorials, numberOfHours, studentsEnrolled, tasNeeded, gradersNeeded, taHourlyRate, graderHourlyRate, budget, instructor);
 		department.addAllCourse(course);
