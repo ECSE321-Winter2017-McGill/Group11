@@ -9,13 +9,17 @@ import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
 import ca.mcgill.ecse321.tamas.controller.StudentController;
 import ca.mcgill.ecse321.tamas.model.*;
 import com.alee.extended.date.WebDateField;
-import com.alee.extended.panel.ComponentReorderListener;
+import com.alee.extended.painter.*;
 import com.alee.extended.panel.GroupPanel;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
-import com.alee.laf.label.WebLabel;
+import com.alee.laf.desktoppane.WebDesktopPane;
+import com.alee.laf.desktoppane.WebInternalFrame;
+import com.alee.laf.panel.WebPanel;
+import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.tabbedpane.WebTabbedPane;
+import com.alee.laf.text.WebTextArea;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -89,6 +93,11 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedJobForCreateAllocation = -1;
     private Integer selectedStudentForCreateOffer = -1;
     private Integer selectedJobForCreateOffer = -1;
+    private Integer numOfIconsOnDesktop = 0;
+    private Integer currentXPositionIcons = 25;
+    private Integer currentYPositionIcons = 25;
+    private Integer defaultXPositionIcons = 25;
+    private Integer defaultYPositionIcons = 25;
 
     Department department;
 
@@ -114,19 +123,46 @@ public class BetaDepartmentPage extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
 
-        tabbedPane.insertTab("Publish Job Posting",null,PublishJobView(),null,0);
-        tabbedPane.insertTab("Register a Student", null, RegisterAStudent(),null,1);
-        tabbedPane.insertTab("Apply for a Job", null, ApplyForAJob(),null,2);
-        tabbedPane.insertTab("Create a Job", null, CreateAJob(),null,3);
-        tabbedPane.insertTab("Create a Course", null, CreateACourse(),null,4);
-        tabbedPane.insertTab("Create an Instructor", null, CreateAInstructor(),null,5);
-        tabbedPane.insertTab("Create Offer", null, CreateOffer(),null,6);
-        tabbedPane.insertTab("Create/Remove Allocation", null, CreateRemoveAllocation(),null,7);
+        final WebDesktopPane desktopPane = new WebDesktopPane();
+        desktopPane.setOpaque(true  );
+        desktopPane.setBackground(new Color(239,62,51));
 
-        setContentPane(tabbedPane);
+        FlowLayout flowLayout = new FlowLayout(FlowLayout.LEADING,-3,-3);
+        WebPanel webPanel = new WebPanel();
+        webPanel.setLayout(flowLayout);
 
-        this.setSize(800,800);
+        addNewFrame(desktopPane,PublishJobView(),"Publish Job Posting", "Publish Job Posting", webPanel);
+        addNewFrame(desktopPane,RegisterAStudent(),"Register a Student", "Register a Student", webPanel);
+        addNewFrame(desktopPane,ApplyForAJob(),"Apply for a Job", "Apply for a Job", webPanel);
+        addNewFrame(desktopPane,CreateAJob(),"Create a Job", "Create a Job", webPanel);
+        addNewFrame(desktopPane,CreateACourse(),"Create a Course", "Create a Course", webPanel);
+        addNewFrame(desktopPane, CreateAnInstructor(),"Create an Instructor", "Create an Instructor", webPanel);
+        addNewFrame(desktopPane,CreateOffer(),"Create Offer", "Create Offer", webPanel);
+        addNewFrame(desktopPane,CreateRemoveAllocation(),"Create/Remove Allocation", "Create/Remove Allocation", webPanel);
 
+        webPanel.setBounds(0,0,800,800);
+        webPanel.setOpaque(false);
+        desktopPane.add(webPanel);
+
+
+        //tabbedPane.insertTab("Home",null,desktopPane,null,0);
+        tabbedPane.setBackgroundPainterAt(0, new ColorPainter(new Color(239,62,51)));
+
+/*        tabbedPane.insertTab("Publish Job Posting",null,PublishJobView(),null,1);
+        tabbedPane.insertTab("Register a Student", null, RegisterAStudent(),null,2);
+        tabbedPane.insertTab("Apply for a Job", null, ApplyForAJob(),null,3);
+        tabbedPane.insertTab("Create a Job", null, CreateAJob(),null,4);
+        tabbedPane.insertTab("Create a Course", null, CreateACourse(),null,5);
+        tabbedPane.insertTab("Create an Instructor", null, CreateAnInstructor(),null,6);
+        tabbedPane.insertTab("Create Offer", null, CreateOffer(),null,7);
+        tabbedPane.insertTab("Create/Remove Allocation", null, CreateRemoveAllocation(),null,8);
+        */
+        setContentPane(desktopPane);
+
+        desktopPane.setPreferredSize(new Dimension(800,800));
+
+        this.setMinimumSize(new Dimension(800,800));
+        pack();
         updateDisplay();
     }
 
@@ -227,9 +263,64 @@ public class BetaDepartmentPage extends JFrame {
 
     }
 
+    private void addNewFrame(final WebDesktopPane webDesktopPane, Component component, String frameName, String iconName, WebPanel webPanel){
+        final WebInternalFrame internalFrame = new WebInternalFrame(frameName, true, true, true,true);
+        WebButton internalFrameIcon = new WebButton("<html><font color='white'>"+ iconName + "</font></html>");
+        internalFrame.add(component);
+        internalFrameIcon.setRound(0);
+        internalFrameIcon.setShineColor(new Color(75,75,75));
+        internalFrameIcon.setRolloverShine(true);
+
+       // internalFrameIcon.setRolloverDecoratedOnly(true);
+        internalFrameIcon.setShadeColor(new Color(43, 43, 43, 255));
+        internalFrameIcon.setBottomBgColor(new Color(43, 43, 43, 255));
+        internalFrameIcon.setTopBgColor(new Color(43, 43, 43, 255));
+        internalFrameIcon.setHorizontalTextPosition(WebButton.CENTER);
+        internalFrameIcon.setVerticalTextPosition(WebButton.BOTTOM);
+        internalFrameIcon.addActionListener ( new ActionListener ()
+        {
+            @Override
+            public void actionPerformed ( final ActionEvent e )
+            {
+                if ( internalFrame.isClosed () )
+                {
+                    if ( internalFrame.getParent () == null )
+                    {
+                        webDesktopPane.add ( internalFrame );
+                    }
+                    internalFrame.open ();
+                    internalFrame.setIcon ( false );
+                }
+                else
+                {
+                    internalFrame.setIcon ( !internalFrame.isIcon () );
+                }
+            }
+        } );
+        if(numOfIconsOnDesktop != 0){
+            if(currentYPositionIcons+100 < 500) {
+                currentYPositionIcons += 100;
+            }else{
+                currentXPositionIcons += 125;
+                currentYPositionIcons = defaultYPositionIcons;
+            }
+        }
+
+        internalFrameIcon.setBounds ( currentXPositionIcons, currentYPositionIcons, 100, 75 );
+        internalFrameIcon.setPreferredSize(100,75);
+        webPanel.add(internalFrameIcon);
+
+        numOfIconsOnDesktop++;
+        internalFrame.setBounds ( 25 + 100 + 50, 50, 300, 300 );
+
+
+        internalFrame.close ();
+
+    }
+
     private Component PublishJobView(){
 
-        JPanel contentPane = new JPanel();
+        WebPanel contentPane = new WebPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(null);
@@ -249,16 +340,25 @@ public class BetaDepartmentPage extends JFrame {
 
         skillsRequiredField = new JTextField();
         skillsRequiredField.setBounds(112, 63, 100, 26);
-        contentPane.add(skillsRequiredField);
+        //contentPane.add(skillsRequiredField);
         skillsRequiredField.setColumns(10);
 
+        final WebTextArea skillsRequiredTextArea = new WebTextArea();
+        skillsRequiredTextArea.setLineWrap(true);
+        skillsRequiredTextArea.setWrapStyleWord(true);
+
+        WebScrollPane areaScroll = new WebScrollPane(skillsRequiredTextArea);
+        areaScroll.setPreferredSize(new Dimension(200,150));
+        areaScroll.setBounds(112,63,200,150);
+        contentPane.add(areaScroll);
+
         JLabel experienceRequiredLabel = new JLabel("Exp. required");
-        experienceRequiredLabel.setBounds(10, 96, 90, 16);
+       experienceRequiredLabel.setBounds(10, 96, 90, 16);
         contentPane.add(experienceRequiredLabel);
 
         experienceRequiredField = new JTextField();
         experienceRequiredField.setBounds(112, 91, 100, 26);
-        contentPane.add(experienceRequiredField);
+        //contentPane.add(experienceRequiredField);
         experienceRequiredField.setColumns(10);
 
         JLabel jobDescriptionLabel = new JLabel("Job description");
@@ -267,7 +367,7 @@ public class BetaDepartmentPage extends JFrame {
 
         jobDescriptionField = new JTextField();
         jobDescriptionField.setBounds(112, 119, 100, 26);
-        contentPane.add(jobDescriptionField);
+        //contentPane.add(jobDescriptionField);
         jobDescriptionField.setColumns(10);
 
         final JLabel offerDeadlineLabel = new JLabel("Offer Deadline");
@@ -277,7 +377,7 @@ public class BetaDepartmentPage extends JFrame {
         offerDeadlineDatePicker= new WebDateField();
         offerDeadlineDatePicker.setBounds(112,147,100,26);
 
-        contentPane.add(offerDeadlineDatePicker);
+       // contentPane.add(offerDeadlineDatePicker);
 
         final JLabel publishJobPostingErrorLabel = new JLabel("");
         publishJobPostingErrorLabel.setForeground(Color.RED);
@@ -297,7 +397,7 @@ public class BetaDepartmentPage extends JFrame {
                 int jobID;
                 Job associatedJob = null;
 
-                skillsRequired = skillsRequiredField.getText();
+                skillsRequired = skillsRequiredTextArea.getText();
                 experienceRequired = experienceRequiredField.getText();
                 jobDescription = jobDescriptionField.getText();
 
@@ -832,7 +932,7 @@ public class BetaDepartmentPage extends JFrame {
         return contentPane;
     }
 
-    private Component CreateAInstructor(){
+    private Component CreateAnInstructor(){
 
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
