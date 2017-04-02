@@ -9,6 +9,7 @@ import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 import java.sql.Date;
+import java.util.Calendar;
 
 public class DepartmentController {
 
@@ -21,11 +22,32 @@ public class DepartmentController {
     private final String createCourseNotIntegerNumberOfGradersNeededError = " Input a numeric number of graders needed!";
     private final String createCourseNotIntegerTAHourlyRateError = " Input a numeric TA hourly rate!";
     private final String createCourseNotIntegerGraderHourlyRateError = " Input a numeric Grader hourly rate!";
+
     private final String createCourseNotIntegerBudgetError = " Input a numeric budget!";
     private final String createCourseNullCourseCodeError = " Course code cannot be empty!";
     private final String createCourseNullCourseNameError = " Course name cannot be empty!";
+    private final String createCourseNullInstructorError = " Invalid instructor!";
 
-	private Department department;
+    private final String createCourseNegativeNumberOfCredits = " Input a non-negative number of credits!";
+    private final String createCourseNegativeNumberOfLabsError = " Input a non-negative number of labs!";
+    private final String createCourseNegativeNumberOfTutorialsError = " Input a non-negative number of tutorials!";
+    private final String createCourseNegativeNumberOfHoursError = " Input a non-negative number of hours!";
+    private final String createCourseNegativeNumberOfStudentEnrolledError = " Input a non-negative number of student enrolled!";
+    private final String createCourseNegativeNumberOfTAsNeededError = " Input a non-negative number of TAs needed!";
+    private final String createCourseNegativeNumberOfGradersNeededError = " Input a non-negative number of graders needed!";
+    private final String createCourseNegativeNumberTAHourlyRateError = " Input a non-negative TA hourly rate!";
+    private final String createCourseNegativeNumberGraderHourlyRateError = " Input a non-negative grader hourly rate!";
+    private final String createCourseNegativeBudgetError = " Input a non-negative budget!";
+
+    private final String createJobNullJobPositionTypeError = " Position type cannot be empty!";
+    private final String createJobNullDateError = " Posting deadline cannot be empty!";
+    private final String createJobNullCourse = " Selected course cannot be empty!";
+    private final String createJobInvalidDateError = " Posting deadline cannot be before today!";
+
+    private final String createAllocationNullJobError = " Job cannot be empty!";
+    private final String createAllocationNullStudentError = " Student cannot be empty!";
+
+    private Department department;
 
 	public DepartmentController(Department department){
 
@@ -122,34 +144,64 @@ public class DepartmentController {
 
         if (!isNumberOfCredits) {
             error += createCourseNotIntegerNumberOfCreditsError;
+        } else if (numberOfCredits < 0) {
+            error += createCourseNegativeNumberOfCredits;
         }
+
         if (!isNumberOfLabs) {
             error += createCourseNotIntegerNumberOfLabsError;
+        } else if (numberOfLabs < 0) {
+            error += createCourseNegativeNumberOfLabsError;
         }
+
         if (!isNumberOfTutorials) {
             error += createCourseNotIntegerNumberOfTutorialsError;
+        } else if (numberOfTutorials < 0) {
+            error += createCourseNegativeNumberOfTutorialsError;
         }
-        if (isNumberOfHours) {
+
+        if (!isNumberOfHours) {
             error += createCourseNotIntegerNumberOfHoursError;
+        } else if (numberOfHours < 0) {
+            error += createCourseNegativeNumberOfHoursError;
         }
+
         if (!isStudentsEnrolled) {
             error += createCourseNotIntegerNumberOfStudentEnrolledError;
+        } else if (studentsEnrolled < 0) {
+            error += createCourseNegativeNumberOfStudentEnrolledError;
         }
+
         if (!isTasNeeded) {
             error += createCourseNotIntegerNumberOfTAsNeededError;
+        } else if (tasNeeded < 0) {
+            error += createCourseNegativeNumberOfTAsNeededError;
         }
+
         if (!isGraderNeeded) {
             error += createCourseNotIntegerNumberOfGradersNeededError;
+        } else if (gradersNeeded < 0) {
+            error += createCourseNegativeNumberOfGradersNeededError;
         }
+
         if (!isTaHourlyRate) {
             error += createCourseNotIntegerTAHourlyRateError;
+        } else if (taHourlyRate < 0) {
+            error += createCourseNegativeNumberTAHourlyRateError;
         }
+
         if (!isGraderHourlyRate) {
             error += createCourseNotIntegerGraderHourlyRateError;
+        } else if (graderHourlyRate < 0) {
+            error += createCourseNegativeNumberGraderHourlyRateError;
         }
+
         if (!isBudget) {
             error += createCourseNotIntegerBudgetError;
+        } else  if (budget < 0) {
+            error += createCourseNegativeBudgetError;
         }
+
         if (code == null || code.length() == 0) {
             error += createCourseNullCourseCodeError;
         }
@@ -157,9 +209,14 @@ public class DepartmentController {
             error += createCourseNullCourseNameError;
         }
 
+        if (instructor == null) {
+            error += createCourseNullInstructorError;
+        }
+
         if (error.length()>0){
             throw new InvalidInputException(error);
         }
+
 
 		Course course = new Course(code, name, semester, numberOfCredits, numberOfLabs, numberOfTutorials, numberOfHours, studentsEnrolled, tasNeeded, gradersNeeded, taHourlyRate, graderHourlyRate, budget, instructor);
 		department.addAllCourse(course);
@@ -172,7 +229,30 @@ public class DepartmentController {
 	 * @param course
 	 *
 	 */
-	public void createJob(PositionType posType, Date postingDeadlineDate, Course course){
+	public void createJob(PositionType posType, Date postingDeadlineDate, Course course) throws InvalidInputException {
+
+	    String error = "";
+
+        if (posType == null) {
+            error += createJobNullJobPositionTypeError;
+        }
+        if (postingDeadlineDate == null) {
+            error += createJobNullDateError;
+        }
+        if (course == null) {
+            error += createJobNullCourse;
+        }
+
+//        Calendar c = Calendar.getInstance();
+//        Date currentDate = new Date(c.getTimeInMillis());
+//
+//        if (postingDeadlineDate.before(currentDate)) {
+//            error += createJobInvalidDateError;
+//        }
+
+        if (error.length()>0){
+            throw new InvalidInputException(error);
+        }
 
 		Job job = new Job(posType,postingDeadlineDate, course);
 		department.addAllJob(job);
@@ -180,19 +260,27 @@ public class DepartmentController {
 
 	}
 
-	public void registerAStudent(int studentID, String studentName, String email, Boolean isGrad, int year, String jobPreference, int numberOfHours) {
-
-	    Student student = new Student(studentID,studentName,email,isGrad,year,jobPreference,numberOfHours);
-	    department.addAllStudent(student);
-	    PersistenceXStream.saveToXMLwithXStream(department);
-    }
 
 	/**
 	 * @param job
 	 * @param student
 	 */
-	public void createAllocation(Job job, Student student){
+	public void createAllocation(Job job, Student student) throws InvalidInputException {
 
+        String error = "";
+
+        if (job == null) {
+            error += createAllocationNullJobError;
+        }
+        if (student == null) {
+            error += createAllocationNullStudentError;
+        }
+
+        if (error.length()>0) {
+            throw new InvalidInputException(error);
+        }
+
+        //TODO
 
 		PersistenceXStream.saveToXMLwithXStream(department);
 
@@ -202,7 +290,23 @@ public class DepartmentController {
 	 * @param job
 	 * @param student
 	 */
-	public void removeAllocation(Job job, Student student){
+	public void removeAllocation(Job job, Student student) throws InvalidInputException {
+
+        String error = "";
+
+        if (job == null) {
+            error += createAllocationNullJobError;
+        }
+        if (student == null) {
+            error += createAllocationNullStudentError;
+        }
+
+        if (error.length()>0) {
+            throw new InvalidInputException(error);
+        }
+
+        //TODO
+
 		PersistenceXStream.saveToXMLwithXStream(department);
 
 	}
@@ -211,7 +315,22 @@ public class DepartmentController {
 	 * @param job
 	 * @param student
 	 */
-	public void createJobOffer(Job job, Student student){
+	public void createJobOffer(Job job, Student student) throws  InvalidInputException {
+
+        String error = "";
+
+        if (job == null) {
+            error += createAllocationNullJobError;
+        }
+        if (student == null) {
+            error += createAllocationNullStudentError;
+        }
+
+        if (error.length()>0) {
+            throw new InvalidInputException(error);
+        }
+
+        //TODO
 
 	    PersistenceXStream.saveToXMLwithXStream(department);
 	}

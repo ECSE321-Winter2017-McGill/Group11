@@ -73,18 +73,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void refreshData(){
-        TextView tvName = (TextView) findViewById(R.id.newstudent_name);
-        tvName.setText("");
-        TextView tvId = (TextView) findViewById(R.id.newstudent_id);
-        tvId.setText("");
-        TextView tvEmail = (TextView) findViewById(R.id.newstudent_email);
-        tvEmail.setText("");
-        TextView tvYear = (TextView) findViewById(R.id.newstudent_year);
-        tvYear.setText("");
-        TextView tvPreference = (TextView) findViewById(R.id.newstudent_preference);
-        tvPreference.setText("");
-        TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
-        tvHours.setText("");
 
         // Initialize the data in the student spinner
         Spinner spinner = (Spinner) findViewById(studentspinner);
@@ -141,6 +129,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         Intent intent = new Intent(this, MainPageActivity.class);
+        startActivity(intent);
+    }
+
+    public void registerActivity(View view){
+        Intent intent = new Intent(this, RegisterStudentActivity.class);
         startActivity(intent);
     }
 }
