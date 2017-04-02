@@ -20,4 +20,5 @@
     <string name="newstudent2_hint">StudentID</string>
     <string name="newstudent_button">Register Student</string>
     <string name="registerstudent_label">If a first time user, please enter information below</string>
+    <string name="register_button">Register</string>
 </resources>

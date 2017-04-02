@@ -70,57 +70,13 @@
             android:layout_height="wrap_content"
             android:text="@string/registerstudent_label"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/newstudent_name"
-            android:hint="@string/newstudent1_hint"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/newstudent_id"
-            android:hint="@string/newstudent2_hint"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/newstudent_email"
-            android:hint="Student Email"/>
-
-
-        <CheckBox
-            android:text="Check if Graduate Student"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/isGrad_checkBox" />
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/newstudent_year"
-            android:hint="Student Year"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/newstudent_preference"
-            android:hint="Job Preference"/>
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/newstudent_hours"
-            android:hint="Hours"/>
-
         <Button
-            android:id="@+id/addStudent"
+            android:id="@+id/register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text="@string/newstudent_button"
-            android:onClick="addStudent"/>
-
+            android:text="@string/register_button"
+            android:onClick="loginActivity"/>
     </LinearLayout>
 
 

@@ -30,8 +30,10 @@
         <activity
             android:name=".ViewReviewsActivity"
             android:parentActivityName=".MainPageActivity" />
-        <activity android:name=".MainPageActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".MainPageActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".RegisterStudentActivity"></activity>
     </application>
 
 </manifest>
