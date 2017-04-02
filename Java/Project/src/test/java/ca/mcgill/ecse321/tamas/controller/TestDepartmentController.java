@@ -25,7 +25,7 @@ public class TestDepartmentController {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        PersistenceXStream.initializeModelManager("output"+ File.separator+"data2.xml");
+        PersistenceXStream.initializeModelManager("output"+ File.separator+"data.xml");
     }
 
     @Before
