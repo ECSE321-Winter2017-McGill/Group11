@@ -85,42 +85,6 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(participantAdapter);
     }
 
-    public void addStudent(View v) {
-        //variables for create student from text view
-        //Name
-        TextView tvName = (TextView) findViewById(R.id.newstudent_name);
-        //Id number
-        TextView tvId = (TextView) findViewById(R.id.newstudent_id);
-        String ID = tvId.getText().toString();
-
-        //email
-        TextView tvEmail = (TextView) findViewById(R.id.newstudent_email);
-        //isGrad?
-        CheckBox gradCheckBox = (CheckBox) findViewById(R.id.isGrad_checkBox);
-        boolean isGrad = false;
-        isGrad = gradCheckBox.isChecked();
-
-        //year
-        TextView tvYear = (TextView) findViewById(R.id.newstudent_year);
-        String year = tvYear.getText().toString();
-
-        //Job preference
-        TextView tvPreference = (TextView) findViewById(R.id.newstudent_preference);
-        //Number of Hours
-        TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
-        String hours = tvHours.getText().toString();
-
-        StudentController pc = new StudentController(d);
-        try {
-            pc.createStudent(ID, tvName.getText().toString(), tvEmail.getText().toString(), isGrad, year, tvPreference.getText().toString(), hours);
-            error = "";
-        } catch (InvalidInputException e) {
-            error = e.getMessage();
-        }
-
-        refreshData();
-    }
-
     public void loginActivity(View view){
         final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
 
