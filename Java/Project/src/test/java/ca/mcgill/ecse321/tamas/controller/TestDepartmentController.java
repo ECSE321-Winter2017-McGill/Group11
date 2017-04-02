@@ -25,7 +25,7 @@ public class TestDepartmentController {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        PersistenceXStream.initializeModelManager("output"+ File.separator+"data.xml");
+        PersistenceXStream.initializeModelManager("output"+ File.separator+"data2.xml");
     }
 
     @Before
@@ -84,7 +84,7 @@ public class TestDepartmentController {
         } catch(InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals("Invalid instructor!", error);
+        assertEquals(" Invalid instructor!", error);
         assertEquals(1,department.numberOfAllCourses());
 
         try {
@@ -110,6 +110,9 @@ public class TestDepartmentController {
         }
         assertEquals(" Input a non-negative number of credits! Input a non-negative number of labs! Input a non-negative number of tutorials! Input a non-negative number of hours! Input a non-negative number of student enrolled! Input a non-negative number of TAs needed! Input a non-negative number of graders needed! Input a non-negative TA hourly rate! Input a non-negative grader hourly rate! Input a non-negative budget!", error);
         assertEquals(1,department.numberOfAllCourses());
+
+        //remove the instructor for next test suits
+        instructorA.delete();
 
     }
 
@@ -174,6 +177,11 @@ public class TestDepartmentController {
         }
         assertEquals(" Position type cannot be empty! Posting deadline cannot be empty! Selected course cannot be empty!", error);
         assertEquals(1,department.numberOfAllJobs());
+
+
+        //remove instructor and course for next test suite
+        instructorA.delete();
+        courseA.delete();
     }
 
     @Test
@@ -274,6 +282,10 @@ public class TestDepartmentController {
         assertEquals(1,department.getAllJobs().size());
         //TODO
 
+        instructorA.delete();
+        studentA.delete();
+        courseA.delete();
+
     }
 
     @Test
@@ -354,6 +366,10 @@ public class TestDepartmentController {
         assertEquals(" Job cannot be empty! Student cannot be empty!", error);
         assertEquals(1,department.getAllJobs().size());
         //TODO
+
+        instructorA.delete();
+        studentA.delete();
+        courseA.delete();
     }
 
     @Test
@@ -433,6 +449,10 @@ public class TestDepartmentController {
         }
         assertEquals(" Job cannot be empty! Student cannot be empty!", error);
         assertEquals(1,department.getAllJobs().size());
+
+        instructorA.delete();
+        studentA.delete();
+        courseA.delete();
 
     }
 
