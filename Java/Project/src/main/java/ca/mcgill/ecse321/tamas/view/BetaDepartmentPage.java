@@ -9,7 +9,6 @@ import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
 import ca.mcgill.ecse321.tamas.controller.StudentController;
 import ca.mcgill.ecse321.tamas.model.*;
 import com.alee.extended.date.WebDateField;
-import com.alee.extended.painter.*;
 import com.alee.extended.panel.GroupPanel;
 import com.alee.laf.WebLookAndFeel;
 import com.alee.laf.button.WebButton;
@@ -30,6 +29,7 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 
 //model classes
 //Controller class
@@ -40,7 +40,7 @@ public class BetaDepartmentPage extends JFrame {
     private StudentController studentController;
     private InstructorController instructorController;
 
-    private JTextField skillsRequiredField;
+    private WebTextArea skillsRequiredTextArea;
     private JTextField experienceRequiredField;
     private JTextField jobDescriptionField;
     private JTextField studentNameField;
@@ -93,12 +93,11 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedJobForCreateAllocation = -1;
     private Integer selectedStudentForCreateOffer = -1;
     private Integer selectedJobForCreateOffer = -1;
-    private Integer numOfIconsOnDesktop = 0;
-    private Integer currentXPositionIcons = 25;
-    private Integer currentYPositionIcons = 25;
-    private Integer defaultXPositionIcons = 25;
-    private Integer defaultYPositionIcons = 25;
 
+    private Integer widthOfApp = 800;
+    private Integer heightOfApp = 800;
+
+    final private WebDesktopPane desktopPane = new WebDesktopPane();
     Department department;
 
 
@@ -118,50 +117,35 @@ public class BetaDepartmentPage extends JFrame {
         setTitle("Department's Page");
         GroupPanel groupPanel;
         WebTabbedPane tabbedPane = new WebTabbedPane();
-
-
+        BorderLayout borderLayout = new BorderLayout(0,0);
+        borderLayout.preferredLayoutSize(getContentPane());
+        getContentPane().setLayout(borderLayout);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 450, 300);
 
-        final WebDesktopPane desktopPane = new WebDesktopPane();
-        desktopPane.setOpaque(true  );
-        desktopPane.setBackground(new Color(239,62,51));
 
-        FlowLayout flowLayout = new FlowLayout(FlowLayout.LEADING,-3,-3);
+        desktopPane.setOpaque(false);
+        this.getContentPane().setBackground(new Color(239,62,51));
+
         WebPanel webPanel = new WebPanel();
-        webPanel.setLayout(flowLayout);
+        webPanel.setLayout(new GridLayout(0,8,-3,-3));
 
-        addNewFrame(desktopPane,PublishJobView(),"Publish Job Posting", "Publish Job Posting", webPanel);
-        addNewFrame(desktopPane,RegisterAStudent(),"Register a Student", "Register a Student", webPanel);
-        addNewFrame(desktopPane,ApplyForAJob(),"Apply for a Job", "Apply for a Job", webPanel);
-        addNewFrame(desktopPane,CreateAJob(),"Create a Job", "Create a Job", webPanel);
-        addNewFrame(desktopPane,CreateACourse(),"Create a Course", "Create a Course", webPanel);
-        addNewFrame(desktopPane, CreateAnInstructor(),"Create an Instructor", "Create an Instructor", webPanel);
-        addNewFrame(desktopPane,CreateOffer(),"Create Offer", "Create Offer", webPanel);
-        addNewFrame(desktopPane,CreateRemoveAllocation(),"Create/Remove Allocation", "Create/Remove Allocation", webPanel);
+        addNewFrame(desktopPane,PublishJobView(),"Publish Job Posting", "Publish Job Posting", webPanel, 393, 388);
+        addNewFrame(desktopPane,RegisterAStudent(),"Register a Student", "Register a Student", webPanel, 324, 354);
+        addNewFrame(desktopPane,ApplyForAJob(),"Apply for a Job", "Apply for a Job", webPanel, 350, 300);
+        addNewFrame(desktopPane,CreateAJob(),"Create a Job", "Create a Job", webPanel, 350, 300);
+        addNewFrame(desktopPane,CreateACourse(),"Create a Course", "Create a Course", webPanel, 350, 300);
+        addNewFrame(desktopPane, CreateAnInstructor(),"Create an Instructor", "Create an Instructor", webPanel, 350, 300);
+        addNewFrame(desktopPane,CreateOffer(),"Create Offer", "Create Offer", webPanel, 350, 300);
+        addNewFrame(desktopPane,CreateRemoveAllocation(),"Create/Remove Allocation", "Create/Remove Allocation", webPanel, 350, 300);
 
         webPanel.setBounds(0,0,800,800);
         webPanel.setOpaque(false);
-        desktopPane.add(webPanel);
 
+        getContentPane().add(desktopPane,BorderLayout.CENTER);
+        getContentPane().add(webPanel, BorderLayout.NORTH);
 
-        //tabbedPane.insertTab("Home",null,desktopPane,null,0);
-        tabbedPane.setBackgroundPainterAt(0, new ColorPainter(new Color(239,62,51)));
-
-/*        tabbedPane.insertTab("Publish Job Posting",null,PublishJobView(),null,1);
-        tabbedPane.insertTab("Register a Student", null, RegisterAStudent(),null,2);
-        tabbedPane.insertTab("Apply for a Job", null, ApplyForAJob(),null,3);
-        tabbedPane.insertTab("Create a Job", null, CreateAJob(),null,4);
-        tabbedPane.insertTab("Create a Course", null, CreateACourse(),null,5);
-        tabbedPane.insertTab("Create an Instructor", null, CreateAnInstructor(),null,6);
-        tabbedPane.insertTab("Create Offer", null, CreateOffer(),null,7);
-        tabbedPane.insertTab("Create/Remove Allocation", null, CreateRemoveAllocation(),null,8);
-        */
-        setContentPane(desktopPane);
-
-        desktopPane.setPreferredSize(new Dimension(800,800));
-
-        this.setMinimumSize(new Dimension(800,800));
+        this.setMinimumSize(new Dimension(widthOfApp,heightOfApp));
         pack();
         updateDisplay();
     }
@@ -174,7 +158,7 @@ public class BetaDepartmentPage extends JFrame {
     private void updateDisplay() {
 
         //update the **publish a job posting** component
-        skillsRequiredField.setText("");
+        skillsRequiredTextArea.setText("");
         experienceRequiredField.setText("");
         jobDescriptionField.setText("");
 
@@ -261,15 +245,20 @@ public class BetaDepartmentPage extends JFrame {
 
 
 
+
     }
 
-    private void addNewFrame(final WebDesktopPane webDesktopPane, Component component, String frameName, String iconName, WebPanel webPanel){
-        final WebInternalFrame internalFrame = new WebInternalFrame(frameName, true, true, true,true);
+    private void addNewFrame(final WebDesktopPane webDesktopPane, Component component, String frameName, String iconName, WebPanel webPanel, int width, int height){
+        final WebInternalFrame internalFrame = new WebInternalFrame(frameName, true, true, false,true);
         WebButton internalFrameIcon = new WebButton("<html><font color='white'>"+ iconName + "</font></html>");
         internalFrame.add(component);
+        internalFrame.getContentPane().setBackground(new Color(43, 43, 43, 255));
         internalFrameIcon.setRound(0);
         internalFrameIcon.setShineColor(new Color(75,75,75));
         internalFrameIcon.setRolloverShine(true);
+        internalFrameIcon.setBorderPainted(false);
+
+
 
        // internalFrameIcon.setRolloverDecoratedOnly(true);
         internalFrameIcon.setShadeColor(new Color(43, 43, 43, 255));
@@ -286,6 +275,7 @@ public class BetaDepartmentPage extends JFrame {
                 {
                     if ( internalFrame.getParent () == null )
                     {
+                        updateDisplay();
                         webDesktopPane.add ( internalFrame );
                     }
                     internalFrame.open ();
@@ -297,21 +287,11 @@ public class BetaDepartmentPage extends JFrame {
                 }
             }
         } );
-        if(numOfIconsOnDesktop != 0){
-            if(currentYPositionIcons+100 < 500) {
-                currentYPositionIcons += 100;
-            }else{
-                currentXPositionIcons += 125;
-                currentYPositionIcons = defaultYPositionIcons;
-            }
-        }
 
-        internalFrameIcon.setBounds ( currentXPositionIcons, currentYPositionIcons, 100, 75 );
         internalFrameIcon.setPreferredSize(100,75);
         webPanel.add(internalFrameIcon);
 
-        numOfIconsOnDesktop++;
-        internalFrame.setBounds ( 25 + 100 + 50, 50, 300, 300 );
+        internalFrame.setBounds ((int)(Math.random()*(widthOfApp/2)), (int)(Math.random()*(heightOfApp/2)), width, height );
 
 
         internalFrame.close ();
@@ -319,75 +299,95 @@ public class BetaDepartmentPage extends JFrame {
     }
 
     private Component PublishJobView(){
-
         WebPanel contentPane = new WebPanel();
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
 
         JLabel jobIDLabel = new JLabel("Job ID");
-        jobIDLabel.setBounds(10, 40, 90, 16);
-        contentPane.add(jobIDLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weighty =1;
+        gridBagConstraints.weightx = 1;
+
+        //jobIDLabel.setBounds(10, 40, 90, 16);
+
+        contentPane.add(jobIDLabel,gridBagConstraints);
 
         JLabel publishJobLabel = new JLabel("Publish A Job Posting");
         publishJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        publishJobLabel.setBounds(23, 6, 165, 20);
+        // publishJobLabel.setBounds(23, 6, 165, 20);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+
         contentPane.add(publishJobLabel);
 
         JLabel skillsRequiredLabel = new JLabel("Skills required");
-        skillsRequiredLabel.setBounds(10, 68, 90, 16);
-        contentPane.add(skillsRequiredLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(skillsRequiredLabel,gridBagConstraints);
 
-        skillsRequiredField = new JTextField();
-        skillsRequiredField.setBounds(112, 63, 100, 26);
-        //contentPane.add(skillsRequiredField);
-        skillsRequiredField.setColumns(10);
 
-        final WebTextArea skillsRequiredTextArea = new WebTextArea();
+
+
+        skillsRequiredTextArea = new WebTextArea();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
         skillsRequiredTextArea.setLineWrap(true);
         skillsRequiredTextArea.setWrapStyleWord(true);
 
-        WebScrollPane areaScroll = new WebScrollPane(skillsRequiredTextArea);
-        areaScroll.setPreferredSize(new Dimension(200,150));
-        areaScroll.setBounds(112,63,200,150);
-        contentPane.add(areaScroll);
+        WebScrollPane areaScrollSkillsRequired = new WebScrollPane(skillsRequiredTextArea);
+        areaScrollSkillsRequired.setPreferredSize(new Dimension(150,150));
+        contentPane.add(areaScrollSkillsRequired,gridBagConstraints);
 
         JLabel experienceRequiredLabel = new JLabel("Exp. required");
-       experienceRequiredLabel.setBounds(10, 96, 90, 16);
-        contentPane.add(experienceRequiredLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = gridBagConstraints.BOTH;
+        contentPane.add(experienceRequiredLabel,gridBagConstraints);
 
         experienceRequiredField = new JTextField();
-        experienceRequiredField.setBounds(112, 91, 100, 26);
-        //contentPane.add(experienceRequiredField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(experienceRequiredField,gridBagConstraints);
         experienceRequiredField.setColumns(10);
 
         JLabel jobDescriptionLabel = new JLabel("Job description");
-        jobDescriptionLabel.setBounds(10, 124, 90, 16);
-        contentPane.add(jobDescriptionLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        contentPane.add(jobDescriptionLabel,gridBagConstraints);
 
         jobDescriptionField = new JTextField();
-        jobDescriptionField.setBounds(112, 119, 100, 26);
-        //contentPane.add(jobDescriptionField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        contentPane.add(jobDescriptionField,gridBagConstraints);
         jobDescriptionField.setColumns(10);
 
         final JLabel offerDeadlineLabel = new JLabel("Offer Deadline");
-        offerDeadlineLabel.setBounds(10, 152, 90, 16);
-        contentPane.add(offerDeadlineLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        contentPane.add(offerDeadlineLabel,gridBagConstraints);
 
         offerDeadlineDatePicker= new WebDateField();
-        offerDeadlineDatePicker.setBounds(112,147,100,26);
-
-       // contentPane.add(offerDeadlineDatePicker);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        contentPane.add(offerDeadlineDatePicker,gridBagConstraints);
 
         final JLabel publishJobPostingErrorLabel = new JLabel("");
         publishJobPostingErrorLabel.setForeground(Color.RED);
-        publishJobPostingErrorLabel.setBounds(10, 215, 202, 16);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
         contentPane.add(publishJobPostingErrorLabel);
 
         //declare this spinner final since accessed from a inner class
         jobListForPublishJobPosting = new JComboBox<String>(new String[0]);
-        jobListForPublishJobPosting.setBounds(112,35,100,26);
-        contentPane.add(jobListForPublishJobPosting);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(jobListForPublishJobPosting,gridBagConstraints);
 
         WebButton publishJobPostingButton = new WebButton("Publish job posting");
         publishJobPostingButton.addActionListener(new ActionListener() {
@@ -413,7 +413,7 @@ public class BetaDepartmentPage extends JFrame {
                         publishJobPostingErrorLabel.setText(""); //it worked so remove the error
 
                     } catch (InvalidInputException e1) {
-                        publishJobPostingErrorLabel.setText(e1.getMessage());
+                        publishJobPostingErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                         updateDisplay();
                     }
 
@@ -423,7 +423,6 @@ public class BetaDepartmentPage extends JFrame {
                 updateDisplay();
             }
         });
-        publishJobPostingButton.setBounds(10, 185, 190, 29);
 
         jobListForPublishJobPosting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -431,10 +430,11 @@ public class BetaDepartmentPage extends JFrame {
                 selectedJobForPublishJobPosting = cb.getSelectedIndex();
             }
         });
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        contentPane.add(publishJobPostingButton,gridBagConstraints);
 
-        contentPane.add(publishJobPostingButton);
-
-        return contentPane;
+        return scrollPane;
     }
 
     private Component RegisterAStudent(){
@@ -442,34 +442,45 @@ public class BetaDepartmentPage extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel studentNameLabel = new JLabel("Student name");
-        studentNameLabel.setBounds(260, 63, 90, 16);
-        contentPane.add(studentNameLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(studentNameLabel,gridBagConstraints);
 
         studentNameField = new JTextField();
-        studentNameField.setBounds(362, 58, 130, 26);
-        contentPane.add(studentNameField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(studentNameField,gridBagConstraints);
         studentNameField.setColumns(10);
 
         JLabel emailLabel = new JLabel("Email");
-        emailLabel.setBounds(260, 91, 61, 16);
-        contentPane.add(emailLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(emailLabel,gridBagConstraints);
 
 
         JLabel RegisterStudentLabel = new JLabel("Register a Student");
         RegisterStudentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        RegisterStudentLabel.setBounds(307, 6, 140, 20);
-        contentPane.add(RegisterStudentLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(RegisterStudentLabel,gridBagConstraints);
 
         emailField = new JTextField();
-        emailField.setBounds(362, 86, 130, 26);
-        contentPane.add(emailField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(emailField,gridBagConstraints);
         emailField.setColumns(10);
 
         undergraduateRadioForRegister = new JRadioButton("Undergraduate");
         graduateRadioForRegister = new JRadioButton("Graduate");
+
 
         ButtonGroup group1 = new ButtonGroup();
         group1.add(undergraduateRadioForRegister);
@@ -479,56 +490,68 @@ public class BetaDepartmentPage extends JFrame {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        undergraduateRadioForRegister.setBounds(260, 211, 124, 23);
-        contentPane.add(undergraduateRadioForRegister);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        contentPane.add(undergraduateRadioForRegister,gridBagConstraints);
 
         graduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             }
         });
-        graduateRadioForRegister.setBounds(391, 211, 101, 23);
-        contentPane.add(graduateRadioForRegister);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        contentPane.add(graduateRadioForRegister,gridBagConstraints);
 
         JLabel studentYearLabel = new JLabel("Year");
-        studentYearLabel.setBounds(260, 119, 61, 16);
-        contentPane.add(studentYearLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        contentPane.add(studentYearLabel,gridBagConstraints);
 
         studentYearField = new JTextField();
-        studentYearField.setBounds(362, 114, 130, 26);
-        contentPane.add(studentYearField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        contentPane.add(studentYearField,gridBagConstraints);
         studentYearField.setColumns(10);
 
         JLabel jobPreferenceLabel = new JLabel("Job preference");
-        jobPreferenceLabel.setBounds(260, 147, 90, 16);
-        contentPane.add(jobPreferenceLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        contentPane.add(jobPreferenceLabel,gridBagConstraints);
 
         jobPreferenceField = new JTextField();
-        jobPreferenceField.setBounds(362, 142, 130, 26);
-        contentPane.add(jobPreferenceField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        contentPane.add(jobPreferenceField,gridBagConstraints);
         jobPreferenceField.setColumns(10);
 
         JLabel studentIDLabel = new JLabel("Student ID");
-        studentIDLabel.setBounds(260, 35, 90, 16);
-        contentPane.add(studentIDLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(studentIDLabel,gridBagConstraints);
 
         studentIDField = new JTextField();
-        studentIDField.setBounds(362, 30, 130, 26);
-        contentPane.add(studentIDField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(studentIDField,gridBagConstraints);
         studentIDField.setColumns(10);
 
         JLabel studentHoursLabel = new JLabel("Number of hours");
-        studentHoursLabel.setBounds(260, 175, 90, 16);
-        contentPane.add(studentHoursLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        contentPane.add(studentHoursLabel,gridBagConstraints);
 
         studentHoursField = new JTextField();
-        studentHoursField.setBounds(362, 173, 130, 26);
-        contentPane.add(studentHoursField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        contentPane.add(studentHoursField,gridBagConstraints);
         studentHoursField.setColumns(10);
 
         final JLabel registerAStudentErrorLabel = new JLabel("");
         registerAStudentErrorLabel.setForeground(Color.RED);
-        registerAStudentErrorLabel.setBounds(270, 282, 222, 16);
-        contentPane.add(registerAStudentErrorLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth =2;
+        contentPane.add(registerAStudentErrorLabel,gridBagConstraints);
 
         WebButton registerStudentButton = new WebButton("Register student");
         registerStudentButton.addActionListener(new ActionListener() {
@@ -553,18 +576,20 @@ public class BetaDepartmentPage extends JFrame {
                     studentController.createStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
                     registerAStudentErrorLabel.setText("");
                 } catch (InvalidInputException e1) {
-                    registerAStudentErrorLabel.setText(e1.getMessage());
+                    registerAStudentErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                 }
 
                 updateDisplay();
             }
         });
-        registerStudentButton.setBounds(260, 241, 232, 29);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth =2;
+        gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+        contentPane.add(registerStudentButton,gridBagConstraints);
 
-        contentPane.add(registerStudentButton);
 
-
-        return contentPane;
+        return scrollPane;
     }
 
     private Component ApplyForAJob(){
@@ -572,34 +597,44 @@ public class BetaDepartmentPage extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel applyForAJobLabel = new JLabel("Apply for a Job");
         applyForAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        applyForAJobLabel.setBounds(591, 162, 110, 16);
-        contentPane.add(applyForAJobLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(applyForAJobLabel,gridBagConstraints);
 
         JLabel studentIDForApplyingLabel = new JLabel("Student ID");
-        studentIDForApplyingLabel.setBounds(533, 190, 61, 16);
-        contentPane.add(studentIDForApplyingLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(studentIDForApplyingLabel,gridBagConstraints);
 
         studentIDForApplyingField = new JTextField();
-        studentIDForApplyingField.setBounds(635, 185, 130, 26);
-        contentPane.add(studentIDForApplyingField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(studentIDForApplyingField,gridBagConstraints);
         studentIDForApplyingField.setColumns(10);
 
         JLabel jobIDForApplyingLabel = new JLabel("Job title");
-        jobIDForApplyingLabel.setBounds(533, 215, 61, 16);
-        contentPane.add(jobIDForApplyingLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(jobIDForApplyingLabel,gridBagConstraints);
 
         jobListForStudentApplyJob = new JComboBox<String>(new String[0]);
-        jobListForStudentApplyJob.setBounds(636,212,126,26);
-        contentPane.add(jobListForStudentApplyJob);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(jobListForStudentApplyJob,gridBagConstraints);
 
         final JLabel applyForAJobErrorLabel = new JLabel("");
         applyForAJobErrorLabel.setForeground(Color.RED);
-        applyForAJobErrorLabel.setBounds(543, 282, 222, 16);
-        contentPane.add(applyForAJobErrorLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(applyForAJobErrorLabel,gridBagConstraints);
 
         WebButton applyForAJobButton = new WebButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
@@ -636,7 +671,7 @@ public class BetaDepartmentPage extends JFrame {
                     applyForAJobErrorLabel.setText(""); //it worked so remove the error
 
                 } catch (InvalidInputException e1) {
-                    applyForAJobErrorLabel.setText(e1.getMessage()); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+                    applyForAJobErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>"); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
 
                 }
 
@@ -644,8 +679,8 @@ public class BetaDepartmentPage extends JFrame {
 
             }
         });
-        applyForAJobButton.setBounds(533, 242, 232, 26);
-
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
         jobListForStudentApplyJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JComboBox<String> cb = (JComboBox<String>) evt.getSource();
@@ -653,21 +688,26 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
 
-        contentPane.add(applyForAJobButton);
+        contentPane.add(applyForAJobButton,gridBagConstraints);
 
-        return contentPane;
+        return scrollPane;
     }
 
     private Component CreateAJob(){
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel createAJobLabel = new JLabel("Create a Job");
         createAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        createAJobLabel.setBounds(591, 6, 140, 20);
-        contentPane.add(createAJobLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(createAJobLabel,gridBagConstraints);
 
 
         TARadio = new JRadioButton("TA");
@@ -683,16 +723,18 @@ public class BetaDepartmentPage extends JFrame {
 
             }
         });
-        TARadio.setBounds(533, 31, 130, 23);
-        contentPane.add(TARadio);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(TARadio,gridBagConstraints);
 
         graderRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
         });
-        graderRadio.setBounds(675, 31, 90, 23);
-        contentPane.add(graderRadio);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(graderRadio,gridBagConstraints);
 
         //This is a dummy instructor
         Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
@@ -712,8 +754,9 @@ public class BetaDepartmentPage extends JFrame {
         courseList = new WebComboBox(new String[0]);
         courseList.setEditable(true);
         //courseList.setEditorColumns();
-        courseList.setBounds(533, 63, 221, 26);
-        contentPane.add(courseList);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(courseList,gridBagConstraints);
 
         final WebButton createNewJobButton = new WebButton("Create new job");
         createNewJobButton.addActionListener(new ActionListener() {
@@ -734,8 +777,9 @@ public class BetaDepartmentPage extends JFrame {
                 updateDisplay();
             }
         });
-        createNewJobButton.setBounds(533, 96, 221, 29);
-        contentPane.add(createNewJobButton);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(createNewJobButton,gridBagConstraints);
 
         courseList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -744,104 +788,56 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
 
-        return contentPane;
+        return scrollPane;
     }
 
     private Component CreateACourse(){
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel createACourseLabel = new JLabel("Create a Course");
         createACourseLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        createACourseLabel.setBounds(37, 240, 125, 16);
-        contentPane.add(createACourseLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(createACourseLabel,gridBagConstraints);
 
         JLabel courseNameLabel = new JLabel("Course name");
-        courseNameLabel.setBounds(10, 273, 90, 16);
-        contentPane.add(courseNameLabel);
-
-        JLabel courseCodeLabel = new JLabel("Course code");
-        courseCodeLabel.setBounds(10, 301, 90, 16);
-        contentPane.add(courseCodeLabel);
-
-        JLabel numberOfTutorialsLabel = new JLabel("Number of tutorials");
-        numberOfTutorialsLabel.setBounds(10, 357, 90, 16);
-        contentPane.add(numberOfTutorialsLabel);
-
-        JLabel numberOfLabsLabel = new JLabel("Number of labs");
-        numberOfLabsLabel.setBounds(10, 385, 90, 16);
-        contentPane.add(numberOfLabsLabel);
-
-        JLabel numberStudentEnrolledLabel = new JLabel("Number student enrolled");
-        numberStudentEnrolledLabel.setBounds(10, 413, 90, 16);
-        contentPane.add(numberStudentEnrolledLabel);
-
-        JLabel hoursLabel = new JLabel("Hours");
-        hoursLabel.setBounds(10, 441, 90, 16);
-        contentPane.add(hoursLabel);
-
-        JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
-        taHourlyRateLabel.setBounds(10, 527, 90, 16);
-        contentPane.add(taHourlyRateLabel);
-
-        JLabel creditsLabel = new JLabel("Credits");
-        creditsLabel.setBounds(10, 610, 90, 16);
-        contentPane.add(creditsLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(courseNameLabel,gridBagConstraints);
 
         courseNameField = new JTextField();
-        courseNameField.setBounds(112, 268, 100, 26);
-        contentPane.add(courseNameField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(courseNameField,gridBagConstraints);
         courseNameField.setColumns(10);
 
+        JLabel courseCodeLabel = new JLabel("Course code");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(courseCodeLabel,gridBagConstraints);
+
         courseCodeField = new JTextField();
-        courseCodeField.setBounds(112, 296, 100, 26);
-        contentPane.add(courseCodeField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(courseCodeField,gridBagConstraints);
         courseCodeField.setColumns(10);
 
-        numberOfTutorialsField = new JTextField();
-        numberOfTutorialsField.setBounds(112, 352, 100, 26);
-        contentPane.add(numberOfTutorialsField);
-        numberOfTutorialsField.setColumns(10);
-
-        numberOfLabsField = new JTextField();
-        numberOfLabsField.setBounds(112, 380, 100, 26);
-        contentPane.add(numberOfLabsField);
-        numberOfLabsField.setColumns(10);
-
-        numberStudentEnrolledField = new JTextField();
-        numberStudentEnrolledField.setBounds(112, 408, 100, 26);
-        contentPane.add(numberStudentEnrolledField);
-        numberStudentEnrolledField.setColumns(10);
-
-        hoursField = new JTextField();
-        hoursField.setBounds(112, 436, 100, 26);
-        contentPane.add(hoursField);
-        hoursField.setColumns(10);
-
-        taHourlyRateField = new JTextField();
-        taHourlyRateField.setBounds(112, 522, 100, 26);
-        contentPane.add(taHourlyRateField);
-        taHourlyRateField.setColumns(10);
-
-        creditsField = new JTextField();
-        creditsField.setBounds(112, 605, 100, 26);
-        contentPane.add(creditsField);
-        creditsField.setColumns(10);
-
-        final JLabel createCourseErrorLabel = new JLabel("");
-        createCourseErrorLabel.setForeground(Color.RED);
-        createCourseErrorLabel.setBounds(10, 684, 202, 16);
-        contentPane.add(createCourseErrorLabel);
-
         JLabel semesterLabel = new JLabel("Semester");
-        semesterLabel.setBounds(10, 329, 94, 16);
-        contentPane.add(semesterLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(semesterLabel,gridBagConstraints);
 
         semesterJComboBox = new JComboBox();
-        semesterJComboBox.setBounds(112, 325, 100, 27);
-        contentPane.add(semesterJComboBox);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        contentPane.add(semesterJComboBox,gridBagConstraints);
 
         semesterJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -850,42 +846,123 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
 
+
+        JLabel creditsLabel = new JLabel("Credits");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        contentPane.add(creditsLabel,gridBagConstraints);
+
+        creditsField = new JTextField();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        contentPane.add(creditsField,gridBagConstraints);
+        creditsField.setColumns(10);
+
+        JLabel numberOfTutorialsLabel = new JLabel("Number of tutorials");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        contentPane.add(numberOfTutorialsLabel,gridBagConstraints);
+
+        numberOfTutorialsField = new JTextField();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        contentPane.add(numberOfTutorialsField,gridBagConstraints);
+        numberOfTutorialsField.setColumns(10);
+
+        JLabel numberOfLabsLabel = new JLabel("Number of labs");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        contentPane.add(numberOfLabsLabel,gridBagConstraints);
+
+        numberOfLabsField = new JTextField();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        contentPane.add(numberOfLabsField,gridBagConstraints);
+        numberOfLabsField.setColumns(10);
+
+        JLabel numberStudentEnrolledLabel = new JLabel("Number student enrolled");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        contentPane.add(numberStudentEnrolledLabel,gridBagConstraints);
+
+        numberStudentEnrolledField = new JTextField();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        contentPane.add(numberStudentEnrolledField,gridBagConstraints);
+        numberStudentEnrolledField.setColumns(10);
+
+        JLabel hoursLabel = new JLabel("Hours");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        contentPane.add(hoursLabel,gridBagConstraints);
+
+        hoursField = new JTextField();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        contentPane.add(hoursField,gridBagConstraints);
+        hoursField.setColumns(10);
+
         JLabel numberOfTAsNeededLabel = new JLabel("TAs needed");
-        numberOfTAsNeededLabel.setBounds(10, 469, 90, 16);
-        contentPane.add(numberOfTAsNeededLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        contentPane.add(numberOfTAsNeededLabel,gridBagConstraints);
 
         numberOfTAsNeededField = new JTextField();
-        numberOfTAsNeededField.setBounds(112, 464, 100, 26);
-        contentPane.add(numberOfTAsNeededField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        contentPane.add(numberOfTAsNeededField,gridBagConstraints);
         numberOfTAsNeededField.setColumns(10);
 
         JLabel numberOfGradersNeededLabel = new JLabel("Graders needed");
-        numberOfGradersNeededLabel.setBounds(10, 497, 90, 16);
-        contentPane.add(numberOfGradersNeededLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        contentPane.add(numberOfGradersNeededLabel,gridBagConstraints);
 
         numberOfGradersNeededField = new JTextField();
-        numberOfGradersNeededField.setBounds(112, 492, 100, 26);
-        contentPane.add(numberOfGradersNeededField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        contentPane.add(numberOfGradersNeededField,gridBagConstraints);
         numberOfGradersNeededField.setColumns(10);
 
+        JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        contentPane.add(taHourlyRateLabel,gridBagConstraints);
+
+        taHourlyRateField = new JTextField();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        contentPane.add(taHourlyRateField,gridBagConstraints);
+        taHourlyRateField.setColumns(10);
+
         JLabel graderHourlyRateLabel = new JLabel("Graders hourly rate");
-        graderHourlyRateLabel.setBounds(10, 555, 90, 16);
-        contentPane.add(graderHourlyRateLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        contentPane.add(graderHourlyRateLabel,gridBagConstraints);
 
         graderHourlyRateField = new JTextField();
-        graderHourlyRateField.setBounds(112, 550, 100, 26);
-        contentPane.add(graderHourlyRateField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        contentPane.add(graderHourlyRateField,gridBagConstraints);
         graderHourlyRateField.setColumns(10);
 
         JLabel budgetLabel = new JLabel("Budget");
-        budgetLabel.setBounds(10, 583, 90, 16);
-        contentPane.add(budgetLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        contentPane.add(budgetLabel,gridBagConstraints);
 
         budgetField = new JTextField();
-        budgetField.setBounds(112, 578, 100, 26);
-        contentPane.add(budgetField);
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        contentPane.add(budgetField,gridBagConstraints);
         budgetField.setColumns(10);
 
+
+        final JLabel createCourseErrorLabel = new JLabel("");
+        createCourseErrorLabel.setForeground(Color.RED);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        contentPane.add(createCourseErrorLabel,gridBagConstraints);
 
         WebButton createACourseButton = new WebButton("Create a Course");
         createACourseButton.addActionListener(new ActionListener() {
@@ -917,7 +994,7 @@ public class BetaDepartmentPage extends JFrame {
                         departmentController.createCourse(courseCode, courseName, semester,numberOfCredits, numberOfLabs,numberOfTutorials,hours,numberOfStudents,numberOfTAsNeeded,numberOfGradersNeeded,hourlyRateTA,graderHourlyRate,budget,dummyInstructor);
                         createCourseErrorLabel.setText("");
                     } catch (InvalidInputException e1) {
-                        createCourseErrorLabel.setText(e1.getMessage());
+                        createCourseErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                     }
                 } else {
                     createCourseErrorLabel.setText("Please select a semester!");
@@ -926,10 +1003,11 @@ public class BetaDepartmentPage extends JFrame {
                 updateDisplay();
             }
         });
-        createACourseButton.setBounds(10, 643, 202, 29);
-        contentPane.add(createACourseButton);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        contentPane.add(createACourseButton,gridBagConstraints);
 
-        return contentPane;
+        return scrollPane;
     }
 
     private Component CreateAnInstructor(){
@@ -937,44 +1015,53 @@ public class BetaDepartmentPage extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel lblCreateAnInstructor = new JLabel("Create an Instructor");
         lblCreateAnInstructor.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        lblCreateAnInstructor.setBounds(307, 310, 152, 16);
-        contentPane.add(lblCreateAnInstructor);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(lblCreateAnInstructor,gridBagConstraints);
 
         JLabel createAnInstructorNameLabel = new JLabel("Full name");
-        createAnInstructorNameLabel.setBounds(260, 338, 90, 16);
-        contentPane.add(createAnInstructorNameLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createAnInstructorNameLabel,gridBagConstraints);
 
         createAnInstructorNameField = new JTextField();
-        createAnInstructorNameField.setBounds(362, 333, 130, 26);
-        contentPane.add(createAnInstructorNameField);
+        gridBagConstraints.gridx++;
+        contentPane.add(createAnInstructorNameField,gridBagConstraints);
         createAnInstructorNameField.setColumns(10);
 
         JLabel instructorIDLabel = new JLabel("Instructor ID");
-        instructorIDLabel.setBounds(260, 367, 90, 16);
-        contentPane.add(instructorIDLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(instructorIDLabel,gridBagConstraints);
 
         instructorIDField = new JTextField();
-        instructorIDField.setBounds(362, 362, 130, 26);
-        contentPane.add(instructorIDField);
+        gridBagConstraints.gridx++;
+        contentPane.add(instructorIDField,gridBagConstraints);
         instructorIDField.setColumns(10);
 
         JLabel instructorEmailLabel = new JLabel("Email");
-        instructorEmailLabel.setBounds(260, 395, 90, 16);
-        contentPane.add(instructorEmailLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(instructorEmailLabel,gridBagConstraints);
 
         instructorEmailField = new JTextField();
-        instructorEmailField.setBounds(362, 390, 130, 26);
-        contentPane.add(instructorEmailField);
+        gridBagConstraints.gridx++;
+        contentPane.add(instructorEmailField,gridBagConstraints);
         instructorEmailField.setColumns(10);
 
         final JLabel createInstructorErrorLabel = new JLabel("");
         createInstructorErrorLabel.setForeground(Color.RED);
-        createInstructorErrorLabel.setBounds(260, 454, 232, 16);
-        contentPane.add(createInstructorErrorLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createInstructorErrorLabel,gridBagConstraints);
 
         WebButton createInstructorButton = new WebButton("Create new instructor");
         createInstructorButton.addActionListener(new ActionListener() {
@@ -991,58 +1078,33 @@ public class BetaDepartmentPage extends JFrame {
                     createInstructorErrorLabel.setText("");
 
                 } catch (InvalidInputException e1) {
-                    createInstructorErrorLabel.setText(e1.getMessage());
+                    createInstructorErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                 }
             }
         });
-        createInstructorButton.setBounds(260, 423, 232, 29);
-        contentPane.add(createInstructorButton);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createInstructorButton,gridBagConstraints);
 
-        return contentPane;
+        return scrollPane;
     }
 
     private Component CreateRemoveAllocation(){
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel createAllocationLabel = new JLabel("Create/Remove Allocation");
         createAllocationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         createAllocationLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        createAllocationLabel.setBounds(260, 492, 229, 16);
-        contentPane.add(createAllocationLabel);
-
-        JLabel createAllocationStudentLabel = new JLabel("Student");
-        createAllocationStudentLabel.setBounds(260, 555, 90, 16);
-        contentPane.add(createAllocationStudentLabel);
-
-        createAllocationStudentComboBox = new JComboBox();
-        createAllocationStudentComboBox.setBounds(376, 551, 116, 27);
-        contentPane.add(createAllocationStudentComboBox);
-
-        createAllocationStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
-                selectedStudentForCreateAllocation = cb.getSelectedIndex();
-            }
-        });
-
-        JLabel createAllocationJobLabel = new JLabel("Job");
-        createAllocationJobLabel.setBounds(260, 583, 90, 16);
-        contentPane.add(createAllocationJobLabel);
-
-        createAllocationJobComboBox = new JComboBox();
-        createAllocationJobComboBox.setBounds(376, 579, 116, 27);
-        contentPane.add(createAllocationJobComboBox);
-
-        createAllocationJobComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
-                selectedJobForCreateAllocation = cb.getSelectedIndex();
-            }
-        });
-
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(createAllocationLabel,gridBagConstraints);
 
         final JRadioButton createAllocationRadio = new JRadioButton("Create");
         final JRadioButton removeAllocationRadio = new JRadioButton("Remove");
@@ -1056,22 +1118,57 @@ public class BetaDepartmentPage extends JFrame {
 
             }
         });
-        createAllocationRadio.setBounds(260, 523, 81, 23);
-        contentPane.add(createAllocationRadio);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createAllocationRadio,gridBagConstraints);
 
         removeAllocationRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
             }
         });
-        removeAllocationRadio.setBounds(392, 523, 100, 23);
-        contentPane.add(removeAllocationRadio);
+        gridBagConstraints.gridx++;
+        contentPane.add(removeAllocationRadio,gridBagConstraints);
+
+        JLabel createAllocationStudentLabel = new JLabel("Student");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createAllocationStudentLabel,gridBagConstraints);
+
+        createAllocationStudentComboBox = new JComboBox();
+        gridBagConstraints.gridx++;
+        contentPane.add(createAllocationStudentComboBox,gridBagConstraints);
+
+        createAllocationStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedStudentForCreateAllocation = cb.getSelectedIndex();
+            }
+        });
+
+        JLabel createAllocationJobLabel = new JLabel("Job");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createAllocationJobLabel,gridBagConstraints);
+
+        createAllocationJobComboBox = new JComboBox();
+        gridBagConstraints.gridx++;
+        contentPane.add(createAllocationJobComboBox,gridBagConstraints);
+
+        createAllocationJobComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForCreateAllocation = cb.getSelectedIndex();
+            }
+        });
+
 
         final JLabel createAllocationErrorLabel = new JLabel("");
         createAllocationErrorLabel.setForeground(Color.RED);
         createAllocationErrorLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        createAllocationErrorLabel.setBounds(260, 648, 232, 16);
-        contentPane.add(createAllocationErrorLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createAllocationErrorLabel,gridBagConstraints);
 
         WebButton createAllocationButton = new WebButton("Create/Remove");
         createAllocationButton.addActionListener(new ActionListener() {
@@ -1126,10 +1223,11 @@ public class BetaDepartmentPage extends JFrame {
                 updateDisplay();
             }
         });
-        createAllocationButton.setBounds(260, 610, 232, 29);
-        contentPane.add(createAllocationButton);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createAllocationButton,gridBagConstraints);
 
-        return contentPane;
+        return scrollPane;
     }
 
     private Component CreateOffer(){
@@ -1137,20 +1235,26 @@ public class BetaDepartmentPage extends JFrame {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(null);
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
 
         JLabel createOfferLabel = new JLabel("Create Offer");
         createOfferLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
-        createOfferLabel.setBounds(606, 310, 110, 16);
-        contentPane.add(createOfferLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        contentPane.add(createOfferLabel,gridBagConstraints);
 
         JLabel createOfferStudentLabel = new JLabel("Student");
-        createOfferStudentLabel.setBounds(543, 352, 61, 16);
-        contentPane.add(createOfferStudentLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createOfferStudentLabel,gridBagConstraints);
 
         createOfferStudentComboBox = new JComboBox();
-        createOfferStudentComboBox.setBounds(635, 346, 130, 27);
-        contentPane.add(createOfferStudentComboBox);
+        gridBagConstraints.gridx++;
+        contentPane.add(createOfferStudentComboBox,gridBagConstraints);
 
         createOfferStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1160,12 +1264,13 @@ public class BetaDepartmentPage extends JFrame {
         });
 
         JLabel createOfferJobLabel = new JLabel("Job");
-        createOfferJobLabel.setBounds(543, 385, 61, 16);
-        contentPane.add(createOfferJobLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createOfferJobLabel,gridBagConstraints);
 
         createOfferJobComboBox = new JComboBox();
-        createOfferJobComboBox.setBounds(635, 381, 130, 27);
-        contentPane.add(createOfferJobComboBox);
+        gridBagConstraints.gridx++;
+        contentPane.add(createOfferJobComboBox,gridBagConstraints);
 
         createOfferJobComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1176,8 +1281,9 @@ public class BetaDepartmentPage extends JFrame {
 
         final JLabel createOfferErrorLabel = new JLabel("");
         createOfferErrorLabel.setForeground(Color.RED);
-        createOfferErrorLabel.setBounds(533, 464, 232, 16);
-        contentPane.add(createOfferErrorLabel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createOfferErrorLabel,gridBagConstraints);
 
         WebButton createOfferButton = new WebButton("Create offer");
         createOfferButton.addActionListener(new ActionListener() {
@@ -1217,10 +1323,10 @@ public class BetaDepartmentPage extends JFrame {
 
             }
         });
-        createOfferButton.setBounds(533, 423, 232, 29);
-        contentPane.add(createOfferButton);
-
-        return contentPane;
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createOfferButton,gridBagConstraints);
+        return scrollPane;
     }
 
     private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
