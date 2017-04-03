@@ -50,7 +50,7 @@ public class TestDepartmentController {
 
         //Create Instructor
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 888888888;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
@@ -84,7 +84,7 @@ public class TestDepartmentController {
         } catch(InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Invalid instructor!", error);
+        assertEquals(" Invalid instructor!<br>", error);
         assertEquals(1,department.numberOfAllCourses());
 
         try {
@@ -92,7 +92,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Input a numeric number of credits! Input a numeric number of labs! Input a numeric number of tutorials! Input a numeric number of hours! Input a numeric number of student enrolled! Input a numeric number of TAs needed! Input a numeric number of graders needed! Input a numeric TA hourly rate! Input a numeric Grader hourly rate! Input a numeric budget! Course code cannot be empty! Course name cannot be empty!",error);
+        assertEquals(" Input a numeric number of credits!<br> Input a numeric number of labs!<br> Input a numeric number of tutorials!<br> Input a numeric number of hours!<br> Input a numeric number of student enrolled!<br> Input a numeric number of TAs needed!<br> Input a numeric number of graders needed!<br> Input a numeric TA hourly rate!<br> Input a numeric Grader hourly rate!<br> Input a numeric budget!<br> Course code cannot be empty!<br> Course name cannot be empty!<br>",error);
         assertEquals(1,department.numberOfAllCourses());
 
         try {
@@ -100,7 +100,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Input a numeric number of credits! Input a numeric number of labs! Input a numeric number of tutorials! Input a numeric number of hours! Input a numeric number of student enrolled! Input a numeric number of TAs needed! Input a numeric number of graders needed! Input a numeric TA hourly rate! Input a numeric Grader hourly rate! Input a numeric budget! Course code cannot be empty! Course name cannot be empty!",error);
+        assertEquals(" Input a numeric number of credits!<br> Input a numeric number of labs!<br> Input a numeric number of tutorials!<br> Input a numeric number of hours!<br> Input a numeric number of student enrolled!<br> Input a numeric number of TAs needed!<br> Input a numeric number of graders needed!<br> Input a numeric TA hourly rate!<br> Input a numeric Grader hourly rate!<br> Input a numeric budget!<br> Course code cannot be empty!<br> Course name cannot be empty!<br>",error);
         assertEquals(1,department.numberOfAllCourses());
 
         try {
@@ -108,7 +108,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Input a non-negative number of credits! Input a non-negative number of labs! Input a non-negative number of tutorials! Input a non-negative number of hours! Input a non-negative number of student enrolled! Input a non-negative number of TAs needed! Input a non-negative number of graders needed! Input a non-negative TA hourly rate! Input a non-negative grader hourly rate! Input a non-negative budget!", error);
+        assertEquals(" Input a non-negative number of credits!<br> Input a non-negative number of labs!<br> Input a non-negative number of tutorials!<br> Input a non-negative number of hours!<br> Input a non-negative number of student enrolled!<br> Input a non-negative number of TAs needed!<br> Input a non-negative number of graders needed!<br> Input a non-negative TA hourly rate!<br> Input a non-negative grader hourly rate!<br> Input a non-negative budget!<br>", error);
         assertEquals(1,department.numberOfAllCourses());
 
         //remove the instructor for next test suits
@@ -152,7 +152,7 @@ public class TestDepartmentController {
 
         //Create instructor for creating a course
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 123456789;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
@@ -175,7 +175,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Position type cannot be empty! Posting deadline cannot be empty! Selected course cannot be empty!", error);
+        assertEquals(" Must select a Position!<br> Posting deadline cannot be empty!<br> Selected course cannot be empty!<br>", error);
         assertEquals(1,department.numberOfAllJobs());
 
 
@@ -214,7 +214,7 @@ public class TestDepartmentController {
         DepartmentController departmentController = new DepartmentController(department);
 
         //Create student
-        int studentID = 123456;
+        int studentID = 222222222;
         String studentName = "Bobby Jones";
         String studentEmail = "bobbyjones@mail.mcgill.ca";
         Boolean isGrad = false;
@@ -243,7 +243,7 @@ public class TestDepartmentController {
 
         //Create instructor for creating a course
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 333333333;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
@@ -278,7 +278,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty! Student cannot be empty!", error);
+        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
         assertEquals(1,department.getAllJobs().size());
         //TODO
 
@@ -299,7 +299,7 @@ public class TestDepartmentController {
         DepartmentController departmentController = new DepartmentController(department);
 
         //Create student
-        int studentID = 123456;
+        int studentID = 444444444;
         String studentName = "Bobby Jones";
         String studentEmail = "bobbyjones@mail.mcgill.ca";
         Boolean isGrad = false;
@@ -328,7 +328,7 @@ public class TestDepartmentController {
 
         //Create instructor for creating a course
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 555555555;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
@@ -363,7 +363,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty! Student cannot be empty!", error);
+        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
         assertEquals(1,department.getAllJobs().size());
         //TODO
 
@@ -383,7 +383,7 @@ public class TestDepartmentController {
         DepartmentController departmentController = new DepartmentController(department);
 
         //Create student
-        int studentID = 123456;
+        int studentID = 666666666;
         String studentName = "Bobby Jones";
         String studentEmail = "bobbyjones@mail.mcgill.ca";
         Boolean isGrad = false;
@@ -412,7 +412,7 @@ public class TestDepartmentController {
 
         //Create instructor for creating a course
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 777777777;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
@@ -447,7 +447,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty! Student cannot be empty!", error);
+        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
         assertEquals(1,department.getAllJobs().size());
 
         instructorA.delete();
