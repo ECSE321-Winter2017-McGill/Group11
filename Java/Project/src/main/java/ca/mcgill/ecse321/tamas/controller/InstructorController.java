@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.tamas.controller;
 
 import java.sql.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ca.mcgill.ecse321.tamas.model.Department;
 import ca.mcgill.ecse321.tamas.model.Instructor;
@@ -12,16 +14,18 @@ import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 public class InstructorController {
 
-	private final String createJobPostingNullJobErrorMessage = " Must select Job!";
-	private final String createJobPostingNullJobDescriptionErrorMessage = " Job description cannot be empty!";
-	private final String createJobPostingNullSkillsRequiredErrorMessage = " Skills required cannot be empty!";
-	private final String createJobPostingNullExperienceRequiredErrorMessage = " Experience required cannot be empty!";
-	private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
-	//private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!";
+	private final String createJobPostingNullJobErrorMessage = " Must select Job!<br>";
+	private final String createJobPostingNullJobDescriptionErrorMessage = " Job description cannot be empty!<br>";
+	private final String createJobPostingNullSkillsRequiredErrorMessage = " Skills required cannot be empty!<br>";
+	private final String createJobPostingNullExperienceRequiredErrorMessage = " Experience required cannot be empty!<br>";
+	//private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
+	private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!<br>";
 
-    private final String createInstructorNotIntegerIDError = " Input a numeric ID number!";
-    private final String createInstructorNullInstructorNameError = " Instructor name cannot be empty!";
-    private final String createInstructorNullInstructorEmailError = " Instructor email cannot be empty!";
+	private final String createInstructorNotIntegerIDError = " Input a valid 9 digit ID number!<br>";
+	private final String createInstructorDuplicateIDError = " Instructor ID already registered!<br>";
+    private final String createInstructorNullInstructorNameError = " Instructor name cannot be empty!<br>";
+	private final String createInstructorNullInstructorEmailError = " Instructor email cannot be empty!<br>";
+	private final String createInstructorInvalidInstructorEmailError = " Please input a valid email address!<br>";
 
 
 
@@ -46,15 +50,29 @@ public class InstructorController {
             isInstructorID = false;
         }
 
-        if (!isInstructorID) {
+        if (!isInstructorID|| instructorID/100000000 == 0) {
             error += createInstructorNotIntegerIDError;
-        }
+        }else{
+			for(Instructor i: department.getAllInstructors()){
+				if(instructorID == i.getInstructorID()){
+					error += createInstructorDuplicateIDError;
+					break;
+				}
+			}
+		}
         if (name == null || name.length() == 0) {
             error += createInstructorNullInstructorNameError;
         }
         if (email == null || email.length() == 0) {
             error += createInstructorNullInstructorEmailError;
-        }
+        }else{
+				String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+				Pattern p = Pattern.compile(emailPattern);
+				Matcher m = p.matcher(email);
+				if(!m.matches()){
+					error += createInstructorInvalidInstructorEmailError;
+				}
+		}
 
         if (error.length()>0){
             throw new InvalidInputException(error);
@@ -90,7 +108,7 @@ public class InstructorController {
 			error = error + createJobPostingNullExperienceRequiredErrorMessage;
 		}
 		if(offerDeadlineDate == null){
-			error = error + createJobPostingNullPostDeadlineErrorMessage;
+			error = error + createJobPostingNullOfferDeadlineErrorMessage;
 		}
 		if (error.length()>0){
 			throw new InvalidInputException(error);

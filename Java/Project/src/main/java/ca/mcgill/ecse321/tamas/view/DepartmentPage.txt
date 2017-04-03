@@ -1,0 +1,243 @@
+package ca.mcgill.ecse321.tamas.view;
+
+
+//GUI classes
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.Font;
+import java.awt.Color;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Properties;
+
+//model classes
+import ca.mcgill.ecse321.tamas.controller.InstructorController;
+import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
+import ca.mcgill.ecse321.tamas.controller.StudentController;
+import ca.mcgill.ecse321.tamas.model.*;
+
+//Controller class
+import ca.mcgill.ecse321.tamas.controller.DepartmentController;
+import com.alee.extended.date.WebCalendar;
+import com.alee.extended.date.WebDateField;
+import com.alee.laf.WebLookAndFeel;
+import com.alee.laf.button.WebButton;
+import com.alee.laf.combobox.WebComboBox;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.SqlDateModel;
+
+public class DepartmentPage extends JFrame {
+
+    private JPanel contentPane;
+    private JTextField skillsRequiredField;
+    private JTextField experienceRequiredField;
+    private JTextField jobDescriptionField;
+    private JTextField studentNameField;
+    private JTextField emailField;
+    private JTextField studentYearField;
+    private JTextField jobPreferenceField;
+    private JTextField studentIDField;
+    private JTextField studentHoursField;
+    private JTextField studentIDForApplyingField;
+    private JTextField courseNameField;
+    private JTextField courseCodeField;
+    private JTextField numberOfTutorialsField;
+    private JTextField numberOfLabsField;
+    private JTextField numberStudentEnrolledField;
+    private JTextField hoursField;
+    private JTextField taHourlyRateField;
+    private JTextField creditsField;
+    private JTextField numberOfTAsNeededField;
+    private JTextField numberOfGradersNeededField;
+    private JTextField graderHourlyRateField;
+    private JTextField budgetField;
+    private JTextField createAnInstructorNameField;
+    private JTextField instructorIDField;
+    private JTextField instructorEmailField;
+
+    //My own private fields
+    private final JRadioButton TARadio;
+    private final JRadioButton graderRadio;
+    private final JRadioButton undergraduateRadioForRegister;
+    private final JRadioButton graduateRadioForRegister;
+    private JSpinner createNewJobSpinner;
+    private WebDateField offerDeadlineDatePicker;
+
+
+    private JComboBox<String> jobListForPublishJobPosting;
+    private JComboBox<String> jobListForStudentApplyJob;
+    private WebComboBox courseList;
+    private JComboBox<String> semesterJComboBox;
+    private JComboBox<String> createAllocationStudentComboBox;
+    private JComboBox<String> createAllocationJobComboBox;
+    private JComboBox<String> createOfferStudentComboBox;
+    private JComboBox<String> createOfferJobComboBox;
+
+
+    private Integer selectedJobForPublishJobPosting = -1;
+    private Integer selectedJobForStudentApply = -1;
+    private Integer selectedCourse = -1;
+    private Integer selectedSemesterForCreateACourse = -1;
+    private Integer selectedStudentForCreateAllocation = -1;
+    private Integer selectedJobForCreateAllocation = -1;
+    private Integer selectedStudentForCreateOffer = -1;
+    private Integer selectedJobForCreateOffer = -1;
+
+    Department department;
+
+
+    /**
+     * Create the frame.
+     */
+
+    public DepartmentPage(final Department department) {
+
+        WebLookAndFeel.install();
+        this.department = department;
+
+        final DepartmentController departmentController = new DepartmentController(department);
+        final StudentController studentController = new StudentController(department);
+        final InstructorController instructorController = new InstructorController(department);
+
+        setTitle("Department's Page");
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setBounds(100, 100, 450, 300);
+        contentPane = new JPanel();
+
+
+
+
+
+
+
+
+
+
+        this.setSize(800,800);
+
+        updateDisplay();
+    }
+
+    //useful for updating the createNewJobSpinner using the spinner model
+    private void setCreateNewJobSpinnerModel(SpinnerModel model) {
+        createNewJobSpinner.setModel(model);
+    }
+
+    private void updateDisplay() {
+
+        //update the **publish a job posting** component
+        skillsRequiredField.setText("");
+        experienceRequiredField.setText("");
+        jobDescriptionField.setText("");
+
+        //update the **register a student** component
+        studentIDField.setText("");
+        studentNameField.setText("");
+        emailField.setText("");
+        studentYearField.setText("");
+        jobPreferenceField.setText("");
+        studentHoursField.setText("");
+        
+        undergraduateRadioForRegister.setSelected(false);
+        graduateRadioForRegister.setSelected(false);
+
+        //update the **Apply for a Job** component
+        studentIDForApplyingField.setText("");
+
+        courseList.removeAllItems();
+        for(Course c: department.getAllCourses()){
+            courseList.addItem(c.getName());
+        }
+        selectedCourse = -1;
+        courseList.setSelectedIndex(selectedCourse);
+
+        jobListForPublishJobPosting.removeAllItems();
+        for(Job j: department.getAllJobs()){
+            String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+            jobListForPublishJobPosting.addItem(tmp);
+        }
+        selectedJobForPublishJobPosting = -1;
+        jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
+
+        jobListForStudentApplyJob.removeAllItems();
+        for(Job j: department.getAllJobs()){
+            if(j.getState() == JobStatus.Posted){
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                jobListForStudentApplyJob.addItem(tmp);
+            }
+        }
+        selectedJobForStudentApply = -1;
+        jobListForStudentApplyJob.setSelectedIndex(selectedJobForStudentApply);
+
+        semesterJComboBox.removeAllItems();
+        semesterJComboBox.addItem("Fall");
+        semesterJComboBox.addItem("Winter");
+        selectedSemesterForCreateACourse = -1;
+        semesterJComboBox.setSelectedIndex(selectedSemesterForCreateACourse);
+
+        createAllocationStudentComboBox.removeAllItems();
+        for (Student s: department.getAllStudents()) {
+            createAllocationStudentComboBox.addItem(s.getEmail());
+        }
+        selectedStudentForCreateAllocation = -1;
+        createAllocationStudentComboBox.setSelectedIndex(selectedStudentForCreateAllocation);
+
+        createAllocationJobComboBox.removeAllItems();
+        for (Job j: department.getAllJobs()) {
+            if (j.getState() == JobStatus.Posted) {
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                createAllocationJobComboBox.addItem(tmp);
+            }
+        }
+        selectedJobForCreateAllocation = -1;
+        createAllocationJobComboBox.setSelectedIndex(selectedJobForCreateAllocation);
+
+        createOfferStudentComboBox.removeAllItems();
+        for (Student s: department.getAllStudents()) {
+            createOfferStudentComboBox.addItem(s.getEmail());
+        }
+        selectedStudentForCreateOffer = -1;
+        createOfferStudentComboBox.setSelectedIndex(selectedStudentForCreateOffer);
+
+        createOfferJobComboBox.removeAllItems();
+        for (Job j: department.getAllJobs()) {
+            if (j.getState() == JobStatus.Posted) {
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                createOfferJobComboBox.addItem(tmp);
+            }
+        }
+        selectedJobForCreateOffer = -1;
+        createOfferJobComboBox.setSelectedIndex(selectedJobForCreateOffer);
+
+        offerDeadlineDatePicker.setDate(null);
+
+    }
+
+    private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+        private static final long serialVersionUID = -2169252224419341678L;
+
+        private String datePattern = "yyyy-MM-dd";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+        @Override
+        public Object stringToValue(String text) throws ParseException {
+            return dateFormatter.parseObject(text);
+        }
+
+        @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+
+            return "";
+        }
+    }
+}

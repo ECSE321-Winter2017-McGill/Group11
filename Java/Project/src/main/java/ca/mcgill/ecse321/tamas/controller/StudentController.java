@@ -5,18 +5,23 @@ import ca.mcgill.ecse321.tamas.model.Job;
 import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * @author Tharsan Ponnampalam
  *
  */
 public class StudentController {
 
-	private final String createStudentNotIntegerStudentIDError = " Input a numeric student ID!";
-	private final String createStudentNotIntegerYearError = " Input a valid numeric year!";
-	private final String createStudentNotIntegerNumberOfHoursError = " Input a valid numeric number of hours!";
-	private final String createStudentNullNameError = " Student name cannot be empty!";
-	private final String createStudentNullEmailError = " Student email cannot be empty!";
-	private final String createStudentNullJobPreferenceError = " Job Preference cannot be empty!";
+	private final String createStudentNotIntegerStudentIDError = " Input a valid 9 digits student ID!<br>";
+	private final String createStudentAlreadyExistError = " Student ID already registered!<br>";
+	private final String createStudentNotIntegerYearError = " Input a valid numeric year!<br>";
+	private final String createStudentNotIntegerNumberOfHoursError = " Input a valid numeric number of hours!<br>";
+	private final String createStudentNullNameError = " Student name cannot be empty!<br>";
+	private final String createStudentNullEmailError = " Student email cannot be empty!<br>";
+	private final String createStudentInvalidEmailError = " Please input a valid email address!<br>";
+	private final String createStudentNullJobPreferenceError = " Job Preference cannot be empty!<br>";
 
 
 	private Department department;
@@ -65,14 +70,31 @@ public class StudentController {
 		}
 
 
-		if(!isIntegerStudentID){
+		if(!isIntegerStudentID || studentID/100000000 == 0 ){
 			error += createStudentNotIntegerStudentIDError;
+		}else{
+			for(Student s: department.getAllStudents()){
+				if(studentID == s.getStudentID()){
+					error += createStudentAlreadyExistError;
+					break;
+				}
+			}
 		}
+
+
+
 		if(name == null ||  name.trim().length() == 0){
 			error += createStudentNullNameError;
 		}
 		if(email == null || email.trim().length() == 0){
 			error += createStudentNullEmailError;
+		}else{
+			String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+			Pattern p = Pattern.compile(emailPattern);
+			Matcher m = p.matcher(email);
+			if(!m.matches()){
+				error += createStudentInvalidEmailError;
+			}
 		}
 		if(!isIntegerYear){
 			error += createStudentNotIntegerYearError;
@@ -109,7 +131,8 @@ public class StudentController {
   			error = error + "Applicant needs to be selected for registration! ";
 		else if (!department.getAllStudents().contains(applicant))
   			error = error + "Applicant does not exist! ";
-		else if (jobPosting.getApplicant().contains(applicant))
+		if (applicant != null && jobPosting != null &&
+				jobPosting.getApplicant().contains(applicant))
 			error = error + "Applicant already applied to Job!";
 		if (jobPosting == null)
 			error = error +"Job needs to be selected for registration!";

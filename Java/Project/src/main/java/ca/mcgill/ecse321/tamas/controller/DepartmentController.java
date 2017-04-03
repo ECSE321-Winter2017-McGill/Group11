@@ -13,39 +13,39 @@ import java.util.Calendar;
 
 public class DepartmentController {
 
-    private final String createCourseNotIntegerNumberOfCreditsError = " Input a numeric number of credits!";
-    private final String createCourseNotIntegerNumberOfLabsError = " Input a numeric number of labs!";
-    private final String createCourseNotIntegerNumberOfTutorialsError = " Input a numeric number of tutorials!";
-    private final String createCourseNotIntegerNumberOfHoursError = " Input a numeric number of hours!";
-    private final String createCourseNotIntegerNumberOfStudentEnrolledError = " Input a numeric number of student enrolled!";
-    private final String createCourseNotIntegerNumberOfTAsNeededError = " Input a numeric number of TAs needed!";
-    private final String createCourseNotIntegerNumberOfGradersNeededError = " Input a numeric number of graders needed!";
-    private final String createCourseNotIntegerTAHourlyRateError = " Input a numeric TA hourly rate!";
-    private final String createCourseNotIntegerGraderHourlyRateError = " Input a numeric Grader hourly rate!";
+    private final String createCourseNotIntegerNumberOfCreditsError = " Input a numeric number of credits!<br>";
+    private final String createCourseNotIntegerNumberOfLabsError = " Input a numeric number of labs!<br>";
+    private final String createCourseNotIntegerNumberOfTutorialsError = " Input a numeric number of tutorials!<br>";
+    private final String createCourseNotIntegerNumberOfHoursError = " Input a numeric number of hours!<br>";
+    private final String createCourseNotIntegerNumberOfStudentEnrolledError = " Input a numeric number of student enrolled!<br>";
+    private final String createCourseNotIntegerNumberOfTAsNeededError = " Input a numeric number of TAs needed!<br>";
+    private final String createCourseNotIntegerNumberOfGradersNeededError = " Input a numeric number of graders needed!<br>";
+    private final String createCourseNotIntegerTAHourlyRateError = " Input a numeric TA hourly rate!<br>";
+    private final String createCourseNotIntegerGraderHourlyRateError = " Input a numeric Grader hourly rate!<br>";
 
-    private final String createCourseNotIntegerBudgetError = " Input a numeric budget!";
-    private final String createCourseNullCourseCodeError = " Course code cannot be empty!";
-    private final String createCourseNullCourseNameError = " Course name cannot be empty!";
-    private final String createCourseNullInstructorError = " Invalid instructor!";
+    private final String createCourseNotIntegerBudgetError = " Input a numeric budget!<br>";
+    private final String createCourseNullCourseCodeError = " Course code cannot be empty!<br>";
+    private final String createCourseNullCourseNameError = " Course name cannot be empty!<br>";
+    private final String createCourseNullInstructorError = " Invalid instructor!<br>";
 
-    private final String createCourseNegativeNumberOfCredits = " Input a non-negative number of credits!";
-    private final String createCourseNegativeNumberOfLabsError = " Input a non-negative number of labs!";
-    private final String createCourseNegativeNumberOfTutorialsError = " Input a non-negative number of tutorials!";
-    private final String createCourseNegativeNumberOfHoursError = " Input a non-negative number of hours!";
-    private final String createCourseNegativeNumberOfStudentEnrolledError = " Input a non-negative number of student enrolled!";
-    private final String createCourseNegativeNumberOfTAsNeededError = " Input a non-negative number of TAs needed!";
-    private final String createCourseNegativeNumberOfGradersNeededError = " Input a non-negative number of graders needed!";
-    private final String createCourseNegativeNumberTAHourlyRateError = " Input a non-negative TA hourly rate!";
-    private final String createCourseNegativeNumberGraderHourlyRateError = " Input a non-negative grader hourly rate!";
-    private final String createCourseNegativeBudgetError = " Input a non-negative budget!";
+    private final String createCourseNegativeNumberOfCredits = " Input a non-negative number of credits!<br>";
+    private final String createCourseNegativeNumberOfLabsError = " Input a non-negative number of labs!<br>";
+    private final String createCourseNegativeNumberOfTutorialsError = " Input a non-negative number of tutorials!<br>";
+    private final String createCourseNegativeNumberOfHoursError = " Input a non-negative number of hours!<br>";
+    private final String createCourseNegativeNumberOfStudentEnrolledError = " Input a non-negative number of student enrolled!<br>";
+    private final String createCourseNegativeNumberOfTAsNeededError = " Input a non-negative number of TAs needed!<br>";
+    private final String createCourseNegativeNumberOfGradersNeededError = " Input a non-negative number of graders needed!<br>";
+    private final String createCourseNegativeNumberTAHourlyRateError = " Input a non-negative TA hourly rate!<br>";
+    private final String createCourseNegativeNumberGraderHourlyRateError = " Input a non-negative grader hourly rate!<br>";
+    private final String createCourseNegativeBudgetError = " Input a non-negative budget!<br>";
 
-    private final String createJobNullJobPositionTypeError = " Position type cannot be empty!";
-    private final String createJobNullDateError = " Posting deadline cannot be empty!";
-    private final String createJobNullCourse = " Selected course cannot be empty!";
-    private final String createJobInvalidDateError = " Posting deadline cannot be before today!";
+    private final String createJobNullJobPositionTypeError = " Must select a Position!<br>";
+    private final String createJobNullDateError = " Posting deadline cannot be empty!<br>";
+    private final String createJobNullCourse = " Selected course cannot be empty!<br>";
+    private final String createJobInvalidDateError = " Posting deadline cannot be before today!<br>";
 
-    private final String createAllocationNullJobError = " Job cannot be empty!";
-    private final String createAllocationNullStudentError = " Student cannot be empty!";
+    private final String createAllocationNullJobError = " Job cannot be empty!<br>";
+    private final String createAllocationNullStudentError = " Student cannot be empty!<br>";
 
     private Department department;
 
