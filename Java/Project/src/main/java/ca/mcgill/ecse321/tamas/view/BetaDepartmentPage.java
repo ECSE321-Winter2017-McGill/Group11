@@ -29,65 +29,103 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Random;
 
 //model classes
 //Controller class
 
 public class BetaDepartmentPage extends JFrame {
-
+    //Controller
     private DepartmentController departmentController;
     private StudentController studentController;
     private InstructorController instructorController;
+    //End Controller
 
+    //Publish Job Posting
+    private JComboBox<String> instructorListForPublishJobPosting;
+    private JComboBox<String> courseListForPublishJobPosting;
+    private JComboBox<String> jobListForPublishJobPosting;
     private WebTextArea skillsRequiredTextArea;
     private JTextField experienceRequiredField;
     private JTextField jobDescriptionField;
+    private WebDateField offerDeadlineDatePicker;
+
+    private Job associatedJobForPublishJobPosting = null;
+    private Course associatedCourseForPublishJobPosting = null;
+    private Instructor associatedInstructorForPublishJobPosting = null;
+
+    //End Publish Job Posting
+
+    //Register a Student
     private JTextField studentNameField;
     private JTextField emailField;
+    private JRadioButton undergraduateRadioForRegister;
+    private JRadioButton graduateRadioForRegister;
     private JTextField studentYearField;
     private JTextField jobPreferenceField;
     private JTextField studentIDField;
     private JTextField studentHoursField;
+    //End Register a Student
+
+    //Apply for a Job
     private JTextField studentIDForApplyingField;
+    private JComboBox<String> studentListForStudentApplyJob;
+    private JComboBox<String> jobListForStudentApplyJob;
+    private WebDateField publishDeadlineDatePicker;
+
+    private WebTextArea skillsRequiredTextAreaForApply;
+    private JTextField experienceRequiredFieldForApply;
+    private JTextField jobDescriptionFieldForApply;
+
+    //End Apply for a Job
+
+    //Create a Job
+    private JRadioButton TARadio;
+    private JRadioButton graderRadio;
+    private WebComboBox courseListForCreateAJob;
+    //End Create a Job
+
+    //Create a Course
     private JTextField courseNameField;
     private JTextField courseCodeField;
+    private JComboBox<String> instructorListForCreateACourse;
+    private JComboBox<String> semesterJComboBox;
+    private JTextField creditsField;
     private JTextField numberOfTutorialsField;
     private JTextField numberOfLabsField;
     private JTextField numberStudentEnrolledField;
     private JTextField hoursField;
-    private JTextField taHourlyRateField;
-    private JTextField creditsField;
     private JTextField numberOfTAsNeededField;
     private JTextField numberOfGradersNeededField;
+    private JTextField taHourlyRateField;
     private JTextField graderHourlyRateField;
     private JTextField budgetField;
+    //End Create a Course
+
+    //Create an Instructor
     private JTextField createAnInstructorNameField;
     private JTextField instructorIDField;
     private JTextField instructorEmailField;
+    //End Create an Instructor
 
-    //My own private fields
-    private JRadioButton undergraduateRadioForRegister;
-    private JRadioButton graduateRadioForRegister;
-    private JRadioButton TARadio;
-    private JRadioButton graderRadio;
-    private JSpinner createNewJobSpinner;
-    private WebDateField offerDeadlineDatePicker;
-
-
-    private JComboBox<String> jobListForPublishJobPosting;
-    private JComboBox<String> jobListForStudentApplyJob;
-    private WebComboBox courseList;
-    private JComboBox<String> semesterJComboBox;
+    //Create/Remove Allocation
+    private JRadioButton createAllocationRadio;
+    private JRadioButton removeAllocationRadio;
     private JComboBox<String> createAllocationStudentComboBox;
     private JComboBox<String> createAllocationJobComboBox;
+    //End Create/Remove Allocation
+
+    //Create Offer
     private JComboBox<String> createOfferStudentComboBox;
     private JComboBox<String> createOfferJobComboBox;
+    //End Create Offer
 
-
+    private Integer selectedInstructorForPublishJobPosting = -1;
     private Integer selectedJobForPublishJobPosting = -1;
+    private Integer selectedCourseForPublishJobPosting = -1;
     private Integer selectedJobForStudentApply = -1;
-    private Integer selectedCourse = -1;
+    private Integer selectedStudentForStudentApply = -1;
+    private Integer selectedCourseForCreateAJob = -1;
+    private Integer selectedInstructorForCreateACourse;
     private Integer selectedSemesterForCreateACourse = -1;
     private Integer selectedStudentForCreateAllocation = -1;
     private Integer selectedJobForCreateAllocation = -1;
@@ -97,7 +135,7 @@ public class BetaDepartmentPage extends JFrame {
     private Integer widthOfApp = 800;
     private Integer heightOfApp = 800;
 
-    final private WebDesktopPane desktopPane = new WebDesktopPane();
+    private WebDesktopPane desktopPane = new WebDesktopPane();
     Department department;
 
 
@@ -117,7 +155,7 @@ public class BetaDepartmentPage extends JFrame {
         setTitle("Department's Page");
         GroupPanel groupPanel;
         WebTabbedPane tabbedPane = new WebTabbedPane();
-        BorderLayout borderLayout = new BorderLayout(0,0);
+        BorderLayout borderLayout = new BorderLayout(0, 0);
         borderLayout.preferredLayoutSize(getContentPane());
         getContentPane().setLayout(borderLayout);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -125,81 +163,188 @@ public class BetaDepartmentPage extends JFrame {
 
 
         desktopPane.setOpaque(false);
-        this.getContentPane().setBackground(new Color(239,62,51));
+        this.getContentPane().setBackground(new Color(250, 62, 51));
 
         WebPanel webPanel = new WebPanel();
-        webPanel.setLayout(new GridLayout(0,8,-3,-3));
+        webPanel.setLayout(new GridLayout(0, 8, -3, -3));
 
-        addNewFrame(desktopPane,PublishJobView(),"Publish Job Posting", "Publish Job Posting", webPanel, 393, 388);
-        addNewFrame(desktopPane,RegisterAStudent(),"Register a Student", "Register a Student", webPanel, 324, 354);
-        addNewFrame(desktopPane,ApplyForAJob(),"Apply for a Job", "Apply for a Job", webPanel, 350, 300);
-        addNewFrame(desktopPane,CreateAJob(),"Create a Job", "Create a Job", webPanel, 350, 300);
-        addNewFrame(desktopPane,CreateACourse(),"Create a Course", "Create a Course", webPanel, 350, 300);
-        addNewFrame(desktopPane, CreateAnInstructor(),"Create an Instructor", "Create an Instructor", webPanel, 350, 300);
-        addNewFrame(desktopPane,CreateOffer(),"Create Offer", "Create Offer", webPanel, 350, 300);
-        addNewFrame(desktopPane,CreateRemoveAllocation(),"Create/Remove Allocation", "Create/Remove Allocation", webPanel, 350, 300);
+        addNewFrame(desktopPane, PublishJobView(), "Publish Job Posting", "Publish Job Posting", webPanel, 469, 423);
+        addNewFrame(desktopPane, RegisterAStudent(), "Register a Student", "Register a Student", webPanel, 324, 354);
+        addNewFrame(desktopPane, ApplyForAJob(), "Apply for a Job", "Apply for a Job", webPanel, 350, 300);
+        addNewFrame(desktopPane, CreateAJob(), "Create a Job", "Create a Job", webPanel, 350, 300);
+        addNewFrame(desktopPane, CreateACourse(), "Create a Course", "Create a Course", webPanel, 440, 450);
+        addNewFrame(desktopPane, CreateAnInstructor(), "Create an Instructor", "Create an Instructor", webPanel, 350, 300);
+        addNewFrame(desktopPane, CreateOffer(), "Create Offer", "Create Offer", webPanel, 350, 300);
+        addNewFrame(desktopPane, CreateRemoveAllocation(), "Create/Remove Allocation", "Create/Remove Allocation", webPanel, 350, 300);
 
-        webPanel.setBounds(0,0,800,800);
+        webPanel.setBounds(0, 0, 800, 800);
         webPanel.setOpaque(false);
 
-        getContentPane().add(desktopPane,BorderLayout.CENTER);
+        getContentPane().add(desktopPane, BorderLayout.CENTER);
         getContentPane().add(webPanel, BorderLayout.NORTH);
 
-        this.setMinimumSize(new Dimension(widthOfApp,heightOfApp));
+        this.setMinimumSize(new Dimension(widthOfApp, heightOfApp));
         pack();
         updateDisplay();
     }
 
-    //useful for updating the createNewJobSpinner using the spinner model
-    private void setCreateNewJobSpinnerModel(SpinnerModel model) {
-        createNewJobSpinner.setModel(model);
-    }
 
     private void updateDisplay() {
+        updatePublishJobView(null, null, true);
+        updateRegisterAStudent();
+        updateApplyforAJob();
+        updateCreateACourse();
+        updateCreateAJob();
+        updateCreateAnInstructor();
+        updateCreateOffer();
+        updateCreateRemoveAllocation();
+    }
 
-        //update the **publish a job posting** component
-        skillsRequiredTextArea.setText("");
-        experienceRequiredField.setText("");
-        jobDescriptionField.setText("");
+    private void updatePublishJobView(Instructor instructor, Course course, boolean clearData) {
+        if(clearData) {
+            //Clear job List combobox
 
-        //update the **register a student** component
-        studentIDField.setText("");
+            instructorListForPublishJobPosting.removeAllItems();
+            for (Instructor i : department.getAllInstructors()) {
+                String tmp = i.getInstructorID() + "(" + i.getName()+ ")";
+                instructorListForPublishJobPosting.addItem(tmp);
+            }
+
+            selectedInstructorForPublishJobPosting = -1;
+            instructorListForPublishJobPosting.setSelectedIndex(selectedInstructorForPublishJobPosting);
+
+            associatedInstructorForPublishJobPosting = null;
+
+
+
+            jobListForPublishJobPosting.removeAllItems();
+            selectedJobForPublishJobPosting = -1;
+            jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
+
+            associatedJobForPublishJobPosting = null;
+
+            courseListForPublishJobPosting.removeAllItems();
+            selectedCourseForPublishJobPosting = -1;
+            courseListForPublishJobPosting.setSelectedIndex(selectedCourseForPublishJobPosting);
+
+            associatedCourseForPublishJobPosting = null;
+
+            //Clear Skills Required Text Area
+            skillsRequiredTextArea.setText("");
+
+            //Clear Experience required Text Area
+            experienceRequiredField.setText("");
+
+            //Clear Job Description Text Area
+            jobDescriptionField.setText("");
+
+            //Clear Offer Deadline Date
+            offerDeadlineDatePicker.setDate(null);
+        }else{
+            if(course !=null){
+
+                jobListForPublishJobPosting.removeAllItems();
+                for (Job j : course.getJobs()) {
+                    if(j.getState() == JobStatus.Ready) {
+                        String tmp = j.getPosType().toString();
+                        jobListForPublishJobPosting.addItem(tmp);
+                    }
+                }
+                selectedJobForPublishJobPosting = -1;
+                jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
+
+            }else if(instructor != null){
+
+                courseListForPublishJobPosting.removeAllItems();
+                for(Course c: instructor.getCourses()){
+                    String tmp = c.getCode() + ": " + c.getName();
+                    courseListForPublishJobPosting.addItem(tmp);
+                }
+                selectedCourseForPublishJobPosting = -1;
+                courseListForPublishJobPosting.setSelectedIndex(selectedCourseForPublishJobPosting);
+
+            }else if(instructor == null){
+                courseListForPublishJobPosting.removeAllItems();
+                selectedCourseForPublishJobPosting = -1;
+                courseListForPublishJobPosting.setSelectedIndex(selectedCourseForPublishJobPosting);
+
+                jobListForPublishJobPosting.removeAllItems();
+                selectedJobForPublishJobPosting = -1;
+                jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
+            }else if(course == null){
+                jobListForPublishJobPosting.removeAllItems();
+                selectedJobForPublishJobPosting = -1;
+                jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
+            }
+        }
+    }
+
+    private void updateRegisterAStudent() {
+        //Clear Student Name
         studentNameField.setText("");
-        emailField.setText("");
-        studentYearField.setText("");
-        jobPreferenceField.setText("");
-        studentHoursField.setText("");
 
+        //Clear studentEmail
+        emailField.setText("");
+
+        //Clear Radio
         undergraduateRadioForRegister.setSelected(false);
         graduateRadioForRegister.setSelected(false);
 
-        //update the **Apply for a Job** component
-        studentIDForApplyingField.setText("");
+        //Clear Student Year
+        studentYearField.setText("");
 
-        courseList.removeAllItems();
-        for(Course c: department.getAllCourses()){
-            courseList.addItem(c.getName());
+        //Clear Job Preference
+        jobPreferenceField.setText("");
+
+        //Clear Student ID
+        studentIDField.setText("");
+
+        //Clear Student Hours
+        studentHoursField.setText("");
+    }
+
+    private void updateApplyforAJob() {
+
+        studentListForStudentApplyJob.removeAllItems();
+        for (Student j : department.getAllStudents()) {
+                String tmp = j.getStudentID() + ": " + j.getName();
+                studentListForStudentApplyJob.addItem(tmp);
         }
-        selectedCourse = -1;
-        courseList.setSelectedIndex(selectedCourse);
+        selectedJobForStudentApply = -1;
+        jobListForStudentApplyJob.setSelectedIndex(selectedJobForStudentApply);
 
-        jobListForPublishJobPosting.removeAllItems();
-        for(Job j: department.getAllJobs()){
-            String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
-            jobListForPublishJobPosting.addItem(tmp);
-        }
-        selectedJobForPublishJobPosting = -1;
-        jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
-
+        //Clear and Update job list for apply job
         jobListForStudentApplyJob.removeAllItems();
-        for(Job j: department.getAllJobs()){
-            if(j.getState() == JobStatus.Posted){
+        for (Job j : department.getAllJobs()) {
+            if (j.getState() == JobStatus.Posted) {
                 String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
                 jobListForStudentApplyJob.addItem(tmp);
             }
         }
         selectedJobForStudentApply = -1;
         jobListForStudentApplyJob.setSelectedIndex(selectedJobForStudentApply);
+    }
+
+    private void updateCreateAJob() {
+        //Clear Radio Selection
+        TARadio.setSelected(false);
+        graderRadio.setSelected(false);
+        //Clear/Update Course List
+        courseListForCreateAJob.removeAllItems();
+        for (Course c : department.getAllCourses()) {
+            String tmp = c.getCode() + ": " + c.getName();
+            courseListForCreateAJob.addItem(tmp);
+        }
+        selectedCourseForCreateAJob = -1;
+        courseListForCreateAJob.setSelectedIndex(selectedCourseForCreateAJob);
+
+        publishDeadlineDatePicker.setDate(null);
+
+    }
+
+    private void updateCreateACourse() {
+        courseNameField.setText("");
+        courseCodeField.setText("");
 
         semesterJComboBox.removeAllItems();
         semesterJComboBox.addItem("Fall");
@@ -207,32 +352,46 @@ public class BetaDepartmentPage extends JFrame {
         selectedSemesterForCreateACourse = -1;
         semesterJComboBox.setSelectedIndex(selectedSemesterForCreateACourse);
 
-        createAllocationStudentComboBox.removeAllItems();
-        for (Student s: department.getAllStudents()) {
-            createAllocationStudentComboBox.addItem(s.getEmail());
-        }
-        selectedStudentForCreateAllocation = -1;
-        createAllocationStudentComboBox.setSelectedIndex(selectedStudentForCreateAllocation);
+        creditsField.setText("");
+        numberOfTutorialsField.setText("");
+        numberOfLabsField.setText("");
+        numberStudentEnrolledField.setText("");
+        hoursField.setText("");
+        numberOfTAsNeededField.setText("");
+        numberOfGradersNeededField.setText("");
+        taHourlyRateField.setText("");
+        graderHourlyRateField.setText("");
+        budgetField.setText("");
 
-        createAllocationJobComboBox.removeAllItems();
-        for (Job j: department.getAllJobs()) {
-            if (j.getState() == JobStatus.Posted) {
-                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
-                createAllocationJobComboBox.addItem(tmp);
-            }
-        }
-        selectedJobForCreateAllocation = -1;
-        createAllocationJobComboBox.setSelectedIndex(selectedJobForCreateAllocation);
 
+        instructorListForCreateACourse.removeAllItems();
+        for (Instructor i : department.getAllInstructors()) {
+            String tmp = i.getInstructorID() + "(" + i.getName()+ ")";
+            instructorListForCreateACourse.addItem(tmp);
+        }
+
+        selectedInstructorForCreateACourse = -1;
+        instructorListForCreateACourse.setSelectedIndex(selectedInstructorForCreateACourse);
+
+    }
+
+    private void updateCreateAnInstructor() {
+        createAnInstructorNameField.setText("");
+        instructorIDField.setText("");
+        instructorEmailField.setText("");
+    }
+
+    private void updateCreateOffer() {
         createOfferStudentComboBox.removeAllItems();
-        for (Student s: department.getAllStudents()) {
+        for (Student s : department.getAllStudents()) {
             createOfferStudentComboBox.addItem(s.getEmail());
         }
         selectedStudentForCreateOffer = -1;
         createOfferStudentComboBox.setSelectedIndex(selectedStudentForCreateOffer);
 
+
         createOfferJobComboBox.removeAllItems();
-        for (Job j: department.getAllJobs()) {
+        for (Job j : department.getAllJobs()) {
             if (j.getState() == JobStatus.Posted) {
                 String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
                 createOfferJobComboBox.addItem(tmp);
@@ -240,66 +399,74 @@ public class BetaDepartmentPage extends JFrame {
         }
         selectedJobForCreateOffer = -1;
         createOfferJobComboBox.setSelectedIndex(selectedJobForCreateOffer);
-
-        offerDeadlineDatePicker.setDate(null);
-
-
-
-
     }
 
-    private void addNewFrame(final WebDesktopPane webDesktopPane, Component component, String frameName, String iconName, WebPanel webPanel, int width, int height){
-        final WebInternalFrame internalFrame = new WebInternalFrame(frameName, true, true, false,true);
-        WebButton internalFrameIcon = new WebButton("<html><font color='white'>"+ iconName + "</font></html>");
+    private void updateCreateRemoveAllocation() {
+        createAllocationRadio.setSelected(false);
+        removeAllocationRadio.setSelected(false);
+        createAllocationStudentComboBox.removeAllItems();
+        for (Student s : department.getAllStudents()) {
+            createAllocationStudentComboBox.addItem(s.getEmail());
+        }
+        selectedStudentForCreateAllocation = -1;
+        createAllocationStudentComboBox.setSelectedIndex(selectedStudentForCreateAllocation);
+
+        createAllocationJobComboBox.removeAllItems();
+        for (Job j : department.getAllJobs()) {
+            if (j.getState() == JobStatus.Posted) {
+                String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                createAllocationJobComboBox.addItem(tmp);
+            }
+        }
+        selectedJobForCreateAllocation = -1;
+        createAllocationJobComboBox.setSelectedIndex(selectedJobForCreateAllocation);
+    }
+
+
+    private void addNewFrame(final WebDesktopPane webDesktopPane, Component component, String frameName, String iconName, WebPanel webPanel, int width, int height) {
+        final WebInternalFrame internalFrame = new WebInternalFrame(frameName, true, true, false, true);
+        WebButton internalFrameIcon = new WebButton("<html><font color='white'>" + iconName + "</font></html>");
         internalFrame.add(component);
         internalFrame.getContentPane().setBackground(new Color(43, 43, 43, 255));
         internalFrameIcon.setRound(0);
-        internalFrameIcon.setShineColor(new Color(75,75,75));
+        internalFrameIcon.setShineColor(new Color(75, 75, 75));
         internalFrameIcon.setRolloverShine(true);
         internalFrameIcon.setBorderPainted(false);
 
 
-
-       // internalFrameIcon.setRolloverDecoratedOnly(true);
+        // internalFrameIcon.setRolloverDecoratedOnly(true);
         internalFrameIcon.setShadeColor(new Color(43, 43, 43, 255));
         internalFrameIcon.setBottomBgColor(new Color(43, 43, 43, 255));
         internalFrameIcon.setTopBgColor(new Color(43, 43, 43, 255));
         internalFrameIcon.setHorizontalTextPosition(WebButton.CENTER);
         internalFrameIcon.setVerticalTextPosition(WebButton.BOTTOM);
-        internalFrameIcon.addActionListener ( new ActionListener ()
-        {
+        internalFrameIcon.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed ( final ActionEvent e )
-            {
-                if ( internalFrame.isClosed () )
-                {
-                    if ( internalFrame.getParent () == null )
-                    {
-                        updateDisplay();
-                        webDesktopPane.add ( internalFrame );
+            public void actionPerformed(final ActionEvent e) {
+                if (internalFrame.isClosed()) {
+                    if (internalFrame.getParent() == null) {
+                        webDesktopPane.add(internalFrame);
                     }
-                    internalFrame.open ();
-                    internalFrame.setIcon ( false );
-                }
-                else
-                {
-                    internalFrame.setIcon ( !internalFrame.isIcon () );
+                    internalFrame.open();
+                    internalFrame.setIcon(false);
+                } else {
+                    internalFrame.setIcon(!internalFrame.isIcon());
                 }
             }
-        } );
+        });
 
-        internalFrameIcon.setPreferredSize(100,75);
+        internalFrameIcon.setPreferredSize(100, 75);
         webPanel.add(internalFrameIcon);
 
-        internalFrame.setBounds ((int)(Math.random()*(widthOfApp/2)), (int)(Math.random()*(heightOfApp/2)), width, height );
+        internalFrame.setBounds((int) (Math.random() * (widthOfApp / 2)), (int) (Math.random() * (heightOfApp / 2)), width, height);
 
 
-        internalFrame.close ();
+        internalFrame.close();
 
     }
 
-    private Component PublishJobView(){
-        WebPanel contentPane = new WebPanel();
+    private Component PublishJobView() {
+        final WebPanel contentPane = new WebPanel();
         contentPane.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
         gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
@@ -308,117 +475,138 @@ public class BetaDepartmentPage extends JFrame {
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        JLabel jobIDLabel = new JLabel("Job ID");
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.weighty =1;
-        gridBagConstraints.weightx = 1;
-
-        //jobIDLabel.setBounds(10, 40, 90, 16);
-
-        contentPane.add(jobIDLabel,gridBagConstraints);
-
         JLabel publishJobLabel = new JLabel("Publish A Job Posting");
         publishJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         // publishJobLabel.setBounds(23, 6, 165, 20);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = 1;
+        contentPane.add(publishJobLabel, gridBagConstraints);
 
-        contentPane.add(publishJobLabel);
+        JLabel instructorLabel = new JLabel("Instructor");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(instructorLabel,gridBagConstraints);
+
+        instructorListForPublishJobPosting = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(instructorListForPublishJobPosting,gridBagConstraints);
+
+        JLabel courseLabel = new JLabel("Course");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseLabel, gridBagConstraints);
+
+        courseListForPublishJobPosting = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(courseListForPublishJobPosting, gridBagConstraints);
+
+        JLabel jobIDLabel = new JLabel("Job");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(jobIDLabel, gridBagConstraints);
+
+        jobListForPublishJobPosting = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(jobListForPublishJobPosting, gridBagConstraints);
 
         JLabel skillsRequiredLabel = new JLabel("Skills required");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        contentPane.add(skillsRequiredLabel,gridBagConstraints);
-
-
-
+        gridBagConstraints.gridy++;
+        contentPane.add(skillsRequiredLabel, gridBagConstraints);
 
         skillsRequiredTextArea = new WebTextArea();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridx++;
         skillsRequiredTextArea.setLineWrap(true);
         skillsRequiredTextArea.setWrapStyleWord(true);
 
         WebScrollPane areaScrollSkillsRequired = new WebScrollPane(skillsRequiredTextArea);
-        areaScrollSkillsRequired.setPreferredSize(new Dimension(150,150));
-        contentPane.add(areaScrollSkillsRequired,gridBagConstraints);
+        areaScrollSkillsRequired.setPreferredSize(new Dimension(150, 150));
+        contentPane.add(areaScrollSkillsRequired, gridBagConstraints);
 
         JLabel experienceRequiredLabel = new JLabel("Exp. required");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy++;
         gridBagConstraints.fill = gridBagConstraints.BOTH;
-        contentPane.add(experienceRequiredLabel,gridBagConstraints);
+        contentPane.add(experienceRequiredLabel, gridBagConstraints);
 
         experienceRequiredField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        contentPane.add(experienceRequiredField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+        contentPane.add(experienceRequiredField, gridBagConstraints);
         experienceRequiredField.setColumns(10);
 
         JLabel jobDescriptionLabel = new JLabel("Job description");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        contentPane.add(jobDescriptionLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(jobDescriptionLabel, gridBagConstraints);
 
         jobDescriptionField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        contentPane.add(jobDescriptionField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+        contentPane.add(jobDescriptionField, gridBagConstraints);
         jobDescriptionField.setColumns(10);
 
         final JLabel offerDeadlineLabel = new JLabel("Offer Deadline");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        contentPane.add(offerDeadlineLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(offerDeadlineLabel, gridBagConstraints);
 
-        offerDeadlineDatePicker= new WebDateField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        contentPane.add(offerDeadlineDatePicker,gridBagConstraints);
+        offerDeadlineDatePicker = new WebDateField();
+        gridBagConstraints.gridx++;
+        contentPane.add(offerDeadlineDatePicker, gridBagConstraints);
 
         final JLabel publishJobPostingErrorLabel = new JLabel("");
         publishJobPostingErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        contentPane.add(publishJobPostingErrorLabel);
-
-        //declare this spinner final since accessed from a inner class
-        jobListForPublishJobPosting = new JComboBox<String>(new String[0]);
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        contentPane.add(jobListForPublishJobPosting,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(publishJobPostingErrorLabel,gridBagConstraints);
 
         WebButton publishJobPostingButton = new WebButton("Publish job posting");
         publishJobPostingButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String skillsRequired, experienceRequired, jobDescription;
-                int jobID;
-                Job associatedJob = null;
+                String skillsRequired, experienceRequired, jobDescription,additionalError ="";
+                associatedJobForPublishJobPosting = null;
 
                 skillsRequired = skillsRequiredTextArea.getText();
                 experienceRequired = experienceRequiredField.getText();
                 jobDescription = jobDescriptionField.getText();
 
+                if(associatedInstructorForPublishJobPosting == null){
+                    additionalError = "Please select an Instructor!<br>";
+                }
+
                 //if the job was found, add the new attributes. Otherwise, display an error.
-                if (selectedJobForPublishJobPosting >= 0) {
-
-                    associatedJob = department.getAllJob(selectedJobForPublishJobPosting);
-                    InstructorController instructorController = new InstructorController(department);
-
-                    try {
-                        instructorController.createJobPosting(associatedJob, jobDescription, skillsRequired, experienceRequired, (Date) offerDeadlineDatePicker.getDate() );
-                        associatedJob.setState(JobStatus.Posted); //post the job
-                        publishJobPostingErrorLabel.setText(""); //it worked so remove the error
-
-                    } catch (InvalidInputException e1) {
-                        publishJobPostingErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
-                        updateDisplay();
+                if(associatedCourseForPublishJobPosting != null) {
+                    for (Job j : associatedCourseForPublishJobPosting.getJobs()) {
+                        if (j.getPosType().toString().contentEquals(jobListForPublishJobPosting.getSelectedItem().toString())) {
+                            associatedJobForPublishJobPosting = j;
+                            break;
+                        }
                     }
+                    associatedJobForPublishJobPosting = department.getAllJob(selectedJobForPublishJobPosting);
 
-                } else
-                    publishJobPostingErrorLabel.setText("Please select a job.");
+                }else{
+                    additionalError += "Please select a Course!<br>";
+                }
+
+
+
+                InstructorController instructorController = new InstructorController(department);
+                Date tmpDate = null;
+
+                if(offerDeadlineDatePicker.getDate() != null){
+                    tmpDate = new Date( offerDeadlineDatePicker.getDate().getTime());
+                }
+
+                try {
+                    instructorController.createJobPosting(associatedJobForPublishJobPosting, jobDescription, skillsRequired, experienceRequired, tmpDate);
+                    publishJobPostingErrorLabel.setText(""); //it worked so remove the error
+                    additionalError = "";
+
+                } catch (InvalidInputException e1) {
+                    publishJobPostingErrorLabel.setText("<html><body width='"+250+"px'>" + additionalError +e1.getMessage() + "</body></html>");
+                }
 
                 updateDisplay();
             }
@@ -430,52 +618,76 @@ public class BetaDepartmentPage extends JFrame {
                 selectedJobForPublishJobPosting = cb.getSelectedIndex();
             }
         });
+
+        courseListForPublishJobPosting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForPublishJobPosting = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0) {
+                    associatedCourseForPublishJobPosting = associatedInstructorForPublishJobPosting.getCourse(cb.getSelectedIndex());
+                    updatePublishJobView(associatedInstructorForPublishJobPosting, associatedCourseForPublishJobPosting, false);
+                }
+
+            }
+        });
+
+        instructorListForPublishJobPosting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedInstructorForPublishJobPosting = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0) {
+                    associatedInstructorForPublishJobPosting = department.getAllInstructor(cb.getSelectedIndex());
+                    updatePublishJobView(associatedInstructorForPublishJobPosting, null, false);
+                }
+            }
+        });
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        contentPane.add(publishJobPostingButton,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(publishJobPostingButton, gridBagConstraints);
 
         return scrollPane;
     }
 
-    private Component RegisterAStudent(){
+    private Component RegisterAStudent() {
 
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
 
+        gridBagConstraints.fill =1;
         WebScrollPane scrollPane = new WebScrollPane(contentPane);
 
 
         JLabel studentNameLabel = new JLabel("Student name");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        contentPane.add(studentNameLabel,gridBagConstraints);
+        contentPane.add(studentNameLabel, gridBagConstraints);
 
         studentNameField = new JTextField();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        contentPane.add(studentNameField,gridBagConstraints);
+        contentPane.add(studentNameField, gridBagConstraints);
         studentNameField.setColumns(10);
 
         JLabel emailLabel = new JLabel("Email");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
-        contentPane.add(emailLabel,gridBagConstraints);
+        contentPane.add(emailLabel, gridBagConstraints);
 
 
         JLabel RegisterStudentLabel = new JLabel("Register a Student");
         RegisterStudentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(RegisterStudentLabel,gridBagConstraints);
+        contentPane.add(RegisterStudentLabel, gridBagConstraints);
 
         emailField = new JTextField();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
-        contentPane.add(emailField,gridBagConstraints);
+        contentPane.add(emailField, gridBagConstraints);
         emailField.setColumns(10);
 
         undergraduateRadioForRegister = new JRadioButton("Undergraduate");
@@ -492,7 +704,7 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 7;
-        contentPane.add(undergraduateRadioForRegister,gridBagConstraints);
+        contentPane.add(undergraduateRadioForRegister, gridBagConstraints);
 
         graduateRadioForRegister.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -500,64 +712,64 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 7;
-        contentPane.add(graduateRadioForRegister,gridBagConstraints);
+        contentPane.add(graduateRadioForRegister, gridBagConstraints);
 
         JLabel studentYearLabel = new JLabel("Year");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
-        contentPane.add(studentYearLabel,gridBagConstraints);
+        contentPane.add(studentYearLabel, gridBagConstraints);
 
         studentYearField = new JTextField();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 4;
-        contentPane.add(studentYearField,gridBagConstraints);
+        contentPane.add(studentYearField, gridBagConstraints);
         studentYearField.setColumns(10);
 
         JLabel jobPreferenceLabel = new JLabel("Job preference");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
-        contentPane.add(jobPreferenceLabel,gridBagConstraints);
+        contentPane.add(jobPreferenceLabel, gridBagConstraints);
 
         jobPreferenceField = new JTextField();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 5;
-        contentPane.add(jobPreferenceField,gridBagConstraints);
+        contentPane.add(jobPreferenceField, gridBagConstraints);
         jobPreferenceField.setColumns(10);
 
         JLabel studentIDLabel = new JLabel("Student ID");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        contentPane.add(studentIDLabel,gridBagConstraints);
+        contentPane.add(studentIDLabel, gridBagConstraints);
 
         studentIDField = new JTextField();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        contentPane.add(studentIDField,gridBagConstraints);
+        contentPane.add(studentIDField, gridBagConstraints);
         studentIDField.setColumns(10);
 
-        JLabel studentHoursLabel = new JLabel("Number of hours");
+        JLabel studentHoursLabel = new JLabel("# of hours");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 6;
-        contentPane.add(studentHoursLabel,gridBagConstraints);
+        contentPane.add(studentHoursLabel, gridBagConstraints);
 
         studentHoursField = new JTextField();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 6;
-        contentPane.add(studentHoursField,gridBagConstraints);
+        contentPane.add(studentHoursField, gridBagConstraints);
         studentHoursField.setColumns(10);
 
         final JLabel registerAStudentErrorLabel = new JLabel("");
         registerAStudentErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 8;
-        gridBagConstraints.gridwidth =2;
-        contentPane.add(registerAStudentErrorLabel,gridBagConstraints);
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(registerAStudentErrorLabel, gridBagConstraints);
 
         WebButton registerStudentButton = new WebButton("Register student");
         registerStudentButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String studentName,studentEmail,studentJobPreference, studentID, studentYear, numberOfHours;
+                String studentName, studentEmail, studentJobPreference, studentID, studentYear, numberOfHours;
                 Boolean isGrad = false;
 
                 //proceed with storing the field values since they are all non-empty
@@ -573,7 +785,7 @@ public class BetaDepartmentPage extends JFrame {
                     isGrad = true;
 
                 try {
-                    studentController.createStudent(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,numberOfHours);
+                    studentController.createStudent(studentID, studentName, studentEmail, isGrad, studentYear, studentJobPreference, numberOfHours);
                     registerAStudentErrorLabel.setText("");
                 } catch (InvalidInputException e1) {
                     registerAStudentErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
@@ -584,22 +796,22 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 9;
-        gridBagConstraints.gridwidth =2;
+        gridBagConstraints.gridwidth = 2;
         gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
-        contentPane.add(registerStudentButton,gridBagConstraints);
+        contentPane.add(registerStudentButton, gridBagConstraints);
 
 
         return scrollPane;
     }
 
-    private Component ApplyForAJob(){
+    private Component ApplyForAJob() {
 
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         WebScrollPane scrollPane = new WebScrollPane(contentPane);
 
 
@@ -607,58 +819,97 @@ public class BetaDepartmentPage extends JFrame {
         applyForAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(applyForAJobLabel,gridBagConstraints);
+        gridBagConstraints.fill =1;
+        contentPane.add(applyForAJobLabel, gridBagConstraints);
 
-        JLabel studentIDForApplyingLabel = new JLabel("Student ID");
+        JLabel studentIDForApplyingLabel = new JLabel("Student");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
-        contentPane.add(studentIDForApplyingLabel,gridBagConstraints);
+        contentPane.add(studentIDForApplyingLabel, gridBagConstraints);
 
-        studentIDForApplyingField = new JTextField();
+        studentListForStudentApplyJob = new JComboBox<String>(new String[0]);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        contentPane.add(studentIDForApplyingField,gridBagConstraints);
-        studentIDForApplyingField.setColumns(10);
+        contentPane.add(studentListForStudentApplyJob, gridBagConstraints);
 
-        JLabel jobIDForApplyingLabel = new JLabel("Job title");
+        JLabel jobIDForApplyingLabel = new JLabel("Job");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        contentPane.add(jobIDForApplyingLabel,gridBagConstraints);
+        contentPane.add(jobIDForApplyingLabel, gridBagConstraints);
 
         jobListForStudentApplyJob = new JComboBox<String>(new String[0]);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        contentPane.add(jobListForStudentApplyJob,gridBagConstraints);
+        contentPane.add(jobListForStudentApplyJob, gridBagConstraints);
+
+        //
+        final JLabel skillsRequiredLabel = new JLabel("");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(skillsRequiredLabel, gridBagConstraints);
+
+        skillsRequiredTextAreaForApply = new WebTextArea();
+        gridBagConstraints.gridx++;
+        skillsRequiredTextAreaForApply.setLineWrap(true);
+        skillsRequiredTextAreaForApply.setWrapStyleWord(true);
+        skillsRequiredTextAreaForApply.setEditable(false);
+
+        final WebScrollPane areaScrollSkillsRequired = new WebScrollPane(skillsRequiredTextAreaForApply);
+        areaScrollSkillsRequired.setPreferredSize(new Dimension(150, 150));
+        areaScrollSkillsRequired.setVisible(false);
+        contentPane.add(areaScrollSkillsRequired, gridBagConstraints);
+
+        final JLabel experienceRequiredLabel = new JLabel("");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.fill = gridBagConstraints.BOTH;
+        contentPane.add(experienceRequiredLabel, gridBagConstraints);
+
+        experienceRequiredFieldForApply = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(experienceRequiredFieldForApply, gridBagConstraints);
+        experienceRequiredFieldForApply.setColumns(10);
+        experienceRequiredFieldForApply.setEditable(false);
+        experienceRequiredFieldForApply.setVisible(false);
+
+        final JLabel jobDescriptionLabel = new JLabel("");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(jobDescriptionLabel, gridBagConstraints);
+
+        jobDescriptionFieldForApply = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(jobDescriptionFieldForApply, gridBagConstraints);
+        jobDescriptionFieldForApply.setColumns(10);
+        jobDescriptionFieldForApply.setEditable(false);
+        jobDescriptionFieldForApply.setVisible(false);
 
         final JLabel applyForAJobErrorLabel = new JLabel("");
         applyForAJobErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        contentPane.add(applyForAJobErrorLabel,gridBagConstraints);
+        gridBagConstraints.gridwidth =2;
+        gridBagConstraints.gridy++;
+        contentPane.add(applyForAJobErrorLabel, gridBagConstraints);
+
+
 
         WebButton applyForAJobButton = new WebButton("Apply!");
         applyForAJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
                 int studentID, jobID;
-                Student student;
+                Student student = null;
                 Job associatedJob = null;
 
                 //convert the student ID if possible.
-                try {
-                    studentID = Integer.valueOf(studentIDForApplyingField.getText());
-                } catch (NumberFormatException exception) {
-                    applyForAJobErrorLabel.setText("Invalid student ID. Please try again.");
-                    updateDisplay();
-                    return;
+                if(studentListForStudentApplyJob.getSelectedIndex() >= 0){
+                    student = department.getAllStudent(studentListForStudentApplyJob.getSelectedIndex());
                 }
 
-                //find the associated student
-                student = Student.getWithStudentID(studentID);
 
 
                 //search through all the jobs of the department to find the corresponding job object
-                for (Job job: department.getAllJobs()) {
+                for (Job job : department.getAllJobs()) {
                     String tmp = job.getCorrespondingCourse().getName() + "-" + job.getPosType().toString();
                     if (jobListForStudentApplyJob.getItemAt(selectedJobForStudentApply) != null && tmp.contentEquals(jobListForStudentApplyJob.getItemAt(selectedJobForStudentApply))) {
                         associatedJob = job;
@@ -667,11 +918,11 @@ public class BetaDepartmentPage extends JFrame {
                 }
 
                 try {
-                    studentController.applyToJobPosting(associatedJob,student);
+                    studentController.applyToJobPosting(associatedJob, student);
                     applyForAJobErrorLabel.setText(""); //it worked so remove the error
 
                 } catch (InvalidInputException e1) {
-                    applyForAJobErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>"); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
+                    applyForAJobErrorLabel.setText("<html><body width='200px'>" + e1.getMessage() + "</body></html>"); //this shouldn't happen since the user chooses the job from a spinner so the job must be existent
 
                 }
 
@@ -680,26 +931,58 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy++;
         jobListForStudentApplyJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JComboBox<String> cb = (JComboBox<String>) evt.getSource();
                 selectedJobForStudentApply = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0){
+                    Job associatedJob = null;
+
+                    for (Job job : department.getAllJobs()) {
+                        String tmp = job.getCorrespondingCourse().getName() + "-" + job.getPosType().toString();
+                        if (jobListForStudentApplyJob.getItemAt(selectedJobForStudentApply) != null && tmp.contentEquals(jobListForStudentApplyJob.getItemAt(selectedJobForStudentApply))) {
+                            associatedJob = job;
+                            break;
+                        }
+                    }
+
+                    if(associatedJob != null) {
+                        experienceRequiredFieldForApply.setText(associatedJob.getExperienceRequired());
+                        jobDescriptionFieldForApply.setText(associatedJob.getJobDescription());
+                        skillsRequiredTextAreaForApply.setText(associatedJob.getSkillsRequired());
+                        experienceRequiredLabel.setText("Experience Required");
+                        skillsRequiredLabel.setText("Skills Required");
+                        jobDescriptionLabel.setText("Job Description");
+                        areaScrollSkillsRequired.setVisible(true);
+                        jobDescriptionFieldForApply.setVisible(true);
+                        experienceRequiredFieldForApply.setVisible(true);
+
+                    }
+
+                }else{
+                    experienceRequiredLabel.setText( "");
+                    skillsRequiredLabel.setText("");
+                    jobDescriptionLabel.setText("");
+                    areaScrollSkillsRequired.setVisible(false);
+                    jobDescriptionFieldForApply.setVisible(false);
+                    experienceRequiredFieldForApply.setVisible(false);
+                }
             }
         });
 
-        contentPane.add(applyForAJobButton,gridBagConstraints);
+        contentPane.add(applyForAJobButton, gridBagConstraints);
 
         return scrollPane;
     }
 
-    private Component CreateAJob(){
+    private Component CreateAJob() {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         WebScrollPane scrollPane = new WebScrollPane(contentPane);
 
 
@@ -707,8 +990,19 @@ public class BetaDepartmentPage extends JFrame {
         createAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(createAJobLabel,gridBagConstraints);
+        gridBagConstraints.fill = 1;
+        contentPane.add(createAJobLabel, gridBagConstraints);
 
+        JLabel posTypeLabel = new JLabel("Position");
+        createAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        contentPane.add(posTypeLabel, gridBagConstraints);
+
+        JPanel radioPanel = new JPanel();
+        FlowLayout radioLayout = new FlowLayout(FlowLayout.LEADING);
+        radioPanel.setLayout(radioLayout);
+        radioPanel.setOpaque(false);
 
         TARadio = new JRadioButton("TA");
         graderRadio = new JRadioButton("Grader");
@@ -723,9 +1017,8 @@ public class BetaDepartmentPage extends JFrame {
 
             }
         });
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        contentPane.add(TARadio,gridBagConstraints);
+
+        radioPanel.add(TARadio);
 
         graderRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -734,70 +1027,93 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 1;
-        contentPane.add(graderRadio,gridBagConstraints);
+        radioPanel.add(graderRadio);
+
+        contentPane.add(radioPanel, gridBagConstraints);
 
         //This is a dummy instructor
-        Instructor dummyInstructor = new Instructor("John Doe", 12345, "john.doe@mcgill.ca");
 
-        //These are some dummy course for testing purposes of the prototype application
-        if(department.getAllCourses().size()<2) {
-            final Course dummyCourse1 = new Course("ECSE100", "Computer Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
-            Course dummyCourse2 = new Course("ECSE200", "Software Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
-            Course dummyCourse3 = new Course("ECSE300", "Electrical Engineering", "2016", 3, 0, 1, 6, 140, 2, 2, 20, 20, 3000, dummyInstructor);
-
-            department.addAllCourse(dummyCourse1);
-            department.addAllCourse(dummyCourse2);
-            department.addAllCourse(dummyCourse3);
-        }
+        JLabel courseLabel = new JLabel("Course");
+        createAJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        contentPane.add(courseLabel, gridBagConstraints);
 
         //spinners
-        courseList = new WebComboBox(new String[0]);
-        courseList.setEditable(true);
-        //courseList.setEditorColumns();
+        courseListForCreateAJob = new WebComboBox(new String[0]);
+        courseListForCreateAJob.setEditable(false);
+        //courseListForCreateAJob.setEditorColumns();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 2;
-        contentPane.add(courseList,gridBagConstraints);
+        contentPane.add(courseListForCreateAJob, gridBagConstraints);
 
-        final WebButton createNewJobButton = new WebButton("Create new job");
+        final JLabel publishDeadlineLabel = new JLabel("Publish Deadline");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(publishDeadlineLabel, gridBagConstraints);
+
+        publishDeadlineDatePicker = new WebDateField();
+        gridBagConstraints.gridx++;
+        contentPane.add(publishDeadlineDatePicker, gridBagConstraints);
+
+        final JLabel createAJobErrorLabel = new JLabel("");
+        createAJobErrorLabel.setForeground(Color.RED);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(createAJobErrorLabel, gridBagConstraints);
+
+        final WebButton createNewJobButton = new WebButton("Create New Job");
         createNewJobButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 //This is code the allows the use to test publish job posting and apply to job
 
-                PositionType positionType = PositionType.TA; //for now, this will be the default value (to avoid situation when user select neither of the choices)
-
+                PositionType positionType = null; //for now, this will be the default value (to avoid situation when user select neither of the choices)
+                Course course = null;
+                if(courseListForCreateAJob.getSelectedIndex()>=0) {
+                    course = department.getAllCourse(courseListForCreateAJob.getSelectedIndex());
+                }
                 if (graderRadio.isSelected())
                     positionType = PositionType.Grader;
-                //Create dummy post Deadline to create job (TESTING PURPOSES)
-                Calendar c = Calendar.getInstance();
-                c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
-                Date dummyPostDeadLine = new Date(c.getTimeInMillis());
+                else if(TARadio.isSelected())
+                    positionType = PositionType.TA;
 
+                Date dummyPostDeadLine = null;
+                if(publishDeadlineDatePicker.getDate() != null) {
+                    dummyPostDeadLine = new Date(publishDeadlineDatePicker.getDate().getTime());
+                    createAJobErrorLabel.setText("");
+                }
+                try {
+                    departmentController.createJob(positionType, dummyPostDeadLine, course);
+                } catch (Exception error) {
+                    createAJobErrorLabel.setText("<html><body width='"+250+"px'>"  +error.getMessage() + "</body></html>");
 
-                departmentController.createJob(positionType, dummyPostDeadLine, department.getAllCourse(selectedCourse));
+                }
                 updateDisplay();
             }
         });
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        contentPane.add(createNewJobButton,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(createNewJobButton, gridBagConstraints);
 
-        courseList.addActionListener(new java.awt.event.ActionListener() {
+        courseListForCreateAJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JComboBox<String> cb = (JComboBox<String>) evt.getSource();
-                selectedCourse = cb.getSelectedIndex();
+                selectedCourseForCreateAJob = cb.getSelectedIndex();
             }
         });
 
         return scrollPane;
     }
 
-    private Component CreateACourse(){
+    private Component CreateACourse() {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new GridBagLayout());
         GridBagConstraints gridBagConstraints = new GridBagConstraints();
-        gridBagConstraints.anchor = GridBagConstraints.NORTHWEST;
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
         WebScrollPane scrollPane = new WebScrollPane(contentPane);
 
 
@@ -805,39 +1121,49 @@ public class BetaDepartmentPage extends JFrame {
         createACourseLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(createACourseLabel,gridBagConstraints);
+        gridBagConstraints.fill = 1;
+        contentPane.add(createACourseLabel, gridBagConstraints);
 
         JLabel courseNameLabel = new JLabel("Course name");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        contentPane.add(courseNameLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(courseNameLabel, gridBagConstraints);
 
         courseNameField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        contentPane.add(courseNameField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(courseNameField, gridBagConstraints);
         courseNameField.setColumns(10);
 
         JLabel courseCodeLabel = new JLabel("Course code");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        contentPane.add(courseCodeLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(courseCodeLabel, gridBagConstraints);
 
         courseCodeField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        contentPane.add(courseCodeField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(courseCodeField, gridBagConstraints);
         courseCodeField.setColumns(10);
+
+        JLabel instructorLabel = new JLabel("Instructor");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(instructorLabel,gridBagConstraints);
+
+        instructorListForCreateACourse = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(instructorListForCreateACourse,gridBagConstraints);
 
         JLabel semesterLabel = new JLabel("Semester");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        contentPane.add(semesterLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(semesterLabel, gridBagConstraints);
 
         semesterJComboBox = new JComboBox();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        contentPane.add(semesterJComboBox,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(semesterJComboBox, gridBagConstraints);
 
         semesterJComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -849,126 +1175,128 @@ public class BetaDepartmentPage extends JFrame {
 
         JLabel creditsLabel = new JLabel("Credits");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        contentPane.add(creditsLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(creditsLabel, gridBagConstraints);
 
         creditsField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        contentPane.add(creditsField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(creditsField, gridBagConstraints);
         creditsField.setColumns(10);
 
-        JLabel numberOfTutorialsLabel = new JLabel("Number of tutorials");
+
+
+        JLabel numberOfTutorialsLabel = new JLabel("# of tutorials");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        contentPane.add(numberOfTutorialsLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfTutorialsLabel, gridBagConstraints);
 
         numberOfTutorialsField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        contentPane.add(numberOfTutorialsField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(numberOfTutorialsField, gridBagConstraints);
         numberOfTutorialsField.setColumns(10);
 
-        JLabel numberOfLabsLabel = new JLabel("Number of labs");
+        JLabel numberOfLabsLabel = new JLabel("# of labs");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        contentPane.add(numberOfLabsLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfLabsLabel, gridBagConstraints);
 
         numberOfLabsField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        contentPane.add(numberOfLabsField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(numberOfLabsField, gridBagConstraints);
         numberOfLabsField.setColumns(10);
 
-        JLabel numberStudentEnrolledLabel = new JLabel("Number student enrolled");
+        JLabel numberStudentEnrolledLabel = new JLabel("# student enrolled");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        contentPane.add(numberStudentEnrolledLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(numberStudentEnrolledLabel, gridBagConstraints);
 
         numberStudentEnrolledField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        contentPane.add(numberStudentEnrolledField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(numberStudentEnrolledField, gridBagConstraints);
         numberStudentEnrolledField.setColumns(10);
 
         JLabel hoursLabel = new JLabel("Hours");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        contentPane.add(hoursLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(hoursLabel, gridBagConstraints);
 
         hoursField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 8;
-        contentPane.add(hoursField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(hoursField, gridBagConstraints);
         hoursField.setColumns(10);
 
-        JLabel numberOfTAsNeededLabel = new JLabel("TAs needed");
+        JLabel numberOfTAsNeededLabel = new JLabel("# of TAs");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 9;
-        contentPane.add(numberOfTAsNeededLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfTAsNeededLabel, gridBagConstraints);
 
         numberOfTAsNeededField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 9;
-        contentPane.add(numberOfTAsNeededField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(numberOfTAsNeededField, gridBagConstraints);
         numberOfTAsNeededField.setColumns(10);
 
-        JLabel numberOfGradersNeededLabel = new JLabel("Graders needed");
+        JLabel numberOfGradersNeededLabel = new JLabel("# of Graders");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 10;
-        contentPane.add(numberOfGradersNeededLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfGradersNeededLabel, gridBagConstraints);
 
         numberOfGradersNeededField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 10;
-        contentPane.add(numberOfGradersNeededField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(numberOfGradersNeededField, gridBagConstraints);
         numberOfGradersNeededField.setColumns(10);
 
         JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 11;
-        contentPane.add(taHourlyRateLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(taHourlyRateLabel, gridBagConstraints);
 
         taHourlyRateField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 11;
-        contentPane.add(taHourlyRateField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(taHourlyRateField, gridBagConstraints);
         taHourlyRateField.setColumns(10);
 
         JLabel graderHourlyRateLabel = new JLabel("Graders hourly rate");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 12;
-        contentPane.add(graderHourlyRateLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(graderHourlyRateLabel, gridBagConstraints);
 
         graderHourlyRateField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 12;
-        contentPane.add(graderHourlyRateField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(graderHourlyRateField, gridBagConstraints);
         graderHourlyRateField.setColumns(10);
 
         JLabel budgetLabel = new JLabel("Budget");
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 13;
-        contentPane.add(budgetLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(budgetLabel, gridBagConstraints);
 
         budgetField = new JTextField();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 13;
-        contentPane.add(budgetField,gridBagConstraints);
+        gridBagConstraints.gridx++;
+
+        contentPane.add(budgetField, gridBagConstraints);
         budgetField.setColumns(10);
 
 
         final JLabel createCourseErrorLabel = new JLabel("");
         createCourseErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 14;
-        contentPane.add(createCourseErrorLabel,gridBagConstraints);
+        gridBagConstraints.gridy++;
+        contentPane.add(createCourseErrorLabel, gridBagConstraints);
 
         WebButton createACourseButton = new WebButton("Create a Course");
         createACourseButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
-                String courseName, courseCode, semester, numberOfLabs, numberOfTutorials, numberOfStudents,hours, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, numberOfCredits, budget;
+                String courseName, courseCode, semester = "", numberOfLabs, numberOfTutorials, numberOfStudents, hours, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, numberOfCredits, budget;
 
                 courseName = courseNameField.getText();
                 courseCode = courseCodeField.getText();
@@ -984,33 +1312,47 @@ public class BetaDepartmentPage extends JFrame {
                 budget = budgetField.getText();
 
                 if (selectedSemesterForCreateACourse >= 0) {
-
                     semester = semesterJComboBox.getSelectedItem().toString();
+                }
 
+                Instructor dummyInstructor = null;
                     //TESTING PURPOSES
-                    Instructor dummyInstructor = new Instructor("John Doe", 12346, "john.doe2@mcgill.ca");
+                if (selectedInstructorForCreateACourse >= 0) {
+
+                    dummyInstructor = department.getAllInstructor(selectedInstructorForCreateACourse);
+                }
 
                     try {
-                        departmentController.createCourse(courseCode, courseName, semester,numberOfCredits, numberOfLabs,numberOfTutorials,hours,numberOfStudents,numberOfTAsNeeded,numberOfGradersNeeded,hourlyRateTA,graderHourlyRate,budget,dummyInstructor);
+                        departmentController.createCourse(courseCode, courseName, semester, numberOfCredits, numberOfLabs, numberOfTutorials, hours, numberOfStudents, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, budget, dummyInstructor);
                         createCourseErrorLabel.setText("");
                     } catch (InvalidInputException e1) {
                         createCourseErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                     }
-                } else {
-                    createCourseErrorLabel.setText("Please select a semester!");
-                }
+
+
+
 
                 updateDisplay();
             }
         });
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 15;
-        contentPane.add(createACourseButton,gridBagConstraints);
+        gridBagConstraints.gridy++;
+
+
+        contentPane.add(createACourseButton, gridBagConstraints);
+
+        instructorListForCreateACourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedInstructorForCreateACourse = cb.getSelectedIndex();
+
+            }
+        });
 
         return scrollPane;
     }
 
-    private Component CreateAnInstructor(){
+    private Component CreateAnInstructor() {
 
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
@@ -1025,43 +1367,43 @@ public class BetaDepartmentPage extends JFrame {
         lblCreateAnInstructor.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(lblCreateAnInstructor,gridBagConstraints);
+        contentPane.add(lblCreateAnInstructor, gridBagConstraints);
 
         JLabel createAnInstructorNameLabel = new JLabel("Full name");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createAnInstructorNameLabel,gridBagConstraints);
+        contentPane.add(createAnInstructorNameLabel, gridBagConstraints);
 
         createAnInstructorNameField = new JTextField();
         gridBagConstraints.gridx++;
-        contentPane.add(createAnInstructorNameField,gridBagConstraints);
+        contentPane.add(createAnInstructorNameField, gridBagConstraints);
         createAnInstructorNameField.setColumns(10);
 
         JLabel instructorIDLabel = new JLabel("Instructor ID");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(instructorIDLabel,gridBagConstraints);
+        contentPane.add(instructorIDLabel, gridBagConstraints);
 
         instructorIDField = new JTextField();
         gridBagConstraints.gridx++;
-        contentPane.add(instructorIDField,gridBagConstraints);
+        contentPane.add(instructorIDField, gridBagConstraints);
         instructorIDField.setColumns(10);
 
         JLabel instructorEmailLabel = new JLabel("Email");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(instructorEmailLabel,gridBagConstraints);
+        contentPane.add(instructorEmailLabel, gridBagConstraints);
 
         instructorEmailField = new JTextField();
         gridBagConstraints.gridx++;
-        contentPane.add(instructorEmailField,gridBagConstraints);
+        contentPane.add(instructorEmailField, gridBagConstraints);
         instructorEmailField.setColumns(10);
 
         final JLabel createInstructorErrorLabel = new JLabel("");
         createInstructorErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createInstructorErrorLabel,gridBagConstraints);
+        contentPane.add(createInstructorErrorLabel, gridBagConstraints);
 
         WebButton createInstructorButton = new WebButton("Create new instructor");
         createInstructorButton.addActionListener(new ActionListener() {
@@ -1074,22 +1416,24 @@ public class BetaDepartmentPage extends JFrame {
                 instructorEmail = instructorEmailField.getText();
 
                 try {
-                    instructorController.createInstructor(instructorName,instructorID,instructorEmail);
+                    instructorController.createInstructor(instructorName, instructorID, instructorEmail);
                     createInstructorErrorLabel.setText("");
 
                 } catch (InvalidInputException e1) {
                     createInstructorErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                 }
+
+                updateDisplay();
             }
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createInstructorButton,gridBagConstraints);
+        contentPane.add(createInstructorButton, gridBagConstraints);
 
         return scrollPane;
     }
 
-    private Component CreateRemoveAllocation(){
+    private Component CreateRemoveAllocation() {
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -1104,10 +1448,10 @@ public class BetaDepartmentPage extends JFrame {
         createAllocationLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(createAllocationLabel,gridBagConstraints);
+        contentPane.add(createAllocationLabel, gridBagConstraints);
 
-        final JRadioButton createAllocationRadio = new JRadioButton("Create");
-        final JRadioButton removeAllocationRadio = new JRadioButton("Remove");
+        createAllocationRadio = new JRadioButton("Create");
+        removeAllocationRadio = new JRadioButton("Remove");
 
         ButtonGroup group3 = new ButtonGroup();
         group3.add(createAllocationRadio);
@@ -1120,7 +1464,7 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createAllocationRadio,gridBagConstraints);
+        contentPane.add(createAllocationRadio, gridBagConstraints);
 
         removeAllocationRadio.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -1128,16 +1472,16 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
         gridBagConstraints.gridx++;
-        contentPane.add(removeAllocationRadio,gridBagConstraints);
+        contentPane.add(removeAllocationRadio, gridBagConstraints);
 
         JLabel createAllocationStudentLabel = new JLabel("Student");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createAllocationStudentLabel,gridBagConstraints);
+        contentPane.add(createAllocationStudentLabel, gridBagConstraints);
 
         createAllocationStudentComboBox = new JComboBox();
         gridBagConstraints.gridx++;
-        contentPane.add(createAllocationStudentComboBox,gridBagConstraints);
+        contentPane.add(createAllocationStudentComboBox, gridBagConstraints);
 
         createAllocationStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1149,11 +1493,11 @@ public class BetaDepartmentPage extends JFrame {
         JLabel createAllocationJobLabel = new JLabel("Job");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createAllocationJobLabel,gridBagConstraints);
+        contentPane.add(createAllocationJobLabel, gridBagConstraints);
 
         createAllocationJobComboBox = new JComboBox();
         gridBagConstraints.gridx++;
-        contentPane.add(createAllocationJobComboBox,gridBagConstraints);
+        contentPane.add(createAllocationJobComboBox, gridBagConstraints);
 
         createAllocationJobComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1168,7 +1512,7 @@ public class BetaDepartmentPage extends JFrame {
         createAllocationErrorLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createAllocationErrorLabel,gridBagConstraints);
+        contentPane.add(createAllocationErrorLabel, gridBagConstraints);
 
         WebButton createAllocationButton = new WebButton("Create/Remove");
         createAllocationButton.addActionListener(new ActionListener() {
@@ -1193,7 +1537,7 @@ public class BetaDepartmentPage extends JFrame {
                     jobString = createAllocationJobComboBox.getSelectedItem().toString();
 
                     //search through all the jobs of the department to find the corresponding job object
-                    for (Job j: department.getAllJobs()) {
+                    for (Job j : department.getAllJobs()) {
                         String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
                         if (createAllocationJobComboBox.getItemAt(selectedJobForCreateAllocation) != null && tmp.contentEquals(createAllocationJobComboBox.getItemAt(selectedJobForCreateAllocation))) {
                             job = j;
@@ -1202,18 +1546,21 @@ public class BetaDepartmentPage extends JFrame {
                     }
 
                     //search through all students of the department to find corresponding student object
-                    for (Student s: department.getAllStudents()) {
+                    for (Student s : department.getAllStudents()) {
                         String tmp = s.getEmail();
                         if (createAllocationStudentComboBox.getItemAt(selectedStudentForCreateAllocation) != null && tmp.contentEquals(createAllocationStudentComboBox.getItemAt(selectedStudentForCreateAllocation))) {
                             student = s;
                             break;
                         }
                     }
+                    try {
+                        if (selectedCreateAllocation) {
+                            departmentController.createAllocation(job, student);
+                        } else {
+                            departmentController.removeAllocation(job, student);
+                        }
+                    } catch (Exception error) {
 
-                    if (selectedCreateAllocation) {
-                        departmentController.createAllocation(job,student);
-                    } else {
-                        departmentController.removeAllocation(job,student);
                     }
 
                 } else {
@@ -1225,12 +1572,12 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createAllocationButton,gridBagConstraints);
+        contentPane.add(createAllocationButton, gridBagConstraints);
 
         return scrollPane;
     }
 
-    private Component CreateOffer(){
+    private Component CreateOffer() {
 
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
@@ -1245,16 +1592,16 @@ public class BetaDepartmentPage extends JFrame {
         createOfferLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
-        contentPane.add(createOfferLabel,gridBagConstraints);
+        contentPane.add(createOfferLabel, gridBagConstraints);
 
         JLabel createOfferStudentLabel = new JLabel("Student");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createOfferStudentLabel,gridBagConstraints);
+        contentPane.add(createOfferStudentLabel, gridBagConstraints);
 
         createOfferStudentComboBox = new JComboBox();
         gridBagConstraints.gridx++;
-        contentPane.add(createOfferStudentComboBox,gridBagConstraints);
+        contentPane.add(createOfferStudentComboBox, gridBagConstraints);
 
         createOfferStudentComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1266,11 +1613,11 @@ public class BetaDepartmentPage extends JFrame {
         JLabel createOfferJobLabel = new JLabel("Job");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createOfferJobLabel,gridBagConstraints);
+        contentPane.add(createOfferJobLabel, gridBagConstraints);
 
         createOfferJobComboBox = new JComboBox();
         gridBagConstraints.gridx++;
-        contentPane.add(createOfferJobComboBox,gridBagConstraints);
+        contentPane.add(createOfferJobComboBox, gridBagConstraints);
 
         createOfferJobComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1283,7 +1630,7 @@ public class BetaDepartmentPage extends JFrame {
         createOfferErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createOfferErrorLabel,gridBagConstraints);
+        contentPane.add(createOfferErrorLabel, gridBagConstraints);
 
         WebButton createOfferButton = new WebButton("Create offer");
         createOfferButton.addActionListener(new ActionListener() {
@@ -1292,40 +1639,39 @@ public class BetaDepartmentPage extends JFrame {
                 Student student = null;
                 Job job = null;
 
-                if (selectedJobForCreateOffer >= 0 && selectedStudentForCreateOffer >= 0) {
+                studentString = createOfferStudentComboBox.getSelectedItem().toString();
+                jobString = createOfferJobComboBox.getSelectedItem().toString();
 
-                    studentString = createOfferStudentComboBox.getSelectedItem().toString();
-                    jobString = createOfferJobComboBox.getSelectedItem().toString();
-
-                    //search through all students of the department to find corresponding student object
-                    for (Student s: department.getAllStudents()) {
-                        String tmp = s.getEmail();
-                        if (createOfferStudentComboBox.getItemAt(selectedStudentForCreateOffer) != null && tmp.contentEquals(createOfferStudentComboBox.getItemAt(selectedStudentForCreateOffer))) {
-                            student = s;
-                            break;
-                        }
+                //search through all students of the department to find corresponding student object
+                for (Student s : department.getAllStudents()) {
+                    String tmp = s.getEmail();
+                    if (createOfferStudentComboBox.getItemAt(selectedStudentForCreateOffer) != null && tmp.contentEquals(createOfferStudentComboBox.getItemAt(selectedStudentForCreateOffer))) {
+                        student = s;
+                        break;
                     }
-
-                    //search through all the jobs of the department to find the corresponding job object
-                    for (Job j: department.getAllJobs()) {
-                        String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
-                        if (createOfferJobComboBox.getItemAt(selectedJobForCreateOffer) != null && tmp.contentEquals(createOfferJobComboBox.getItemAt(selectedJobForCreateOffer))) {
-                            job = j;
-                            break;
-                        }
-                    }
-
-                    departmentController.createJobOffer(job,student);
-
-                } else {
-                    createOfferErrorLabel.setText("Please select all the fields.");
                 }
+
+                //search through all the jobs of the department to find the corresponding job object
+                for (Job j : department.getAllJobs()) {
+                    String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
+                    if (createOfferJobComboBox.getItemAt(selectedJobForCreateOffer) != null && tmp.contentEquals(createOfferJobComboBox.getItemAt(selectedJobForCreateOffer))) {
+                        job = j;
+                        break;
+                    }
+                }
+                try {
+                    departmentController.createJobOffer(job, student);
+                } catch (Exception error) {
+
+                }
+
+                updateDisplay();
 
             }
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
-        contentPane.add(createOfferButton,gridBagConstraints);
+        contentPane.add(createOfferButton, gridBagConstraints);
         return scrollPane;
     }
 
