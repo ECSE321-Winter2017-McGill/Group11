@@ -1403,6 +1403,7 @@ public class BetaDepartmentPage extends JFrame {
         createInstructorErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth=2;
         contentPane.add(createInstructorErrorLabel, gridBagConstraints);
 
         WebButton createInstructorButton = new WebButton("Create new instructor");

@@ -1,67 +1,75 @@
 <ca.mcgill.ecse321.tamas.model.Department id="1">
   <allJobs id="2">
     <Job id="3">
-      <posType>Grader</posType>
-      <postingDeadlineDate id="4">2017-03-16</postingDeadlineDate>
-      <state>Ready</state>
+      <jobDescription>fun</jobDescription>
+      <posType>TA</posType>
+      <skillsRequired>Must love Umple</skillsRequired>
+      <experienceRequired>none</experienceRequired>
+      <postingDeadlineDate id="4">2017-04-28</postingDeadlineDate>
+      <offerDeadlineDate id="5">2017-04-29</offerDeadlineDate>
+      <state>Posted</state>
       <jobID>1</jobID>
-      <allocatedStudent id="5"/>
-      <previousWorker id="6"/>
-      <applicant id="7"/>
-      <offerReceiver id="8"/>
-      <employee id="9"/>
-      <correspondingCourse id="10">
-        <code>ECSE321</code>
-        <name>Software Engineering</name>
-        <semester>W2017</semester>
+      <allocatedStudent id="6"/>
+      <previousWorker id="7"/>
+      <applicant id="8">
+        <Student id="9">
+          <studentID>222222222</studentID>
+          <name>mathieu</name>
+          <email>mathieu.lapointe@mail.mcgill.ca</email>
+          <isGrad>false</isGrad>
+          <year>2</year>
+          <jobPreference>none</jobPreference>
+          <numberOfHours>2</numberOfHours>
+          <previousJobExperiences id="10"/>
+          <jobsAppliedTo id="11">
+            <Job reference="3"/>
+          </jobsAppliedTo>
+          <offeredJobs id="12"/>
+          <currentJobs id="13"/>
+          <reviewText id="14"/>
+        </Student>
+      </applicant>
+      <offerReceiver id="15"/>
+      <employee id="16"/>
+      <correspondingCourse id="17">
+        <code>321</code>
+        <name>Intro to software eng.</name>
+        <semester>Winter</semester>
         <numberOfCredits>3</numberOfCredits>
         <numberOfLabs>0</numberOfLabs>
         <numberOfTutorials>2</numberOfTutorials>
-        <numberOfHours>1</numberOfHours>
+        <numberOfHours>3</numberOfHours>
         <studentsEnrolled>100</studentsEnrolled>
-        <tasNeeded>1</tasNeeded>
-        <gradersNeeded>1</gradersNeeded>
+        <tasNeeded>2</tasNeeded>
+        <gradersNeeded>2</gradersNeeded>
         <taHourlyRate>12</taHourlyRate>
         <graderHourlyRate>12</graderHourlyRate>
-        <budget>10000</budget>
-        <jobs id="11">
+        <budget>300</budget>
+        <jobs id="18">
           <Job reference="3"/>
         </jobs>
-        <instructors id="12">
-          <Instructor id="13">
-            <name>James</name>
-            <instructorID>12345</instructorID>
-            <email>james@mcgill.ca</email>
-            <courses id="14">
-              <Course reference="10"/>
+        <instructors id="19">
+          <Instructor id="20">
+            <name>daniel varro</name>
+            <instructorID>555555555</instructorID>
+            <email>danielvarro@mail.mcgill.ca</email>
+            <courses id="21">
+              <Course reference="17"/>
             </courses>
-            <reviewText id="15"/>
+            <reviewText id="22"/>
           </Instructor>
         </instructors>
       </correspondingCourse>
     </Job>
   </allJobs>
-  <allCourses id="16">
-    <Course reference="10"/>
+  <allCourses id="23">
+    <Course reference="17"/>
   </allCourses>
-  <allInstructors id="17">
-    <Instructor reference="13"/>
+  <allInstructors id="24">
+    <Instructor reference="20"/>
   </allInstructors>
-  <allStudents id="18">
-    <Student id="19">
-      <studentID>123456</studentID>
-      <name>Bobby Jones</name>
-      <email>bobbyjones@mail.mcgill.ca</email>
-      <isGrad>false</isGrad>
-      <year>2</year>
-      <jobPreference>TA, but I don&apos;t mind.</jobPreference>
-      <numberOfHours>45</numberOfHours>
-      <previousJobExperiences id="20"/>
-      <jobsAppliedTo id="21"/>
-      <offeredJobs id="22"/>
-      <currentJobs id="23"/>
-      <reviewText id="24"/>
-    </Student>
+  <allStudents id="25">
+    <Student reference="9"/>
   </allStudents>
-  <allReviews id="25"/>
+  <allReviews id="26"/>
 </ca.mcgill.ecse321.tamas.model.Department>
