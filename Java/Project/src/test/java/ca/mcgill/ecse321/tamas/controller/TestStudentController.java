@@ -156,7 +156,7 @@ public class TestStudentController {
 
         //Create Instructor
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 23456;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
