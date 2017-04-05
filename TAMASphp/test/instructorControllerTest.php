@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__.'\..\controller\InstructorController.php';
-require_once __DIR__.'\..\persistence\PersistenceTAMAS.php';
-require_once __DIR__.'\..\model\Course.php';
-require_once __DIR__.'\..\model\Department.php';
-require_once __DIR__.'\..\model\Instructor.php';
-require_once __DIR__.'\..\model\Job.php';
-require_once __DIR__.'\..\model\Review.php';
-require_once __DIR__.'\..\model\Student.php';
+require_once __DIR__.'/../controller/InstructorController.php';
+require_once __DIR__.'/../persistence/PersistenceTAMAS.php';
+require_once __DIR__.'/../model/Course.php';
+require_once __DIR__.'/../model/Department.php';
+require_once __DIR__.'/../model/Instructor.php';
+require_once __DIR__.'/../model/Job.php';
+require_once __DIR__.'/../model/Review.php';
+require_once __DIR__.'/../model/Student.php';
 
 class instructorControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -19,7 +19,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
         $this->contr = new InstructorController();
         $this->persis = new PersistenceTamas();
         $this->dpt = $this->persis->loadDataFromStore();
-        //$this->dpt->delete();
+        $this->dpt->delete();
         $this->persis->writeDataToStore($this->dpt);
     }
 	
