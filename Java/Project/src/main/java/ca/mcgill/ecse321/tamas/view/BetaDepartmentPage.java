@@ -133,7 +133,7 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedJobForCreateOffer = -1;
 
     private Integer widthOfApp = 800;
-    private Integer heightOfApp = 800;
+    private Integer heightOfApp = 700;
 
     private WebDesktopPane desktopPane = new WebDesktopPane();
     Department department;
@@ -402,6 +402,7 @@ public class BetaDepartmentPage extends JFrame {
     }
 
     private void updateCreateRemoveAllocation() {
+
         createAllocationRadio.setSelected(false);
         removeAllocationRadio.setSelected(false);
         createAllocationStudentComboBox.removeAllItems();
@@ -1435,6 +1436,7 @@ public class BetaDepartmentPage extends JFrame {
     }
 
     private Component CreateRemoveAllocation() {
+
         JPanel contentPane = new JPanel();
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -1560,8 +1562,9 @@ public class BetaDepartmentPage extends JFrame {
                         } else {
                             departmentController.removeAllocation(job, student);
                         }
+                        createAllocationErrorLabel.setText("");
                     } catch (Exception error) {
-
+                        //TODO
                     }
 
                 } else {
