@@ -1,8 +1,8 @@
 <?php 
 
-require_once __DIR__.'\..\persistence\PersistenceTAMAS.php';
-require_once __DIR__.'\..\model\Department.php';
-require_once __DIR__.'\..\model\Instructor.php';
+require_once __DIR__.'/../persistence/PersistenceTAMAS.php';
+require_once __DIR__.'/../model/Department.php';
+require_once __DIR__.'/../model/Instructor.php';
 
 class PersistenceTest extends PHPUnit_Framework_TestCase
 {
