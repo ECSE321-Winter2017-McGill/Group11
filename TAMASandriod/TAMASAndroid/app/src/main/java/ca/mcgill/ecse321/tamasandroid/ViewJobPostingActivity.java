@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.tamasandroid;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +11,13 @@ import java.util.Calendar;
 
 import ca.mcgill.ecse321.tamas.controller.InstructorController;
 import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
+import ca.mcgill.ecse321.tamas.controller.StudentController;
 import ca.mcgill.ecse321.tamas.model.Course;
 import ca.mcgill.ecse321.tamas.model.Department;
 import ca.mcgill.ecse321.tamas.model.Instructor;
 import ca.mcgill.ecse321.tamas.model.Job;
 import ca.mcgill.ecse321.tamas.model.PositionType;
+import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 public class ViewJobPostingActivity extends AppCompatActivity {
@@ -22,6 +25,9 @@ public class ViewJobPostingActivity extends AppCompatActivity {
     private Department d = null;
     private String fileName;
     String error = null;
+    Intent intent = null;
+    String ID = null;
+    Student student = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,15 @@ public class ViewJobPostingActivity extends AppCompatActivity {
 
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
-        //addJobPosting();
+
+        intent = getIntent();
+        ID = intent.getStringExtra(MainPageActivity.APPLY_STUDENT);
+        for (Student a : d.getAllStudents()) {
+            if (a.getStudentID() == Integer.parseInt(ID)) {
+                student = a;
+                break;
+            }
+        }
         refreshData();
     }
 
@@ -73,10 +87,25 @@ public class ViewJobPostingActivity extends AppCompatActivity {
 
     public void applyToPosting(View view){
         //implement apply methods
-    }
 
-    //method to apply to a job posting
-    //display the information of the job posting HOW?
-    //link to the other activity of viewing the information of the posting
-    //View Info
+        final Spinner postingSpinner = (Spinner) findViewById(R.id.jobpostingspinner);
+        StudentController s = new StudentController(d);
+
+        String jobName = postingSpinner.getSelectedItem().toString();
+        Job jobposting = null;
+        for (Job j : d.getAllJobs()) {
+            String postingName = j.getPosType().toString() + j.getCorrespondingCourse().getName();
+            if (postingName.contentEquals(jobName)) {
+                jobposting = j;
+                break;
+            }
+        }
+
+        try {
+            s.applyToJobPosting(jobposting, student);
+            error = "";
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+    }
 }
