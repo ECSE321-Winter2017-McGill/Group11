@@ -19,6 +19,7 @@ class PersistenceTest extends PHPUnit_Framework_TestCase
 	
 	public function testPersistence()
 	{
+		//tst
 		// 1. Create test data
 		$dpt = new Department();
 		$instructor = new Instructor("John", "111222333", "john@mcgill.ca");
