@@ -55,78 +55,78 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
     }
     
     public function testCreateInstructorNull(){
-    	 $this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateInstructorEmpty(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateInstructorSpace(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateInstructorInvalidFormats(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateJobPosting(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateJobPostingNull(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateJobPostingEmpty(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateJobPostingSpace(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateJobPostingOfferDeadlineDateBeforePostingDeadlineDate(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateJobPostingJobInexistant(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testmodyifyAllocation(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testmodyifyAllocationNull(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testmodyifyAllocationJobInexistant(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testmodyifyAllocationStudentsInexistant(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateReview(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateReviewNull(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateReviewEmptyContent(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateReviewSpaceContent(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
     
     public function testCreateReviewInstructorJobAndStudentInexistant(){
-    	$this->pass();
+    	$this->assertEquals(0, 0);
     }
 }
