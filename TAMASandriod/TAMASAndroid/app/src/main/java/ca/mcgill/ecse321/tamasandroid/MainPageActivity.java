@@ -36,14 +36,15 @@ public class MainPageActivity extends AppCompatActivity {
 
         intent = getIntent();
         ID = intent.getStringExtra(MainActivity.EXTRA_LOGIN);
+        /*
         for (Student a : d.getAllStudents()) {
             if (a.getStudentID() == Integer.parseInt(ID)) {
                 student = a;
                 break;
             }
         }
-
-        refreshData();
+*/
+        //refreshData();
     }
 
     private void refreshData(){
@@ -66,6 +67,7 @@ public class MainPageActivity extends AppCompatActivity {
     //View the job posting
     public void viewPost(View view){
         Intent intent = new Intent(this, ViewJobPostingActivity.class);
+        intent.putExtra(APPLY_STUDENT, ID);
         startActivity(intent);
     }
 
