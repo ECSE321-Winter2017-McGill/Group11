@@ -55,7 +55,6 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
     }
     
     public function testCreateInstructorNull(){
-    	//yes
     	$this->assertEquals(0, 0);
     }
     
