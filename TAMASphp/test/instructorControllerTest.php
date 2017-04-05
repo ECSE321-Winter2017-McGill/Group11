@@ -30,9 +30,9 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
     public function testCreateInstructor(){
     	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
     	
-    	$name = "Daniel Varro";
+    	$name = "Daniel";
     	$id = "123456789";
-    	$email = "daniel.varro@mail.mcgill.ca";
+    	$email = "daniel@mcgill.ca";
     	
     	try{
     		$this->contr->createInstructor($name, $id, $email);
@@ -51,7 +51,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
     	$this->assertEquals(0, count($this->dpt->getAllInstructor_index(0)->getReviewText()));
     	$this->assertEquals($name, $this->dpt->getAllInstructor_index(0)->getName());
     	$this->assertEquals($id, $this->dpt->getAllInstructor_index(0)->getInstructorID());
-    	$this->assertEquals($email, $this->dpt->getEvent_index(0)->getEmail());    	
+    	$this->assertEquals($email, $this->dpt->getAllInstructor_index(0)->getEmail());    	
     }
     
     public function testCreateInstructorNull(){
