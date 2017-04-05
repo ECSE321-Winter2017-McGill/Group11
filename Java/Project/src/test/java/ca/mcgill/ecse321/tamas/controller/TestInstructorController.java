@@ -107,6 +107,7 @@ public class TestInstructorController {
         checkJobPosting(job,jobDescription,skillsRequired,experienceRequired,postDeadLine,department2);
 
         department2.delete();
+        instructor.delete();
 
     }
 

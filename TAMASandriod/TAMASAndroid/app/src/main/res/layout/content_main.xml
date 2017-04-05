@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:text="@string/register_button"
-            android:onClick="loginActivity"/>
+            android:onClick="registerActivity"/>
     </LinearLayout>
 
 
