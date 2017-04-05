@@ -14,26 +14,41 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 public class MainPageActivity extends AppCompatActivity {
 
     private Department d = null;
     private String fileName;
-
+    Intent intent = null;
+    String ID = null;
+    Student student = null;
+    public static final String APPLY_STUDENT = "ca.mcgill.ecse321.tamasandroid.VIEWJOB";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
 
-        //the description of the student
-
-        TextView description = (TextView) findViewById(R.id.studentDescription);
-        description.setText("Will be used to display the information of the student");
-
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
+
+        intent = getIntent();
+        ID = intent.getStringExtra(MainActivity.EXTRA_LOGIN);
+        for (Student a : d.getAllStudents()) {
+            if (a.getStudentID() == Integer.parseInt(ID)) {
+                student = a;
+                break;
+            }
+        }
+
+        refreshData();
+    }
+
+    private void refreshData(){
+        TextView tv = (TextView) findViewById(R.id.studentDescription);
+        tv.setText(student.getName() + " " + student.getStudentID() + " " + student.getEmail());
     }
 
     //Will access the view offers tab for job offers

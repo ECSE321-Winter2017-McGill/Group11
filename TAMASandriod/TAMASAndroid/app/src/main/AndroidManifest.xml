@@ -33,8 +33,9 @@
         <activity
             android:name=".MainPageActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".RegisterStudentActivity"
-            android:parentActivityName=".MainActivity"></activity>
+        <activity
+            android:name=".RegisterStudentActivity"
+            android:parentActivityName=".MainActivity" />
     </application>
 
 </manifest>

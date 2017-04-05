@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Department d = null;
     private String fileName;
     String error = null;
+    public static final String EXTRA_LOGIN = "ca.mcgill.ecse321.tamasandroid.LOGIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +78,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the data in the student spinner
         Spinner spinner = (Spinner) findViewById(studentspinner);
-        ArrayAdapter<CharSequence> participantAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item);
+        ArrayAdapter<Integer> participantAdapter = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_item);
         participantAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         for (Student s : d.getAllStudents()) {
-            participantAdapter.add(s.getName());
+            participantAdapter.add(s.getStudentID());
         }
         spinner.setAdapter(participantAdapter);
     }
@@ -88,11 +90,10 @@ public class MainActivity extends AppCompatActivity {
     public void loginActivity(View view){
         final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
 
-        //have to use the data gottenand login as the student
-
-
+        String studentID = studentSpinner.getSelectedItem().toString();
 
         Intent intent = new Intent(this, MainPageActivity.class);
+        intent.putExtra(EXTRA_LOGIN, studentID);
         startActivity(intent);
     }
 
