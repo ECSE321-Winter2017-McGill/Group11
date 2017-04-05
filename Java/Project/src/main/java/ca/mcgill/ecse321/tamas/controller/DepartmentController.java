@@ -46,6 +46,8 @@ public class DepartmentController {
 
     private final String createAllocationNullJobError = " Job cannot be empty!<br>";
     private final String createAllocationNullStudentError = " Student cannot be empty!<br>";
+    private final String createAllocationStudentAlreadyAllocatedError = " Student is already allocated!<br>";
+    private final String removeAllocationStudentNotAllocatedError = " Student is not allocated for this job!<br>";
 
     private Department department;
 
@@ -276,11 +278,17 @@ public class DepartmentController {
             error += createAllocationNullStudentError;
         }
 
+        for (Student s: job.getAllocatedStudent()) {
+            if (s.getStudentID() == student.getStudentID()) {
+                error += createAllocationStudentAlreadyAllocatedError;
+            }
+        }
+
         if (error.length()>0) {
             throw new InvalidInputException(error);
         }
 
-        //TODO
+        job.addAllocatedStudent(student);
 
 		PersistenceXStream.saveToXMLwithXStream(department);
 
@@ -293,6 +301,7 @@ public class DepartmentController {
 	public void removeAllocation(Job job, Student student) throws InvalidInputException {
 
         String error = "";
+        boolean studentNotFound = true;
 
         if (job == null) {
             error += createAllocationNullJobError;
@@ -301,11 +310,21 @@ public class DepartmentController {
             error += createAllocationNullStudentError;
         }
 
+        for (Student s: job.getAllocatedStudent()) {
+            if (s.getStudentID() == student.getStudentID()) {
+               studentNotFound = false;
+            }
+        }
+
+        if (studentNotFound) {
+            error += removeAllocationStudentNotAllocatedError;
+        }
+
         if (error.length()>0) {
             throw new InvalidInputException(error);
         }
 
-        //TODO
+        job.removeAllocatedStudent(student);
 
 		PersistenceXStream.saveToXMLwithXStream(department);
 

@@ -185,25 +185,6 @@ public class TestDepartmentController {
     }
 
     @Test
-    public void testRegisterAStudent() {
-
-        String error = "";
-
-        assertEquals(0, department.getAllCourses().size());
-        assertEquals(0, department.getAllInstructors().size());
-
-        DepartmentController departmentController = new DepartmentController(department);
-
-        String studentID = "260689345";
-        String studentName = "Bobby Jones";
-        String studentEmail = "bobbyjones@mail.mcgill.ca";
-        Boolean isGrad = false;
-        String studentYear = "2";
-        String studentJobPreference = "TA";
-        String studentNumberOfHours = "45";
-    }
-
-    @Test
     public void testCreateAllocation() {
 
         String error = "";
