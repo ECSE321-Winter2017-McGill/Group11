@@ -65,6 +65,7 @@ public class TestStudentController {
 
     @Test
     public void testCreateStudent2(){
+        //successful and adding same student
         assertEquals(0, department.getAllStudents().size());
 
         StudentController studentController = new StudentController(department);
@@ -86,9 +87,13 @@ public class TestStudentController {
         }
         assertEquals(1, department.getAllStudents().size());
 
-        student = Student.getWithEmail(email);
-
-        student.delete();
+        try{
+            studentController.createStudent(Integer.toString(studentID), name, email, isGrad, Integer.toString(year), jobPreference, Integer.toString(numberOfHours));
+        } catch (InvalidInputException e){
+            assertEquals(1, department.getAllStudents().size());
+            student = Student.getWithEmail(email);
+            student.delete();
+        }
     }
 
     @Test
@@ -152,6 +157,122 @@ public class TestStudentController {
         String year = "2016";
         String jobPreference = "Preference to be a TA";
         String numberOfHours = "16y";
+
+        try{
+            studentController.createStudent(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        } catch (InvalidInputException e){
+            assertEquals(0, department.getAllStudents().size());
+        }
+    }
+
+    @Test
+    public void testCreateStudent6(){
+        assertEquals(0, department.getAllStudents().size());
+
+        StudentController studentController = new StudentController(department);
+        Student student = null;
+
+        //create student
+        String studentID = "123456e89";
+        String name = null;
+        String email = "jonathan@mcgill.ca";
+        boolean isGrad = true;
+        String year = "2016";
+        String jobPreference = "Preference to be a TA";
+        String numberOfHours = "16";
+
+        try{
+            studentController.createStudent(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        } catch (InvalidInputException e){
+            assertEquals(0, department.getAllStudents().size());
+        }
+    }
+
+    @Test
+    public void testCreateStudent7(){
+        assertEquals(0, department.getAllStudents().size());
+
+        StudentController studentController = new StudentController(department);
+        Student student = null;
+
+        //create student
+        String studentID = "123456e89";
+        String name = "Jonathan";
+        String email = null;
+        boolean isGrad = true;
+        String year = "2016";
+        String jobPreference = "Preference to be a TA";
+        String numberOfHours = "16";
+
+        try{
+            studentController.createStudent(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        } catch (InvalidInputException e){
+            assertEquals(0, department.getAllStudents().size());
+        }
+
+    }
+
+    @Test
+    public void testCreateStudent8(){
+        assertEquals(0, department.getAllStudents().size());
+
+        StudentController studentController = new StudentController(department);
+        Student student = null;
+
+        //create student
+        String studentID = "123456e89";
+        String name = "Jonathan";
+        String email = "jonathan@gmail.com";
+        boolean isGrad = true;
+        String year = "2016";
+        String jobPreference = "Preference to be a TA";
+        String numberOfHours = "16";
+
+        try{
+            studentController.createStudent(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        } catch (InvalidInputException e){
+            assertEquals(0, department.getAllStudents().size());
+        }
+    }
+
+    @Test
+    public void testCreateStudent9(){
+        assertEquals(0, department.getAllStudents().size());
+
+        StudentController studentController = new StudentController(department);
+        Student student = null;
+
+        //create student
+        String studentID = "123456e89";
+        String name = "Jonathan";
+        String email = "jonathan@mcgill.ca";
+        boolean isGrad = true;
+        String year = "2016";
+        String jobPreference = null;
+        String numberOfHours = "16";
+
+        try{
+            studentController.createStudent(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        } catch (InvalidInputException e){
+            assertEquals(0, department.getAllStudents().size());
+        }
+    }
+
+    @Test
+    public void testCreateStudent10(){
+        assertEquals(0, department.getAllStudents().size());
+
+        StudentController studentController = new StudentController(department);
+        Student student = null;
+
+        //create student
+        String studentID = "123456e89";
+        String name = "Jon";
+        String email = "jon";
+        boolean isGrad = true;
+        String year = "2016";
+        String jobPreference = "Preference to be a TA";
+        String numberOfHours = "16";
 
         try{
             studentController.createStudent(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
