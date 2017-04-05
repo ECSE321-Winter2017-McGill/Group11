@@ -19,7 +19,8 @@ class InstructorController
 		$instructorName = InvalidInputException::validate_input($instructorName);
 		$instructorID = InvalidInputException::validate_input($instructorID);
 		$instructorEmail = InvalidInputException::validate_input($instructorEmail);
-			
+		
+		/*
 		$validIDlength = strlen($instructorID) == 9;
 		$validIDFormat = true;
 		for($i = 0; $i < strlen ( $instructorID ); $i ++) {
@@ -31,7 +32,7 @@ class InstructorController
 		}	
 		
 		$validEmailFormat = true;
-		
+		*/
 		
 		
 		// throw exceptions, if need be
@@ -41,7 +42,8 @@ class InstructorController
 		if ($instructorID == null || strlen ( $instructorID ) == 0) {
 			$error .= "@2Instructor ID cannot be empty!";
 		}
-		if($validIDFormat || $validIDlength) {
+		//if($validIDFormat || $validIDlength) {
+		if(false){
 			$error .= "@3Instructor ID must be a 9-digit integer!";
 		}
 		if ($instructorEmail == null || strlen ( $instructorEmail ) == 0) {
