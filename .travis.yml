@@ -1,4 +1,4 @@
 language: php
 php:
 - 5.5
-script: phpunit TAMASphp/test/PersistenceTest.php
+script: phpunit TAMASphp/test/
