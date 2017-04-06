@@ -1,71 +1,22 @@
 <ca.mcgill.ecse321.tamas.model.Department id="1">
-  <allJobs id="2">
-    <Job id="3">
-      <posType>Grader</posType>
-      <postingDeadlineDate id="4">2017-03-16</postingDeadlineDate>
-      <state>Ready</state>
-      <jobID>1</jobID>
-      <allocatedStudent id="5"/>
-      <previousWorker id="6"/>
-      <applicant id="7"/>
-      <offerReceiver id="8">
-        <Student id="9">
-          <studentID>666666666</studentID>
-          <name>Bobby Jones</name>
-          <email>bobbyjones@mail.mcgill.ca</email>
-          <isGrad>false</isGrad>
-          <year>2</year>
-          <jobPreference>TA, but I don&apos;t mind.</jobPreference>
-          <numberOfHours>45</numberOfHours>
-          <previousJobExperiences id="10"/>
-          <jobsAppliedTo id="11"/>
-          <offeredJobs id="12">
-            <Job reference="3"/>
-          </offeredJobs>
-          <currentJobs id="13"/>
-          <reviewText id="14"/>
-        </Student>
-      </offerReceiver>
-      <employee id="15"/>
-      <correspondingCourse id="16">
-        <code>ECSE321</code>
-        <name>Software Engineering</name>
-        <semester>W2017</semester>
-        <numberOfCredits>3</numberOfCredits>
-        <numberOfLabs>0</numberOfLabs>
-        <numberOfTutorials>2</numberOfTutorials>
-        <numberOfHours>1</numberOfHours>
-        <studentsEnrolled>100</studentsEnrolled>
-        <tasNeeded>1</tasNeeded>
-        <gradersNeeded>1</gradersNeeded>
-        <taHourlyRate>12</taHourlyRate>
-        <graderHourlyRate>12</graderHourlyRate>
-        <budget>10000</budget>
-        <jobs id="17">
-          <Job reference="3"/>
-        </jobs>
-        <instructors id="18">
-          <Instructor id="19">
-            <name>James</name>
-            <instructorID>777777777</instructorID>
-            <email>james@mcgill.ca</email>
-            <courses id="20">
-              <Course reference="16"/>
-            </courses>
-            <reviewText id="21"/>
-          </Instructor>
-        </instructors>
-      </correspondingCourse>
-    </Job>
-  </allJobs>
-  <allCourses id="22">
-    <Course reference="16"/>
-  </allCourses>
-  <allInstructors id="23">
-    <Instructor reference="19"/>
-  </allInstructors>
-  <allStudents id="24">
-    <Student reference="9"/>
+  <allJobs id="2"/>
+  <allCourses id="3"/>
+  <allInstructors id="4"/>
+  <allStudents id="5">
+    <Student id="6">
+      <studentID>123456789</studentID>
+      <name>Jonathan</name>
+      <email>jonathan@mcgill.ca</email>
+      <isGrad>true</isGrad>
+      <year>1</year>
+      <jobPreference>Preference to be a TA</jobPreference>
+      <numberOfHours>0</numberOfHours>
+      <previousJobExperiences id="7"/>
+      <jobsAppliedTo id="8"/>
+      <offeredJobs id="9"/>
+      <currentJobs id="10"/>
+      <reviewText id="11"/>
+    </Student>
   </allStudents>
-  <allReviews id="25"/>
+  <allReviews id="12"/>
 </ca.mcgill.ecse321.tamas.model.Department>
