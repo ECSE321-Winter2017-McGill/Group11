@@ -25,8 +25,6 @@ public class ViewJobPostingActivity extends AppCompatActivity {
     private Department d = null;
     private String fileName;
     String error = null;
-    Intent intent = null;
-    String ID = null;
     Student student = null;
 
     @Override
@@ -38,14 +36,7 @@ public class ViewJobPostingActivity extends AppCompatActivity {
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
 
-        intent = getIntent();
-        ID = intent.getStringExtra(MainPageActivity.APPLY_STUDENT);
-        for (Student a : d.getAllStudents()) {
-            if (a.getStudentID() == Integer.parseInt(ID)) {
-                student = a;
-                break;
-            }
-        }
+        student = MainActivity.login;
         refreshData();
     }
 
