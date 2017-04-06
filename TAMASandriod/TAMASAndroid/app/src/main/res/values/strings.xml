@@ -21,4 +21,8 @@
     <string name="newstudent_button">Register Student</string>
     <string name="registerstudent_label">If a first time user, please enter information below</string>
     <string name="register_button">Register</string>
+    <string name="genOffer_button">Generate Offer</string>
+    <string name="jobofferspinner_label">Job Offers</string>
+    <string name="acceptOffer">Accept</string>
+    <string name="rejectOffer">Reject</string>
 </resources>
