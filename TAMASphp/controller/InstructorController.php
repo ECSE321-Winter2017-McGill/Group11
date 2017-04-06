@@ -39,13 +39,13 @@ class InstructorController
 		if ($instructorID == null || strlen ( $instructorID ) == 0) {
 			$error .= "@2Instructor ID cannot be empty! ";
 		}
-		//if($validIDFormat || $validIDlength) {
+		//else if($validIDFormat || $validIDlength) {
 		//	$error .= "@3Instructor ID must be a 9-digit integer! ";
 		//}
 		if ($instructorEmail == null || strlen ( $instructorEmail ) == 0) {
 			$error .= "@4Instructor E-mail address cannot be empty! ";
 		}
-		//if ($validEmailFormat){
+		//else if ($validEmailFormat){
 		//	$error .= "@5Instructor E-mail address has to be of the form example@example.com! ";
 		//}
 		if (strlen($error) > 0){

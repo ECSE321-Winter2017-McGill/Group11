@@ -161,8 +161,4 @@ public class StudentController {
 		PersistenceXStream.saveToXMLwithXStream(department);
 		
 	}
-	
-	
-	
-	
 }

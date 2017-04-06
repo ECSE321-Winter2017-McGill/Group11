@@ -55,15 +55,75 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
     }
     
     public function testCreateInstructorNull(){
-    	$this->assertEquals(0, 0);
+    	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+    	
+    	$name = null;
+    	$id = null;
+    	$email = null;
+    	
+    	$error = "";
+    	try{
+    		$this->contr->createInstructor($name, $id, $email);
+    	} catch (Exception $e) {
+    		$error =$e->getMessage();
+    	}
+    	
+    	$this->assertEquals($error, "@1Instructor name cannot be empty! @2Instructor ID cannot be empty! @4Instructor E-mail address cannot be empty!");
+    	
+    	$this->dpt = $this->persis->loadDataFromStore();
+    	$this->assertEquals(0, count($this->dpt->getAllCourses()));
+    	$this->assertEquals(0, count($this->dpt->getAllJobs()));
+    	$this->assertEquals(0, count($this->dpt->getAllReviews()));
+    	$this->assertEquals(0, count($this->dpt->getAllStudents()));
+    	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
     }
     
     public function testCreateInstructorEmpty(){
-    	$this->assertEquals(0, 0);
+    	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+    	 
+    	$name = "";
+    	$id = "";
+    	$email = "";
+    	 
+    	$error = "";
+    	try{
+    		$this->contr->createInstructor($name, $id, $email);
+    	} catch (Exception $e) {
+    		$error =$e->getMessage();
+    	}
+    	 
+    	$this->assertEquals($error, "@1Instructor name cannot be empty! @2Instructor ID cannot be empty! @4Instructor E-mail address cannot be empty!");
+    	 
+    	$this->dpt = $this->persis->loadDataFromStore();
+    	$this->assertEquals(0, count($this->dpt->getAllCourses()));
+    	$this->assertEquals(0, count($this->dpt->getAllJobs()));
+    	$this->assertEquals(0, count($this->dpt->getAllReviews()));
+    	$this->assertEquals(0, count($this->dpt->getAllStudents()));
+    	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
     }
     
     public function testCreateInstructorSpace(){
-    	$this->assertEquals(0, 0);
+    	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+    	 
+    	$name = " ";
+    	$id = " ";
+    	$email = " ";
+    	 
+    	$error = "";
+    	try{
+    		$this->contr->createInstructor($name, $id, $email);
+    	} catch (Exception $e) {
+    		$error =$e->getMessage();
+    	}
+    	 
+    	$this->assertEquals($error, "@1Instructor name cannot be empty! @2Instructor ID cannot be empty! @4Instructor E-mail address cannot be empty!");
+    	 
+    	$this->dpt = $this->persis->loadDataFromStore();
+    	$this->assertEquals(0, count($this->dpt->getAllCourses()));
+    	$this->assertEquals(0, count($this->dpt->getAllJobs()));
+    	$this->assertEquals(0, count($this->dpt->getAllReviews()));
+    	$this->assertEquals(0, count($this->dpt->getAllStudents()));
+    	$this->assertEquals(0, count($this->dpt->getAllInstructors()));
     }
     
     public function testCreateInstructorInvalidFormats(){

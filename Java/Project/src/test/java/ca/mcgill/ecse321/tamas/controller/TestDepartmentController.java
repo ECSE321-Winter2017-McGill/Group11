@@ -247,12 +247,17 @@ public class TestDepartmentController {
         department.addAllJob(jobA);
         assertEquals(1,department.getAllJobs().size());
 
+        //first make sure that there is no allocated job
+        assertEquals(false, jobA.hasAllocatedStudent());
+
+        //now try to create an allocation
         try {
             departmentController.createAllocation(jobA,studentA);
         } catch (InvalidInputException e) {
             fail();
         }
-        //TODO
+        assertEquals(1, department.getAllJobs().size());
+        assertEquals(true, jobA.hasAllocatedStudent());
 
         try {
             departmentController.createAllocation(null,null);
@@ -261,7 +266,7 @@ public class TestDepartmentController {
         }
         assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
         assertEquals(1,department.getAllJobs().size());
-        //TODO
+        assertEquals(true,jobA.hasAllocatedStudent());
 
         instructorA.delete();
         studentA.delete();
@@ -332,21 +337,43 @@ public class TestDepartmentController {
         department.addAllJob(jobA);
         assertEquals(1,department.getAllJobs().size());
 
+        //first we need to allocate the student before removing him
+        try {
+            departmentController.createAllocation(jobA,studentA);
+        } catch (InvalidInputException e) {
+            fail();
+        }
+        assertEquals(1,department.getAllJobs().size());
+        assertEquals(true,jobA.hasAllocatedStudent());
+
+        //now we test if remove works
         try {
             departmentController.removeAllocation(jobA,studentA);
         } catch (InvalidInputException e) {
             fail();
         }
-        //TODO
+        assertEquals(1,department.getAllJobs().size());
+        assertEquals(false,jobA.hasAllocatedStudent());
+
+
+        //test that removing a student already removed is correctly handled
+        try {
+            departmentController.removeAllocation(jobA,studentA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Student is not allocated for this job!<br>", error);
+        assertEquals(1,department.getAllJobs().size());
+        assertEquals(false,jobA.hasAllocatedStudent());
 
         try {
             departmentController.removeAllocation(null,null);
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
+        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br> Student is not allocated for this job!<br>", error);
         assertEquals(1,department.getAllJobs().size());
-        //TODO
+        assertEquals(false,jobA.hasAllocatedStudent());
 
         instructorA.delete();
         studentA.delete();
@@ -421,7 +448,14 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             fail();
         }
-        //TODO
+
+        //try adding the job offer a second time
+        try {
+            departmentController.createJobOffer(jobA,studentA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Offer already made to this student!<br>", error);
 
         try {
             departmentController.createJobOffer(null,null);

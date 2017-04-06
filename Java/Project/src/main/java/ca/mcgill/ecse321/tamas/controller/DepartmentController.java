@@ -49,6 +49,8 @@ public class DepartmentController {
     private final String createAllocationStudentAlreadyAllocatedError = " Student is already allocated!<br>";
     private final String removeAllocationStudentNotAllocatedError = " Student is not allocated for this job!<br>";
 
+    private final String createJobOfferOfferNotAddedError = " Offer already made to this student!<br>";
+
     private Department department;
 
 	public DepartmentController(Department department){
@@ -278,9 +280,11 @@ public class DepartmentController {
             error += createAllocationNullStudentError;
         }
 
-        for (Student s: job.getAllocatedStudent()) {
-            if (s.getStudentID() == student.getStudentID()) {
-                error += createAllocationStudentAlreadyAllocatedError;
+        if (job != null) {
+            for (Student s : job.getAllocatedStudent()) {
+                if (s.getStudentID() == student.getStudentID()) {
+                    error += createAllocationStudentAlreadyAllocatedError;
+                }
             }
         }
 
@@ -310,9 +314,12 @@ public class DepartmentController {
             error += createAllocationNullStudentError;
         }
 
-        for (Student s: job.getAllocatedStudent()) {
-            if (s.getStudentID() == student.getStudentID()) {
-               studentNotFound = false;
+        //cannot do that if the job is null
+        if (job != null) {
+            for (Student s : job.getAllocatedStudent()) {
+                if (s.getStudentID() == student.getStudentID()) {
+                    studentNotFound = false;
+                }
             }
         }
 
@@ -337,6 +344,7 @@ public class DepartmentController {
 	public void createJobOffer(Job job, Student student) throws  InvalidInputException {
 
         String error = "";
+        boolean wasAdded = false;
 
         if (job == null) {
             error += createAllocationNullJobError;
@@ -349,8 +357,11 @@ public class DepartmentController {
             throw new InvalidInputException(error);
         }
 
-        //TODO
-
+        //Job model class tells us if it worked by returning boolean
+        wasAdded = job.addOfferReceiver(student);
+        if (!wasAdded) {
+            throw new InvalidInputException(createJobOfferOfferNotAddedError);
+        }
 	    PersistenceXStream.saveToXMLwithXStream(department);
 	}
 
