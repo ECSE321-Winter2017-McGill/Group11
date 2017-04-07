@@ -28,9 +28,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 //model classes
 //Controller class
@@ -69,7 +66,6 @@ public class BetaDepartmentPage extends JFrame {
     //End Register a Student
 
     //Apply for a Job
-    private JTextField studentIDForApplyingField;
     private JComboBox<String> studentListForStudentApplyJob;
     private JComboBox<String> jobListForStudentApplyJob;
     private WebDateField publishDeadlineDatePicker;
@@ -136,6 +132,41 @@ public class BetaDepartmentPage extends JFrame {
     private DefaultTableModel previousJobsTableModel = new DefaultTableModel();
     //End View Student
 
+    //View Course
+    private JComboBox<String> courseListForViewCourse;
+    private JTextField courseNameFieldForViewCourse;
+    private JTextField courseCodeFieldForViewCourse;
+    private JComboBox<String> instructorListForViewCourse;
+    private JRadioButton fallRadio;
+    private JRadioButton winterRadio;
+    private JTextField creditsFieldForViewCourse;
+    private JTextField numberOfTutorialsFieldForViewCourse;
+    private JTextField numberOfLabsFieldForViewCourse;
+    private JTextField numberStudentEnrolledFieldForViewCourse;
+    private JTextField hoursFieldForViewCourse;
+    private JTextField numberOfTAsNeededFieldForViewCourse;
+    private JTextField numberOfGradersNeededFieldForViewCourse;
+    private JTextField taHourlyRateFieldForViewCourse;
+    private JTextField graderHourlyRateFieldForViewCourse;
+    private JTextField budgetFieldForViewCourse;
+    //End View Course
+
+    //View Job
+    private JComboBox<String> courseListForViewJob;
+    private JComboBox<String> jobListForViewJob;
+    private WebTextArea skillsRequiredTextAreaForViewJob;
+    private WebTextArea experienceRequiredFieldForViewJob;
+    private WebTextArea jobDescriptionFieldForViewJob;
+    private WebDateField offerDeadlineDatePickerForViewJob;
+
+    private Job associatedJobForViewJob = null;
+    private Course associatedCourseForViewJob = null;
+
+    private DefaultTableModel employeeTableModel = new DefaultTableModel();
+    private DefaultTableModel applicantTableModel = new DefaultTableModel();
+    private DefaultTableModel allocatedTableModel = new DefaultTableModel();
+    //End View Job
+
     private Integer selectedInstructorForPublishJobPosting = -1;
     private Integer selectedJobForPublishJobPosting = -1;
     private Integer selectedCourseForPublishJobPosting = -1;
@@ -149,6 +180,12 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedStudentForCreateOffer = -1;
     private Integer selectedJobForCreateOffer = -1;
     private Integer selectedStudentForViewStudent = -1;
+    private Integer selectedSemesterForViewJob = -1;
+    private Integer selectedInstructorForViewCourse = -1;
+    private Integer selectedCourseListForViewCourse = -1;
+    private Integer selectedCourseListForViewJob = -1;
+    private Integer selectedJobListForViewJob = -1;
+
 
     private Integer widthOfApp = 800;
     private Integer heightOfApp = 700;
@@ -195,9 +232,11 @@ public class BetaDepartmentPage extends JFrame {
         addNewFrame(desktopPane, CreateOffer(), "Create Offer", "Create Offer", webPanel, 350, 300);
         addNewFrame(desktopPane, CreateRemoveAllocation(), "Create/Remove Allocation", "Create/Remove Allocation", webPanel, 350, 300);
         addNewFrame(desktopPane, ViewStudent(), "View Student Info", "View Student Info", webPanel, 500, 300);
+        addNewFrame(desktopPane, ViewCourse(), "View Course Info", "View Course Info", webPanel, 500, 300);
+        addNewFrame(desktopPane, ViewJob(), "View Job Info", "View Job Info", webPanel, 700, 400);
 
 
-        webPanel.setBounds(0, 0, 800, 800);
+        webPanel.setBounds(0, 0, 900, 900);
         webPanel.setOpaque(false);
 
         getContentPane().add(desktopPane, BorderLayout.CENTER);
@@ -219,6 +258,8 @@ public class BetaDepartmentPage extends JFrame {
         updateCreateOffer();
         updateCreateRemoveAllocation();
         updateStudentView();
+        updateCourseView();
+        updateJobView();
     }
 
     private void updatePublishJobView(Instructor instructor, Course course, boolean clearData) {
@@ -448,14 +489,41 @@ public class BetaDepartmentPage extends JFrame {
             String tmp = j.getStudentID() + ": " + j.getName();
             studentListForViewStudent.addItem(tmp);
 
-
-
-
         }
         selectedStudentForViewStudent = -1;
         studentListForViewStudent.setSelectedIndex(selectedStudentForViewStudent);
 
 
+    }
+
+    private void updateCourseView(){
+
+        courseListForViewCourse.removeAllItems();
+        for (Course c : department.getAllCourses()) {
+            String tmp = c.getCode() + ": " + c.getName();
+            courseListForViewCourse.addItem(tmp);
+
+        }
+        selectedCourseListForViewCourse = -1;
+        courseListForViewCourse.setSelectedIndex(selectedCourseListForViewCourse);
+
+        selectedInstructorForViewCourse = -1;
+        instructorListForViewCourse.setSelectedIndex(selectedInstructorForViewCourse);
+
+    }
+
+    private void updateJobView(){
+        courseListForViewJob.removeAllItems();
+        for (Course c : department.getAllCourses()) {
+            String tmp = c.getCode() + ": " + c.getName();
+            courseListForViewJob.addItem(tmp);
+        }
+
+        selectedCourseListForViewJob = -1;
+        courseListForViewJob.setSelectedIndex(selectedCourseListForViewJob);
+
+        selectedJobListForViewJob = -1;
+        jobListForViewJob.setSelectedIndex(selectedJobListForViewJob);
     }
 
 
@@ -494,7 +562,7 @@ public class BetaDepartmentPage extends JFrame {
         internalFrameIcon.setPreferredSize(100, 75);
         webPanel.add(internalFrameIcon);
 
-        internalFrame.setBounds((int) (Math.random() * (widthOfApp / 2)), (int) (Math.random() * (heightOfApp / 2)), width, height);
+        internalFrame.setBounds(50, 100, width, height);
 
 
         internalFrame.close();
@@ -546,7 +614,7 @@ public class BetaDepartmentPage extends JFrame {
         gridBagConstraints.gridx++;
         contentPane.add(jobListForPublishJobPosting, gridBagConstraints);
 
-        JLabel skillsRequiredLabel = new JLabel("Skills required");
+        JLabel skillsRequiredLabel = new JLabel("Skills Required");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
         contentPane.add(skillsRequiredLabel, gridBagConstraints);
@@ -560,7 +628,7 @@ public class BetaDepartmentPage extends JFrame {
         areaScrollSkillsRequired.setPreferredSize(new Dimension(150, 150));
         contentPane.add(areaScrollSkillsRequired, gridBagConstraints);
 
-        JLabel experienceRequiredLabel = new JLabel("Exp. required");
+        JLabel experienceRequiredLabel = new JLabel("Exp. Required");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
         gridBagConstraints.fill = gridBagConstraints.BOTH;
@@ -571,7 +639,7 @@ public class BetaDepartmentPage extends JFrame {
         contentPane.add(experienceRequiredField, gridBagConstraints);
         experienceRequiredField.setColumns(10);
 
-        JLabel jobDescriptionLabel = new JLabel("Job description");
+        JLabel jobDescriptionLabel = new JLabel("Job Description");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
         contentPane.add(jobDescriptionLabel, gridBagConstraints);
@@ -2046,25 +2114,735 @@ public class BetaDepartmentPage extends JFrame {
         return scrollPane;
     }
 
-    private class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
-        private static final long serialVersionUID = -2169252224419341678L;
+    private Component ViewCourse(){
+        JPanel contentPane = new JPanel();
+        contentPane.setBackground(new Color(255, 255, 255));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
 
-        private String datePattern = "yyyy-MM-dd";
-        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
-        @Override
-        public Object stringToValue(String text) throws ParseException {
-            return dateFormatter.parseObject(text);
-        }
+        JLabel createACourseLabel = new JLabel("View Course Info");
+        createACourseLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = 1;
+        contentPane.add(createACourseLabel,gridBagConstraints);
 
-        @Override
-        public String valueToString(Object value) throws ParseException {
-            if (value != null) {
-                Calendar cal = (Calendar) value;
-                return dateFormatter.format(cal.getTime());
+
+        final JLabel courseLabel = new JLabel("Course");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseLabel,gridBagConstraints);
+
+
+        courseListForViewCourse = new JComboBox<>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(courseListForViewCourse,gridBagConstraints);
+
+
+        final JLabel courseNameLabel = new JLabel("Course name");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseNameLabel, gridBagConstraints);
+        courseNameLabel.setVisible(false);
+
+        courseNameFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(courseNameFieldForViewCourse, gridBagConstraints);
+        courseNameFieldForViewCourse.setVisible(false);
+        courseNameFieldForViewCourse.setEditable(false);
+
+
+        final JLabel courseCodeLabel = new JLabel("Course code");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseCodeLabel, gridBagConstraints);
+        courseCodeLabel.setVisible(false);
+
+
+        courseCodeFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(courseCodeFieldForViewCourse, gridBagConstraints);
+        courseCodeFieldForViewCourse.setVisible(false);
+        courseCodeFieldForViewCourse.setEditable(false);
+
+
+        final JLabel instructorLabel = new JLabel("Instructor");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(instructorLabel,gridBagConstraints);
+        instructorLabel.setVisible(false);
+
+        instructorListForViewCourse = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(instructorListForViewCourse,gridBagConstraints);
+        instructorListForViewCourse.setVisible(false);
+        instructorListForViewCourse.setEditable(false);
+
+
+        final JLabel semesterLabel = new JLabel("Semester");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(semesterLabel, gridBagConstraints);
+        semesterLabel.setVisible(false);
+
+        JPanel radioPanel = new JPanel();
+        FlowLayout radioLayout = new FlowLayout(FlowLayout.LEADING);
+        radioPanel.setLayout(radioLayout);
+        radioPanel.setOpaque(false);
+
+        fallRadio = new JRadioButton("Fall");
+        winterRadio = new JRadioButton("Winter");
+
+        //Created a group for the radio
+        ButtonGroup group = new ButtonGroup();
+        group.add(fallRadio);
+        group.add(winterRadio);
+
+        fallRadio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
             }
+        });
+        fallRadio.setSelected(false);
+        fallRadio.setVisible(false);
+        fallRadio.setEnabled(false);
 
-            return "";
-        }
+        radioPanel.add(fallRadio);
+
+        winterRadio.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+
+        winterRadio.setSelected(false);
+        winterRadio.setVisible(false);
+        winterRadio.setEnabled(false);
+        radioPanel.add(winterRadio);
+
+        gridBagConstraints.gridx++;
+        contentPane.add(radioPanel, gridBagConstraints);
+
+
+
+
+        final JLabel creditsLabel = new JLabel("Credits");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(creditsLabel, gridBagConstraints);
+        creditsLabel.setVisible(false);
+
+        creditsFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(creditsFieldForViewCourse, gridBagConstraints);
+        creditsFieldForViewCourse.setVisible(false);
+        creditsFieldForViewCourse.setEditable(false);
+
+
+
+
+        final JLabel numberOfTutorialsLabel = new JLabel("# of tutorials");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfTutorialsLabel, gridBagConstraints);
+        numberOfTutorialsLabel.setVisible(false);
+
+        numberOfTutorialsFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(numberOfTutorialsFieldForViewCourse, gridBagConstraints);
+        numberOfTutorialsFieldForViewCourse.setVisible(false);
+        numberOfTutorialsFieldForViewCourse.setEditable(false);
+
+
+        final JLabel numberOfLabsLabel = new JLabel("# of labs");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfLabsLabel, gridBagConstraints);
+        numberOfLabsLabel.setVisible(false);
+
+        numberOfLabsFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(numberOfLabsFieldForViewCourse, gridBagConstraints);
+        numberOfLabsFieldForViewCourse.setVisible(false);
+        numberOfLabsFieldForViewCourse.setEditable(false);
+
+        final JLabel numberStudentEnrolledLabel = new JLabel("# student enrolled");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(numberStudentEnrolledLabel, gridBagConstraints);
+        numberStudentEnrolledLabel.setVisible(false);
+
+        numberStudentEnrolledFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(numberStudentEnrolledFieldForViewCourse, gridBagConstraints);
+        numberStudentEnrolledFieldForViewCourse.setVisible(false);
+        numberStudentEnrolledFieldForViewCourse.setEditable(false);
+
+        final JLabel hoursLabel = new JLabel("Hours");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(hoursLabel, gridBagConstraints);
+        hoursLabel.setVisible(false);
+
+        hoursFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(hoursFieldForViewCourse, gridBagConstraints);
+        hoursFieldForViewCourse.setVisible(false);
+        hoursFieldForViewCourse.setEditable(false);
+
+        final JLabel numberOfTAsNeededLabel = new JLabel("# of TAs");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfTAsNeededLabel, gridBagConstraints);
+        numberOfTAsNeededLabel.setVisible(false);
+
+        numberOfTAsNeededFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(numberOfTAsNeededFieldForViewCourse, gridBagConstraints);
+        numberOfTAsNeededFieldForViewCourse.setVisible(false);
+        numberOfTAsNeededFieldForViewCourse.setEditable(false);
+
+        final JLabel numberOfGradersNeededLabel = new JLabel("# of Graders");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(numberOfGradersNeededLabel, gridBagConstraints);
+        numberOfGradersNeededLabel.setVisible(false);
+
+        numberOfGradersNeededFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(numberOfGradersNeededFieldForViewCourse, gridBagConstraints);
+        numberOfGradersNeededFieldForViewCourse.setVisible(false);
+        numberOfGradersNeededFieldForViewCourse.setEditable(false);
+
+        final JLabel taHourlyRateLabel = new JLabel("TA hourly rate");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(taHourlyRateLabel, gridBagConstraints);
+        taHourlyRateLabel.setVisible(false);
+
+        taHourlyRateFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(taHourlyRateFieldForViewCourse, gridBagConstraints);
+        taHourlyRateFieldForViewCourse.setVisible(false);
+        taHourlyRateFieldForViewCourse.setEditable(false);
+
+        final JLabel graderHourlyRateLabel = new JLabel("Graders hourly rate");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(graderHourlyRateLabel, gridBagConstraints);
+        graderHourlyRateLabel.setVisible(false);
+
+        graderHourlyRateFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(graderHourlyRateFieldForViewCourse, gridBagConstraints);
+        graderHourlyRateFieldForViewCourse.setVisible(false);
+        graderHourlyRateFieldForViewCourse.setEditable(false);
+
+        final JLabel budgetLabel = new JLabel("Budget");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(budgetLabel, gridBagConstraints);
+        budgetLabel.setVisible(false);
+
+        budgetFieldForViewCourse = new JTextField();
+        gridBagConstraints.gridx++;
+        contentPane.add(budgetFieldForViewCourse, gridBagConstraints);
+        budgetFieldForViewCourse.setVisible(false);
+        budgetFieldForViewCourse.setEditable(false);
+
+
+        instructorListForViewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedInstructorForViewCourse = cb.getSelectedIndex();
+
+            }
+        });
+
+        courseListForViewCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedStudentForViewStudent = cb.getSelectedIndex();
+
+                if(cb.getSelectedIndex() >= 0){
+                    courseNameLabel.setVisible(true);
+                    courseNameFieldForViewCourse.setVisible(true);
+
+                    courseCodeLabel.setVisible(true);
+                    courseCodeFieldForViewCourse.setVisible(true);
+
+                    instructorLabel.setVisible(true);
+                    instructorListForViewCourse.setVisible(true);
+
+                    semesterLabel.setVisible(true);
+                    winterRadio.setVisible(true);
+                    fallRadio.setVisible(true);
+
+                    creditsLabel.setVisible(true);
+                    creditsFieldForViewCourse.setVisible(true);
+
+                    numberOfTutorialsLabel.setVisible(true);
+                    numberOfTutorialsFieldForViewCourse.setVisible(true);
+
+                    numberOfLabsLabel.setVisible(true);
+                    numberOfLabsFieldForViewCourse.setVisible(true);
+
+                    numberStudentEnrolledLabel.setVisible(true);
+                    numberStudentEnrolledFieldForViewCourse.setVisible(true);
+
+                    hoursLabel.setVisible(true);
+                    hoursFieldForViewCourse.setVisible(true);
+
+                    numberOfTAsNeededLabel.setVisible(true);
+                    numberOfTAsNeededFieldForViewCourse.setVisible(true);
+
+                    numberOfGradersNeededLabel.setVisible(true);
+                    numberOfGradersNeededFieldForViewCourse.setVisible(true);
+
+                    taHourlyRateLabel.setVisible(true);
+                    taHourlyRateFieldForViewCourse.setVisible(true);
+
+                    graderHourlyRateLabel.setVisible(true);
+                    graderHourlyRateFieldForViewCourse.setVisible(true);
+
+                    budgetLabel.setVisible(true);
+                    budgetFieldForViewCourse.setVisible(true);
+
+
+                    String tmpCourseID = cb.getSelectedItem().toString().split(":")[0];
+                    Course tmpCourse = null;
+                    for(Course c: department.getAllCourses()){
+                        if(c.getCode().contentEquals(tmpCourseID)){
+                            tmpCourse = c;
+                            break;
+                        }
+                    }
+
+                    if(tmpCourse != null){
+
+                        courseNameFieldForViewCourse.setText(tmpCourse.getName());
+                        courseCodeFieldForViewCourse.setText(tmpCourse.getCode());
+
+                        instructorListForViewCourse.removeAllItems();
+                        for (Instructor i : tmpCourse.getInstructors()) {
+                            String tmp = i.getInstructorID() + "(" + i.getName()+ ")";
+                            instructorListForViewCourse.addItem(tmp);
+                        }
+                        selectedInstructorForViewCourse = 0;
+                        instructorListForViewCourse.setSelectedIndex(selectedInstructorForViewCourse);
+
+
+
+                        creditsFieldForViewCourse.setText(tmpCourse.getNumberOfCredits()+"");
+                        numberOfTutorialsFieldForViewCourse.setText(tmpCourse.getNumberOfTutorials()+"");
+                        numberOfLabsFieldForViewCourse.setText(tmpCourse.getNumberOfLabs()+"");
+                        numberStudentEnrolledFieldForViewCourse.setText(tmpCourse.getStudentsEnrolled()+"");
+                        hoursFieldForViewCourse.setText(tmpCourse.getNumberOfHours()+"");
+                        numberOfTAsNeededFieldForViewCourse.setText(tmpCourse.getTasNeeded()+"");
+                        numberOfGradersNeededFieldForViewCourse.setText(tmpCourse.getGradersNeeded()+"");
+                        taHourlyRateFieldForViewCourse.setText("$"+tmpCourse.getTaHourlyRate());
+                        graderHourlyRateFieldForViewCourse.setText("$" + tmpCourse.getGraderHourlyRate());
+                        budgetFieldForViewCourse.setText("$"+ tmpCourse.getBudget());
+
+
+                        if(tmpCourse.getSemester().contains("Fall")) {
+                            winterRadio.setSelected(false);
+                            fallRadio.setSelected(true);
+                        }else{
+                            winterRadio.setSelected(true);
+                            fallRadio.setSelected(false);
+                        }
+
+                    }
+
+
+                }else{
+                    courseNameLabel.setVisible(false);
+                    courseNameFieldForViewCourse.setVisible(false);
+
+                    courseCodeLabel.setVisible(false);
+                    courseCodeFieldForViewCourse.setVisible(false);
+
+                    instructorLabel.setVisible(false);
+                    instructorListForViewCourse.setVisible(false);
+
+                    semesterLabel.setVisible(false);
+                    winterRadio.setSelected(false);
+                    winterRadio.setVisible(false);
+                    fallRadio.setSelected(false);
+                    fallRadio.setVisible(false);
+
+                    creditsLabel.setVisible(false);
+                    creditsFieldForViewCourse.setVisible(false);
+
+                    numberOfTutorialsLabel.setVisible(false);
+                    numberOfTutorialsFieldForViewCourse.setVisible(false);
+
+                    numberOfLabsLabel.setVisible(false);
+                    numberOfLabsFieldForViewCourse.setVisible(false);
+
+                    numberStudentEnrolledLabel.setVisible(false);
+                    numberStudentEnrolledFieldForViewCourse.setVisible(false);
+
+                    hoursLabel.setVisible(false);
+                    hoursFieldForViewCourse.setVisible(false);
+
+                    numberOfTAsNeededLabel.setVisible(false);
+                    numberOfTAsNeededFieldForViewCourse.setVisible(false);
+
+                    numberOfGradersNeededLabel.setVisible(false);
+                    numberOfGradersNeededFieldForViewCourse.setVisible(false);
+
+                    taHourlyRateLabel.setVisible(false);
+                    taHourlyRateFieldForViewCourse.setVisible(false);
+
+                    graderHourlyRateLabel.setVisible(false);
+                    graderHourlyRateFieldForViewCourse.setVisible(false);
+
+                    budgetLabel.setVisible(false);
+                    budgetFieldForViewCourse.setVisible(false);
+
+
+
+
+
+
+                }
+            }
+        });
+
+        return scrollPane;
+    }
+
+    private Component ViewJob(){
+        final WebPanel contentPane = new WebPanel();
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
+        contentPane.setBackground(new Color(255, 255, 255));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        final JLabel viewStudentLabel = new JLabel("View Job Info");
+        viewStudentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = 1;
+        contentPane.add(viewStudentLabel, gridBagConstraints);
+
+        JLabel courseLabel = new JLabel("Course");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseLabel, gridBagConstraints);
+
+        courseListForViewJob = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(courseListForViewJob, gridBagConstraints);
+
+        final JLabel jobLabel = new JLabel("Job");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(jobLabel,gridBagConstraints);
+
+        jobListForViewJob = new JComboBox<>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(jobListForViewJob,gridBagConstraints);
+
+        final JLabel skillsRequiredLabel = new JLabel("Skills Required");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(skillsRequiredLabel,gridBagConstraints);
+        skillsRequiredLabel.setVisible(false);
+
+
+        skillsRequiredTextAreaForViewJob = new WebTextArea();
+        gridBagConstraints.gridx++;
+        skillsRequiredTextAreaForViewJob.setEditable(false);
+        skillsRequiredTextAreaForViewJob.setLineWrap(true);
+        skillsRequiredTextAreaForViewJob.setWrapStyleWord(true);
+
+        final WebScrollPane areaScrollSkillsRequired = new WebScrollPane(skillsRequiredTextAreaForViewJob);
+        contentPane.add(areaScrollSkillsRequired, gridBagConstraints);
+        areaScrollSkillsRequired.setVisible(false);
+        areaScrollSkillsRequired.setPreferredSize(new Dimension(250, 75));
+
+
+
+        final JLabel experienceRequiredLabel = new JLabel("Exp. Required");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(experienceRequiredLabel, gridBagConstraints);
+        experienceRequiredLabel.setVisible(false);
+
+
+
+        experienceRequiredFieldForViewJob = new WebTextArea();
+        gridBagConstraints.gridx++;
+        experienceRequiredFieldForViewJob.setEditable(false);
+        experienceRequiredFieldForViewJob.setLineWrap(true);
+        experienceRequiredFieldForViewJob.setWrapStyleWord(true);
+
+        final WebScrollPane areaScrollExperiencesRequired = new WebScrollPane(experienceRequiredFieldForViewJob);
+        areaScrollExperiencesRequired.setPreferredSize(new Dimension(250, 75));
+        contentPane.add(areaScrollExperiencesRequired, gridBagConstraints);
+        areaScrollExperiencesRequired.setVisible(false);
+
+
+
+
+        final JLabel jobDescriptionLabel = new JLabel("Job Description");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(jobDescriptionLabel,gridBagConstraints);
+        jobDescriptionLabel.setVisible(false);
+
+
+        jobDescriptionFieldForViewJob = new WebTextArea();
+        gridBagConstraints.gridx++;
+        jobDescriptionFieldForViewJob.setEditable(false);
+        jobDescriptionFieldForViewJob.setLineWrap(true);
+        jobDescriptionFieldForViewJob.setWrapStyleWord(true);
+
+        final WebScrollPane areaScrollJobDescription = new WebScrollPane(jobDescriptionFieldForViewJob);
+        areaScrollJobDescription.setPreferredSize(new Dimension(250, 75));
+        contentPane.add(areaScrollJobDescription, gridBagConstraints);
+        areaScrollJobDescription.setVisible(false);
+
+
+
+
+        final JLabel employeeLabel = new JLabel("Employee");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(employeeLabel, gridBagConstraints);
+        employeeLabel.setVisible(false);
+
+        WebTable tableCurrentEmployees = new WebTable();
+        tableCurrentEmployees.setModel(employeeTableModel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy+=3;
+        gridBagConstraints.gridwidth = 2;
+        tableCurrentEmployees.setEditable(false);
+
+        final WebScrollPane scrollCurrentEmployeesTable = new WebScrollPane(tableCurrentEmployees);
+        tableCurrentEmployees.setFillsViewportHeight(true);
+
+        scrollCurrentEmployeesTable.setMinimumWidth(600);
+        contentPane.add(scrollCurrentEmployeesTable,gridBagConstraints);
+        scrollCurrentEmployeesTable.setVisible(false);
+
+
+        final JLabel allocatedLabel = new JLabel("Allocated Applicants");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 1;
+        contentPane.add(allocatedLabel, gridBagConstraints);
+        allocatedLabel.setVisible(false);
+
+        WebTable tableAllocatedApplicant = new WebTable();
+        tableAllocatedApplicant.setModel(allocatedTableModel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy+=3;
+        gridBagConstraints.gridwidth = 2;
+        tableAllocatedApplicant.setEditable(false);
+
+        final WebScrollPane scrollAllocatedApplicantTable = new WebScrollPane(tableAllocatedApplicant);
+        tableAllocatedApplicant.setFillsViewportHeight(true);
+
+        scrollAllocatedApplicantTable.setMinimumWidth(600);
+        contentPane.add(scrollAllocatedApplicantTable,gridBagConstraints);
+        scrollAllocatedApplicantTable.setVisible(false);
+
+
+
+        final JLabel applicantLabel = new JLabel("Applicants");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 1;
+        contentPane.add(applicantLabel, gridBagConstraints);
+        applicantLabel.setVisible(false);
+
+        WebTable tableApplicants = new WebTable();
+        tableApplicants.setModel(applicantTableModel);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy+=3;
+        gridBagConstraints.gridwidth = 2;
+        tableApplicants.setEditable(false);
+
+        final WebScrollPane scrollApplicantTable = new WebScrollPane(tableApplicants);
+        tableApplicants.setFillsViewportHeight(true);
+
+        scrollApplicantTable.setMinimumWidth(600);
+        contentPane.add(scrollApplicantTable,gridBagConstraints);
+        scrollApplicantTable.setVisible(false);
+
+        courseListForViewJob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedCourseListForViewJob = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0) {
+
+                    Course tmpCourse = department.getAllCourse(cb.getSelectedIndex());
+
+                    jobListForViewJob.removeAllItems();
+                    for(Job j: tmpCourse.getJobs()){
+                        String tmp = j.getPosType().toString();
+                        jobListForViewJob.addItem(tmp);
+                    }
+                    selectedJobListForViewJob = -1;
+                    jobListForViewJob.setSelectedIndex(selectedJobListForViewJob);
+
+
+                }else{
+
+                }
+
+            }
+        });
+
+        jobListForViewJob.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobListForViewJob = cb.getSelectedIndex();
+
+                if (cb.getSelectedIndex() >= 0) {
+                    skillsRequiredLabel.setVisible(true);
+                    areaScrollSkillsRequired.setVisible(true);
+
+                    experienceRequiredLabel.setVisible(true);
+                    areaScrollExperiencesRequired.setVisible(true);
+
+                    jobDescriptionLabel.setVisible(true);
+                    areaScrollJobDescription.setVisible(true);
+
+                    employeeLabel.setVisible(true);
+                    scrollCurrentEmployeesTable.setVisible(true);
+
+                    allocatedLabel.setVisible(true);
+                    scrollAllocatedApplicantTable.setVisible(true);
+
+                    applicantLabel.setVisible(true);
+                    scrollApplicantTable.setVisible(true);
+
+
+
+                    String tmpPos = cb.getSelectedItem().toString();
+                    Job tmpJob = null;
+                    for (Job j : department.getAllCourse(selectedCourseListForViewJob).getJobs()) {
+
+                        if (j.getPosType().toString().contains(tmpPos)) {
+                            tmpJob = j;
+                            break;
+                        }
+                    }
+
+                    if (tmpJob != null) {
+                        skillsRequiredTextAreaForViewJob.setText(tmpJob.getSkillsRequired());
+                        experienceRequiredFieldForViewJob.setText(tmpJob.getExperienceRequired());
+                        jobDescriptionFieldForViewJob.setText(tmpJob.getJobDescription() + "");
+
+                        employeeTableModel.setRowCount(0);
+                        allocatedTableModel.setRowCount(0);
+                        applicantTableModel.setRowCount(0);
+                        Object[] columns = {"Student ID", "Student Name", "Email", "Education"};
+                        employeeTableModel.setColumnIdentifiers(columns);
+                        allocatedTableModel.setColumnIdentifiers(columns);
+                        applicantTableModel.setColumnIdentifiers(columns);
+
+                        for (Student s : tmpJob.getEmployee()) {
+                            String studentID = s.getStudentID()+"";
+                            String studentName = s.getName();
+                            String studentEmail = s.getEmail();
+                            String education= "";
+                            boolean isGrad = s.getIsGrad();
+                            if (isGrad) {
+                                education = "Graduate";
+                            } else {
+                                education = "Undergraduate";
+                            }
+
+                            Object[] tmpData = {studentID,studentName,studentEmail,education};
+                            employeeTableModel.addRow(tmpData);
+                        }
+
+                        for (Student s : tmpJob.getAllocatedStudent()) {
+                            String studentID = s.getStudentID()+"";
+                            String studentName = s.getName();
+                            String studentEmail = s.getEmail();
+                            String education= "";
+                            boolean isGrad = s.getIsGrad();
+                            if (isGrad) {
+                                education = "Graduate";
+                            } else {
+                                education = "Undergraduate";
+                            }
+
+                            Object[] tmpData = {studentID,studentName,studentEmail,education};
+                            allocatedTableModel.addRow(tmpData);
+                        }
+
+                        for (Student s : tmpJob.getApplicant()) {
+                            String studentID = s.getStudentID()+"";
+                            String studentName = s.getName();
+                            String studentEmail = s.getEmail();
+                            String education= "";
+                            boolean isGrad = s.getIsGrad();
+                            if (isGrad) {
+                                education = "Graduate";
+                            } else {
+                                education = "Undergraduate";
+                            }
+
+                            Object[] tmpData = {studentID,studentName,studentEmail,education};
+                            applicantTableModel.addRow(tmpData);
+                        }
+
+
+                    }
+
+
+                } else {
+                    skillsRequiredLabel.setVisible(false);
+                    areaScrollSkillsRequired.setVisible(false);
+
+                    experienceRequiredLabel.setVisible(false);
+                    areaScrollExperiencesRequired.setVisible(false);
+
+                    jobDescriptionLabel.setVisible(false);
+                    areaScrollJobDescription.setVisible(false);
+
+                    employeeLabel.setVisible(false);
+                    scrollCurrentEmployeesTable.setVisible(false);
+
+                    allocatedLabel.setVisible(false);
+                    scrollAllocatedApplicantTable.setVisible(false);
+
+                    applicantLabel.setVisible(false);
+                    scrollApplicantTable.setVisible(false);
+
+
+                    currentJobTableModel.setRowCount(0);
+                    appliedToJobsTableModel.setRowCount(0);
+                    previousJobsTableModel.setRowCount(0);
+
+                }
+
+
+
+            }
+        });
+
+
+
+
+
+        return scrollPane;
+
     }
 }

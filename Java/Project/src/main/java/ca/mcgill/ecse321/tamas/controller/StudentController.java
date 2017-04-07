@@ -139,6 +139,9 @@ public class StudentController {
 		else if(!department.getAllJobs().contains(jobPosting))
 			error = error + "Job does not exist!";
 		error = error.trim();
+		if(applicant.getJobsAppliedTo().size() >= 3){
+			error = error + "Can't apply to more than 3 jobs!";
+		}
 		if (error.length()>0)
 			throw new InvalidInputException(error);
 		
@@ -154,6 +157,7 @@ public class StudentController {
 		if(accept){
 			jobOffer.removeOfferReceiver(student);
 			jobOffer.addEmployee(student);
+			student.setNumberOfHours(jobOffer.getCorrespondingCourse().getNumberOfHours());
 		}else{
 			jobOffer.removeOfferReceiver(student);
 		}
