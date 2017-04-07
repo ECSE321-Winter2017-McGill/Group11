@@ -27,7 +27,10 @@ public class InstructorController {
 	private final String createInstructorNullInstructorEmailError = " Instructor email cannot be empty!<br>";
 	private final String createInstructorInvalidInstructorEmailError = " Please input a valid email address!<br>";
 
-
+	private final String createReviewNullInstructorError = " Please select an instructor!<br>";
+	private final String createReviewNullStudentError = " Please select a student!<br>";
+	private final String createReviewNullContentError = " Content cannot be empty!<br>";
+	private final String createReviewNullJobError = " Please select a job!<br>";
 
 
 	private Department department;
@@ -129,9 +132,31 @@ public class InstructorController {
 	 * @param reviewee
 	 * @param content
 	 */
-	public void createReview(Instructor reviewer, Student reviewee, String content, Job reviewedJob){
+	public void createReview(Instructor reviewer, Student reviewee, String content, Job reviewedJob) throws InvalidInputException{
+
+	    String error = "";
+
+	    if (reviewer == null) {
+	        error += createReviewNullInstructorError;
+        }
+        if (reviewee == null) {
+	        error += createReviewNullStudentError;
+        }
+
+        if (content == null || content.trim().length() == 0) {
+	        error += createReviewNullContentError;
+        }
+
+        if (reviewedJob == null) {
+	        error += createReviewNullJobError;
+        }
+
+        if (error.length() > 0) {
+	        throw new InvalidInputException(error);
+        }
+
 		Review review = new Review(content, reviewee, reviewedJob, reviewer);
-		
+	    department.addAllReview(review);
 		PersistenceXStream.saveToXMLwithXStream(department);
 	}
 	
@@ -144,18 +169,16 @@ public class InstructorController {
 		boolean validApplicant = false;
 		//Check if student is an applicant
 		for(Student st: job.getApplicant()){
-
-			if(st==applicant){
+			if(st == applicant){
 				validApplicant = true;
 				break;
 			}
-
 		}
 
-		if(validApplicant){
+		if(validApplicant) {
 			job.removeApplicant(applicant);
 			job.addAllocatedStudent(applicant);
-		}else{
+		} else {
 			//// IMPLEMENT EXCEPTION \\\\\\\\\\\\\\\\\
 			return;
 		}

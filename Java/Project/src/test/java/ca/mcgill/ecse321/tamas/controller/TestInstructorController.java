@@ -37,6 +37,74 @@ public class TestInstructorController {
     }
 
     @Test
+    public void testCreateInstructor() {
+
+        String error = "";
+
+        assertEquals(0,department.numberOfAllInstructors());
+
+        InstructorController instructorController = new InstructorController(department);
+
+        String instructorName = "bobby john";
+        String instructorID = "123456789";
+        String instructorEmail = "bobbyjohn@mail.mcgill.ca";
+        String instructorEmail2 = "bobbyjohn@mcgill.ca";
+
+        String invalidInstructorID = "1";
+        String invalidInstructorID2 = "3333333333"; // > 9 digits
+        String invalidInstructorEmail = "bobby_john@gmail.com";
+        String invalidInstructorEmail2 = "bobby$john33";
+
+        try {
+            instructorController.createInstructor(instructorName,instructorID,instructorEmail);
+        } catch (InvalidInputException e) {
+            fail();
+        }
+        assertEquals(1,department.numberOfAllInstructors());
+
+        try {
+            instructorController.createInstructor(null,null,null);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a valid 9 digit ID number!<br> Instructor name cannot be empty!<br> Instructor email cannot be empty!<br>", error);
+        assertEquals(1,department.numberOfAllInstructors());
+
+        try {
+            instructorController.createInstructor("","","");
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a valid 9 digit ID number!<br> Instructor name cannot be empty!<br> Instructor email cannot be empty!<br>", error);
+        assertEquals(1,department.numberOfAllInstructors());
+
+        try {
+            instructorController.createInstructor(instructorName,invalidInstructorID, instructorEmail2);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a valid 9 digit ID number!<br>", error);
+        assertEquals(1,department.numberOfAllInstructors());
+
+        try {
+            instructorController.createInstructor(instructorName, invalidInstructorID2, invalidInstructorEmail);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Input a valid 9 digit ID number!<br>", error);
+        assertEquals(1,department.numberOfAllInstructors());
+
+        try {
+            instructorController.createInstructor(instructorName,instructorID,invalidInstructorEmail2);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Instructor ID already registered!<br> Please input a valid email address!<br>", error);
+        assertEquals(1,department.numberOfAllInstructors());
+
+    }
+
+    @Test
     public void testCreateJobPosting() {
 
         assertEquals(0, department.getAllJobs().size());
@@ -107,7 +175,8 @@ public class TestInstructorController {
         checkJobPosting(job,jobDescription,skillsRequired,experienceRequired,postDeadLine,department2);
 
         department2.delete();
-        instructor.delete();
+
+        clean(null,instructor,course,null);
 
     }
 
@@ -123,6 +192,102 @@ public class TestInstructorController {
         assertEquals(postDeadLine.toString(), department.getAllJob(0).getPostingDeadlineDate().toString());
     }
 
+    @Test
+    public void testCreateReview() {
 
+        String error = "";
+
+        InstructorController instructorController = new InstructorController(department);
+
+        //Create instructor
+        String instructorName = "James";
+        int instructorID = 123456782;
+        String instructorEmail = "james@mcgill.ca";
+
+        Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
+        department.addAllInstructor(instructorA);
+        assertEquals(1, department.getAllInstructors().size());
+
+        //Create student
+        int studentID = 222222222;
+        String studentName = "Bobby Jones";
+        String studentEmail = "bobbyjones@mail.mcgill.ca";
+        Boolean isGrad = false;
+        int studentYear = 2;
+        String studentJobPreference = "TA, but I don't mind.";
+        int studentNumberOfHours = 45;
+
+        Student studentA = new Student(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,studentNumberOfHours);
+        department.addAllStudent(studentA);
+        assertEquals(1,department.numberOfAllStudents());
+
+        //Create a course
+        String courseCode = "ECSE321";
+        String courseName = "Software Engineering";
+        String courseSemester = "W2017";
+        int courseNumOfCredits = 3;
+        int courseNumOfLabs = 0;
+        int courseNumOfTutorials = 2;
+        int courseNumOfHours = 1;
+        int courseNumOfStudentsEnrolled = 100;
+        int courseTasRequired = 1;
+        int courseGradersRequired = 1;
+        int courseTaHourlyRates = 12;
+        int courseGraderHourlyRates = 12;
+        int courseBudget = 10000;
+
+        Course courseA = new Course(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructorA);
+        department.addAllCourse(courseA);
+        assertEquals(1,department.numberOfAllCourses());
+
+        //Create a job
+        PositionType posType = PositionType.Grader;
+
+        Calendar c = Calendar.getInstance();
+        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
+
+        Job jobA = new Job(posType,postDeadLine,courseA);
+        department.addAllJob(jobA);
+        assertEquals(1,department.getAllJobs().size());
+
+        assertEquals(studentA.hasReviewText(),false);
+        assertEquals(instructorA.hasReviewText(), false);
+
+        try {
+            instructorController.createReview(instructorA,studentA,"Really good student", jobA);
+        } catch (InvalidInputException e) {
+            fail();
+        }
+        assertEquals(studentA.hasReviewText(),true);
+        assertEquals(instructorA.hasReviewText(), true);
+
+        try {
+            instructorController.createReview(null,null,"",null);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(error, " Please select an instructor!<br> Please select a student!<br> Content cannot be empty!<br> Please select a job!<br>");
+        assertEquals(studentA.hasReviewText(),true);
+        assertEquals(instructorA.hasReviewText(), true);
+
+        clean(studentA,instructorA,courseA,null);
+    }
+
+    private void clean(Student student, Instructor instructor, Course course, Job job) {
+
+        if (student != null) {
+            student.delete();
+        }
+        if (instructor != null) {
+            instructor.delete();
+        }
+        if (course != null) {
+            course.delete();
+        }
+        if (job != null) {
+            job.delete();
+        }
+    }
 
 }
