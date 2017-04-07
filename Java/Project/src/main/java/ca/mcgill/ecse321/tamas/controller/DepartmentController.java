@@ -46,6 +46,10 @@ public class DepartmentController {
 
     private final String createAllocationNullJobError = " Job cannot be empty!<br>";
     private final String createAllocationNullStudentError = " Student cannot be empty!<br>";
+    private final String createAllocationStudentAlreadyAllocatedError = " Student is already allocated!<br>";
+    private final String removeAllocationStudentNotAllocatedError = " Student is not allocated for this job!<br>";
+
+    private final String createJobOfferOfferNotAddedError = " Offer already made to this student!<br>";
 
     private Department department;
 
@@ -276,11 +280,19 @@ public class DepartmentController {
             error += createAllocationNullStudentError;
         }
 
+        if (job != null) {
+            for (Student s : job.getAllocatedStudent()) {
+                if (s.getStudentID() == student.getStudentID()) {
+                    error += createAllocationStudentAlreadyAllocatedError;
+                }
+            }
+        }
+
         if (error.length()>0) {
             throw new InvalidInputException(error);
         }
 
-        //TODO
+        job.addAllocatedStudent(student);
 
 		PersistenceXStream.saveToXMLwithXStream(department);
 
@@ -293,6 +305,7 @@ public class DepartmentController {
 	public void removeAllocation(Job job, Student student) throws InvalidInputException {
 
         String error = "";
+        boolean studentNotFound = true;
 
         if (job == null) {
             error += createAllocationNullJobError;
@@ -301,11 +314,24 @@ public class DepartmentController {
             error += createAllocationNullStudentError;
         }
 
+        //cannot do that if the job is null
+        if (job != null) {
+            for (Student s : job.getAllocatedStudent()) {
+                if (s.getStudentID() == student.getStudentID()) {
+                    studentNotFound = false;
+                }
+            }
+        }
+
+        if (studentNotFound) {
+            error += removeAllocationStudentNotAllocatedError;
+        }
+
         if (error.length()>0) {
             throw new InvalidInputException(error);
         }
 
-        //TODO
+        job.removeAllocatedStudent(student);
 
 		PersistenceXStream.saveToXMLwithXStream(department);
 
@@ -318,6 +344,7 @@ public class DepartmentController {
 	public void createJobOffer(Job job, Student student) throws  InvalidInputException {
 
         String error = "";
+        boolean wasAdded = false;
 
         if (job == null) {
             error += createAllocationNullJobError;
@@ -330,8 +357,11 @@ public class DepartmentController {
             throw new InvalidInputException(error);
         }
 
-        //TODO
-
+        //Job model class tells us if it worked by returning boolean
+        wasAdded = job.addOfferReceiver(student);
+        if (!wasAdded) {
+            throw new InvalidInputException(createJobOfferOfferNotAddedError);
+        }
 	    PersistenceXStream.saveToXMLwithXStream(department);
 	}
 

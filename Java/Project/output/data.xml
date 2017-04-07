@@ -8,9 +8,9 @@
       <name>Jonathan</name>
       <email>jonathan@mcgill.ca</email>
       <isGrad>true</isGrad>
-      <year>2016</year>
+      <year>1</year>
       <jobPreference>Preference to be a TA</jobPreference>
-      <numberOfHours>16</numberOfHours>
+      <numberOfHours>0</numberOfHours>
       <previousJobExperiences id="7"/>
       <jobsAppliedTo id="8"/>
       <offeredJobs id="9"/>

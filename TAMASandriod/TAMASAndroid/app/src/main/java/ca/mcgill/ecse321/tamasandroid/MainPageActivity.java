@@ -21,10 +21,7 @@ public class MainPageActivity extends AppCompatActivity {
 
     private Department d = null;
     private String fileName;
-    Intent intent = null;
-    String ID = null;
     Student student = null;
-    public static final String APPLY_STUDENT = "ca.mcgill.ecse321.tamasandroid.VIEWJOB";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +31,12 @@ public class MainPageActivity extends AppCompatActivity {
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
 
-        intent = getIntent();
-        ID = intent.getStringExtra(MainActivity.EXTRA_LOGIN);
-        /*
-        for (Student a : d.getAllStudents()) {
-            if (a.getStudentID() == Integer.parseInt(ID)) {
-                student = a;
-                break;
-            }
-        }
-*/
-        //refreshData();
+        refreshData();
     }
 
     private void refreshData(){
         TextView tv = (TextView) findViewById(R.id.studentDescription);
-        tv.setText(student.getName() + " " + student.getStudentID() + " " + student.getEmail());
+        tv.setText(MainActivity.login.getName());
     }
 
     //Will access the view offers tab for job offers
@@ -67,7 +54,6 @@ public class MainPageActivity extends AppCompatActivity {
     //View the job posting
     public void viewPost(View view){
         Intent intent = new Intent(this, ViewJobPostingActivity.class);
-        intent.putExtra(APPLY_STUDENT, ID);
         startActivity(intent);
     }
 

@@ -31,9 +31,11 @@ public class UpdateInfoActivity extends AppCompatActivity {
 
     private void refreshData() {
         TextView tv = (TextView) findViewById(R.id.updatestudent_name);
+        tv.setText(MainActivity.login.getName());
         TextView tv2 = (TextView) findViewById(R.id.updatestudent_email);
+        tv2.setText(MainActivity.login.getEmail());
         TextView tv3 = (TextView) findViewById((R.id.updatestudent_jobPreference));
-        tv.setText("");
+        tv3.setText(MainActivity.login.getJobPreference());
     }
 
     public void isGrad(View view){
@@ -41,9 +43,11 @@ public class UpdateInfoActivity extends AppCompatActivity {
 
         if(checkbox.isChecked()){
             // student as a graduate student
+            MainActivity.login.setIsGrad(true);
         }
         else{
             //student will be set as not a graduate student
+            MainActivity.login.setIsGrad(false);
         }
     }
 
@@ -54,8 +58,9 @@ public class UpdateInfoActivity extends AppCompatActivity {
         TextView tv3 = (TextView) findViewById(R.id.updatestudent_jobPreference);
 
         //functions with set name, email and preference of student
-
+        MainActivity.login.setName(tv.getText().toString());
+        MainActivity.login.setEmail(tv2.getText().toString());
+        MainActivity.login.setJobPreference(tv3.getText().toString());
         refreshData();
-
     }
 }

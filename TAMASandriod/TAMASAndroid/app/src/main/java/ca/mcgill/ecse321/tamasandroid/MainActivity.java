@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Department d = null;
     private String fileName;
     String error = null;
-    public static final String EXTRA_LOGIN = "ca.mcgill.ecse321.tamasandroid.LOGIN";
+    public static Student login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +88,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loginActivity(View view){
+        //select student in spinner for login
         final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
-
         String studentID = studentSpinner.getSelectedItem().toString();
 
         Intent intent = new Intent(this, MainPageActivity.class);
-        intent.putExtra(EXTRA_LOGIN, studentID);
+
+
+        for (Student a : d.getAllStudents()) {
+            if (a.getStudentID() == Integer.parseInt(studentID)) {
+                login = a;
+                break;
+            }
+        }
         startActivity(intent);
     }
 
