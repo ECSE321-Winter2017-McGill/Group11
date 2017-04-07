@@ -39,6 +39,8 @@ public class DepartmentController {
     private final String createCourseNegativeNumberGraderHourlyRateError = " Input a non-negative grader hourly rate!<br>";
     private final String createCourseNegativeBudgetError = " Input a non-negative budget!<br>";
 
+    private final String createCourseInvalidHourError = "Please input valid number of hourse ranging between 45 hours to 180 hours!<br>";
+
     private final String createJobNullJobPositionTypeError = " Must select a Position!<br>";
     private final String createJobNullDateError = " Posting deadline cannot be empty!<br>";
     private final String createJobNullCourse = " Selected course cannot be empty!<br>";
@@ -215,6 +217,10 @@ public class DepartmentController {
 
         if (instructor == null) {
             error += createCourseNullInstructorError;
+        }
+
+        if(isNumberOfHours && (numberOfHours < 45 || numberOfHours >180)){
+            error += createCourseInvalidHourError;
         }
 
         if (error.length()>0){
