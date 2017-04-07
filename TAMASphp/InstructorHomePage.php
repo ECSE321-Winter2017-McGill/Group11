@@ -49,6 +49,9 @@
 							</li>
 						</ul>
 					</li>
+					<li class="enabled pull-right">
+						<a href="LogoutPage.php">Logout</a>
+					</li>
 				</ul>
 			</div>
 		</div>

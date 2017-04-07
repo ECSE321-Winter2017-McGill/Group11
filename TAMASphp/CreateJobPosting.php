@@ -1,8 +1,12 @@
 <?php
-require_once 'controller/InstructorController.php';
+require_once 'controller\InstructorController.php';
+require_once 'persistence\PersistenceTAMAS.php';
+require_once 'model\Job.php';
+require_once 'model\Course.php';
+require_once 'model\Department.php';
+require_once 'model\Instructor.php';
 
 session_start();
-
 $c = new InstructorController();
 try{
 	$_SESSION['errorJobID'] = "";
