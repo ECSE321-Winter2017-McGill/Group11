@@ -152,13 +152,38 @@ public class StudentController {
 	
 	
 
-	public void respondToJobOffer(Student student,Job jobOffer, boolean accept){
-		
-		if(accept){
+	public void respondToJobOffer(Student student,Job jobOffer, boolean accept) throws InvalidInputException {
+		String error = "";
+		int maximumWorkHoursForStudent = 180;
+		if(student == null){
+			error = error + "Student needs to be selected to respond to offer! ";
+		}
+		if(jobOffer == null){
+			error = error + "Offer needs to be selected to respond to offer! ";
+		}
+
+
+
+
+		if(accept&&error.length()==0){
+
+			if(student.getNumberOfHours()+jobOffer.getCorrespondingCourse().getNumberOfHours()> maximumWorkHoursForStudent){
+				error = error + "Sorry student can't accept anymore job. Wor hours exceeding " +maximumWorkHoursForStudent;
+			}
+
+			if(error.length()>0){
+				throw new InvalidInputException(error);
+			}
+
 			jobOffer.removeOfferReceiver(student);
 			jobOffer.addEmployee(student);
 			student.setNumberOfHours(jobOffer.getCorrespondingCourse().getNumberOfHours());
 		}else{
+
+			if(error.length()>0){
+				throw new InvalidInputException(error);
+			}
+
 			jobOffer.removeOfferReceiver(student);
 		}
 		
