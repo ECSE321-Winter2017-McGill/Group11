@@ -15,6 +15,7 @@ import com.alee.laf.button.WebButton;
 import com.alee.laf.combobox.WebComboBox;
 import com.alee.laf.desktoppane.WebDesktopPane;
 import com.alee.laf.desktoppane.WebInternalFrame;
+import com.alee.laf.optionpane.WebOptionPane;
 import com.alee.laf.panel.WebPanel;
 import com.alee.laf.scroll.WebScrollPane;
 import com.alee.laf.tabbedpane.WebTabbedPane;
@@ -167,6 +168,29 @@ public class BetaDepartmentPage extends JFrame {
     private DefaultTableModel allocatedTableModel = new DefaultTableModel();
     //End View Job
 
+    //Create Review
+    private JComboBox<String> instructorListForCreateReview;
+    private JComboBox<String> courseListForCreateReview;
+    private JComboBox<String> jobListForCreateReview;
+    private JComboBox<String> studentListForCreateReview;
+    private WebTextArea reviewTextAreaForCreateReview;
+    private Job associatedJobForCreateReview= null;
+    private Course associatedCourseForCreateReview = null;
+    private Instructor associatedInstructorForCreateReview = null;
+    private Student associatedStudentForCreateReview = null;
+    //End Create Review
+
+    //Respond to Offer
+
+    private JComboBox<String> studentListForRespondToOffer;
+    private JComboBox<String> offerListForRespondToOffer;
+
+    private Integer selectedStudentForRespondToOffer = -1;
+    private Integer selectedOfferForRespondToOffer = -1;
+
+    //End Respond to Offer
+
+
     private Integer selectedInstructorForPublishJobPosting = -1;
     private Integer selectedJobForPublishJobPosting = -1;
     private Integer selectedCourseForPublishJobPosting = -1;
@@ -185,6 +209,12 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedCourseListForViewCourse = -1;
     private Integer selectedCourseListForViewJob = -1;
     private Integer selectedJobListForViewJob = -1;
+
+    private Integer selectedInstructorForCreateReview = -1;
+    private Integer selectedCourseForCreateReview = -1;
+    private Integer selectedJobForCreateReview = -1;
+    private Integer selectedStudentForCreateReview = -1;
+
 
 
     private Integer widthOfApp = 800;
@@ -234,6 +264,8 @@ public class BetaDepartmentPage extends JFrame {
         addNewFrame(desktopPane, ViewStudent(), "View Student Info", "View Student Info", webPanel, 500, 300);
         addNewFrame(desktopPane, ViewCourse(), "View Course Info", "View Course Info", webPanel, 500, 300);
         addNewFrame(desktopPane, ViewJob(), "View Job Info", "View Job Info", webPanel, 700, 400);
+        addNewFrame(desktopPane, CreateReview(), "Create Review", "Create Review", webPanel, 500, 300);
+        addNewFrame(desktopPane, RespondToOffer(), "Respond to Offer", "Respond to Offer", webPanel, 500, 300);
 
 
         webPanel.setBounds(0, 0, 900, 900);
@@ -260,6 +292,8 @@ public class BetaDepartmentPage extends JFrame {
         updateStudentView();
         updateCourseView();
         updateJobView();
+        updateCreateReview(null,null,null,true);
+        updateRespondToOffer();
     }
 
     private void updatePublishJobView(Instructor instructor, Course course, boolean clearData) {
@@ -312,8 +346,6 @@ public class BetaDepartmentPage extends JFrame {
                         jobListForPublishJobPosting.addItem(tmp);
                     }
                 }
-                selectedJobForPublishJobPosting = -1;
-                jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
 
             }else if(instructor != null){
 
@@ -322,21 +354,13 @@ public class BetaDepartmentPage extends JFrame {
                     String tmp = c.getCode() + ": " + c.getName();
                     courseListForPublishJobPosting.addItem(tmp);
                 }
-                selectedCourseForPublishJobPosting = -1;
-                courseListForPublishJobPosting.setSelectedIndex(selectedCourseForPublishJobPosting);
 
             }else if(instructor == null){
                 courseListForPublishJobPosting.removeAllItems();
-                selectedCourseForPublishJobPosting = -1;
-                courseListForPublishJobPosting.setSelectedIndex(selectedCourseForPublishJobPosting);
 
                 jobListForPublishJobPosting.removeAllItems();
-                selectedJobForPublishJobPosting = -1;
-                jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
             }else if(course == null){
                 jobListForPublishJobPosting.removeAllItems();
-                selectedJobForPublishJobPosting = -1;
-                jobListForPublishJobPosting.setSelectedIndex(selectedJobForPublishJobPosting);
             }
         }
     }
@@ -519,11 +543,104 @@ public class BetaDepartmentPage extends JFrame {
             courseListForViewJob.addItem(tmp);
         }
 
-        selectedCourseListForViewJob = -1;
-        courseListForViewJob.setSelectedIndex(selectedCourseListForViewJob);
 
-        selectedJobListForViewJob = -1;
-        jobListForViewJob.setSelectedIndex(selectedJobListForViewJob);
+    }
+
+    private void updateCreateReview(Instructor instructor, Course course, Job job, boolean clearData){
+
+        if(clearData) {
+            //Clear job List combobox
+
+            instructorListForCreateReview.removeAllItems();
+            for (Instructor i : department.getAllInstructors()) {
+                String tmp = i.getInstructorID() + "(" + i.getName()+ ")";
+                instructorListForCreateReview.addItem(tmp);
+            }
+
+            selectedInstructorForCreateReview = -1;
+            instructorListForCreateReview.setSelectedIndex(selectedInstructorForCreateReview);
+
+            associatedInstructorForCreateReview = null;
+
+            jobListForCreateReview.removeAllItems();
+            selectedJobForCreateReview = -1;
+            jobListForCreateReview.setSelectedIndex(selectedJobForCreateReview);
+
+            associatedJobForCreateReview = null;
+
+            courseListForCreateReview.removeAllItems();
+            selectedCourseForCreateReview = -1;
+            courseListForCreateReview.setSelectedIndex(selectedCourseForCreateReview);
+
+            associatedCourseForCreateReview= null;
+
+            studentListForCreateReview.removeAllItems();
+            selectedStudentForCreateReview = -1;
+            studentListForCreateReview.setSelectedIndex(selectedStudentForCreateReview);
+
+            associatedStudentForCreateReview = null;
+
+
+            reviewTextAreaForCreateReview.setText("");
+
+
+        }else {
+
+            if (job != null) {
+
+                studentListForCreateReview.removeAllItems();
+                for (Student s : job.getEmployee()) {
+                    String tmp = s.getStudentID() + "(" + s.getName() + ")";
+                    studentListForCreateReview.addItem(tmp);
+                }
+
+            } else if (course != null) {
+
+                jobListForCreateReview.removeAllItems();
+                for (Job j : course.getJobs()) {
+
+                    String tmp = j.getPosType().toString();
+                    jobListForCreateReview.addItem(tmp);
+
+                }
+
+            } else if (instructor != null) {
+
+                courseListForCreateReview.removeAllItems();
+                for (Course c : instructor.getCourses()) {
+                    String tmp = c.getCode() + ": " + c.getName();
+                    courseListForCreateReview.addItem(tmp);
+                }
+
+            } else if (instructor == null) {
+                courseListForPublishJobPosting.removeAllItems();
+
+                jobListForPublishJobPosting.removeAllItems();
+
+                studentListForCreateReview.removeAllItems();
+
+
+            } else if (course == null) {
+                jobListForPublishJobPosting.removeAllItems();
+
+                studentListForCreateReview.removeAllItems();
+
+            } else if (job == null) {
+                studentListForCreateReview.removeAllItems();
+
+            }
+        }
+    }
+
+    private void updateRespondToOffer(){
+        studentListForRespondToOffer.removeAllItems();
+        for (Student s : department.getAllStudents()) {
+            String tmp = s.getStudentID() + "(" + s.getName()+")";
+            studentListForRespondToOffer.addItem(tmp);
+        }
+
+        selectedOfferForRespondToOffer = -1;
+        offerListForRespondToOffer.setSelectedIndex(selectedOfferForRespondToOffer);
     }
 
 
@@ -559,7 +676,7 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
 
-        internalFrameIcon.setPreferredSize(100, 75);
+        internalFrameIcon.setPreferredSize(100, 50);
         webPanel.add(internalFrameIcon);
 
         internalFrame.setBounds(50, 100, width, height);
@@ -725,11 +842,12 @@ public class BetaDepartmentPage extends JFrame {
         courseListForPublishJobPosting.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JComboBox<String> cb = (JComboBox<String>) evt.getSource();
-                selectedJobForPublishJobPosting = cb.getSelectedIndex();
-                if(cb.getSelectedIndex() >= 0) {
+                selectedCourseForPublishJobPosting = cb.getSelectedIndex();
+                if(selectedCourseForPublishJobPosting >=0) {
                     associatedCourseForPublishJobPosting = associatedInstructorForPublishJobPosting.getCourse(cb.getSelectedIndex());
                     updatePublishJobView(associatedInstructorForPublishJobPosting, associatedCourseForPublishJobPosting, false);
                 }
+
 
             }
         });
@@ -1384,6 +1502,7 @@ public class BetaDepartmentPage extends JFrame {
         createCourseErrorLabel.setForeground(Color.RED);
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 3;
         contentPane.add(createCourseErrorLabel, gridBagConstraints);
 
         WebButton createACourseButton = new WebButton("Create a Course");
@@ -1420,7 +1539,7 @@ public class BetaDepartmentPage extends JFrame {
                         departmentController.createCourse(courseCode, courseName, semester, numberOfCredits, numberOfLabs, numberOfTutorials, hours, numberOfStudents, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, budget, dummyInstructor);
                         createCourseErrorLabel.setText("");
                     } catch (InvalidInputException e1) {
-                        createCourseErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
+                        createCourseErrorLabel.setText("<html><body>" + e1.getMessage() + "</body></html>");
                     }
 
 
@@ -1431,6 +1550,7 @@ public class BetaDepartmentPage extends JFrame {
         });
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
 
 
         contentPane.add(createACourseButton, gridBagConstraints);
@@ -2529,12 +2649,12 @@ public class BetaDepartmentPage extends JFrame {
         contentPane.setBackground(new Color(255, 255, 255));
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        final JLabel viewStudentLabel = new JLabel("View Job Info");
-        viewStudentLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        final JLabel viewJobLabel = new JLabel("View Job Info");
+        viewJobLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = 1;
-        contentPane.add(viewStudentLabel, gridBagConstraints);
+        contentPane.add(viewJobLabel, gridBagConstraints);
 
         JLabel courseLabel = new JLabel("Course");
         gridBagConstraints.gridx = 0;
@@ -2681,6 +2801,7 @@ public class BetaDepartmentPage extends JFrame {
         scrollApplicantTable.setMinimumWidth(600);
         contentPane.add(scrollApplicantTable,gridBagConstraints);
         scrollApplicantTable.setVisible(false);
+
 
         courseListForViewJob.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -2844,5 +2965,286 @@ public class BetaDepartmentPage extends JFrame {
 
         return scrollPane;
 
+    }
+
+    private Component CreateReview(){
+        final WebPanel contentPane = new WebPanel();
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
+        contentPane.setBackground(new Color(255, 255, 255));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        final JLabel createReviewLabel = new JLabel("Create Review");
+        createReviewLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = 1;
+        contentPane.add(createReviewLabel, gridBagConstraints);
+
+        JLabel instructorLabel = new JLabel("Instructor");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(instructorLabel,gridBagConstraints);
+
+        instructorListForCreateReview = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(instructorListForCreateReview,gridBagConstraints);
+
+        JLabel courseLabel = new JLabel("Course");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseLabel, gridBagConstraints);
+
+        courseListForCreateReview = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(courseListForCreateReview, gridBagConstraints);
+
+        JLabel jobIDLabel = new JLabel("Job");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(jobIDLabel, gridBagConstraints);
+
+        jobListForCreateReview = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(jobListForCreateReview, gridBagConstraints);
+
+
+        JLabel studentLabel = new JLabel("Student");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(studentLabel, gridBagConstraints);
+
+        studentListForCreateReview = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(studentListForCreateReview, gridBagConstraints);
+
+        final JLabel reviewLabel = new JLabel("Review");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(reviewLabel,gridBagConstraints);
+
+
+        reviewTextAreaForCreateReview = new WebTextArea();
+        gridBagConstraints.gridx++;
+        reviewTextAreaForCreateReview.setLineWrap(true);
+        reviewTextAreaForCreateReview.setWrapStyleWord(true);
+
+        final WebScrollPane areaScrollReview = new WebScrollPane(reviewTextAreaForCreateReview);
+        contentPane.add(areaScrollReview, gridBagConstraints);
+        areaScrollReview.setPreferredSize(new Dimension(250, 75));
+
+        final JLabel createReviewErrorLabel = new JLabel("");
+        createReviewErrorLabel.setForeground(Color.RED);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(createReviewErrorLabel,gridBagConstraints);
+
+        WebButton createReviewButton = new WebButton("Create Review");
+        createReviewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+
+
+                updateDisplay();
+            }
+        });
+
+
+        instructorListForCreateReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedInstructorForCreateReview = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0) {
+                    associatedInstructorForCreateReview = department.getAllInstructor(cb.getSelectedIndex());
+                    updateCreateReview(associatedInstructorForCreateReview, null, null, false);
+                }
+            }
+        });
+
+        courseListForCreateReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedCourseForCreateReview = cb.getSelectedIndex();
+                if(selectedCourseForCreateReview >=0) {
+                    associatedCourseForCreateReview = associatedInstructorForCreateReview.getCourse(cb.getSelectedIndex());
+                    updateCreateReview(associatedInstructorForCreateReview, associatedCourseForCreateReview, null, false);
+                }
+
+
+            }
+        });
+
+        jobListForCreateReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobForCreateReview = cb.getSelectedIndex();
+
+                if(cb.getSelectedIndex() >=0) {
+                    associatedJobForCreateReview = associatedCourseForCreateReview.getJob(cb.getSelectedIndex());
+                    updateCreateReview(associatedInstructorForCreateReview, associatedCourseForCreateReview, associatedJobForCreateReview, false);
+                }
+            }
+        });
+
+        studentListForCreateReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedStudentForCreateReview = cb.getSelectedIndex();
+            }
+        });
+
+
+
+
+        return scrollPane;
+    }
+
+    private Component RespondToOffer(){
+        final WebPanel contentPane = new WebPanel();
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        final WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
+        contentPane.setBackground(new Color(255, 255, 255));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        final JLabel respondToOfferLabel = new JLabel("Respond to Offer");
+        respondToOfferLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = 1;
+        contentPane.add(respondToOfferLabel, gridBagConstraints);
+
+        final JLabel studentLabel = new JLabel("Student");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(studentLabel,gridBagConstraints);
+
+        studentListForRespondToOffer = new JComboBox<>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(studentListForRespondToOffer,gridBagConstraints);
+
+        final JLabel offerLabel = new JLabel("Offer");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(offerLabel,gridBagConstraints);
+
+        offerListForRespondToOffer = new JComboBox<>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(offerListForRespondToOffer,gridBagConstraints);
+
+        final JLabel respondToOfferErrorLabel = new JLabel("");
+        respondToOfferErrorLabel.setForeground(Color.RED);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(respondToOfferErrorLabel, gridBagConstraints);
+
+        final WebButton acceptButton = new WebButton("Accept");
+        acceptButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                //This is code the allows the use to test publish job posting and apply to job
+
+                int confirmation = WebOptionPane.showConfirmDialog(scrollPane,"Are you sure you want to accept the job offer?","",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+                if(confirmation == JOptionPane.YES_OPTION) {
+
+                    Job tmpOfferedJob = null;
+                    Student tmpStudent = department.getAllStudent(selectedStudentForRespondToOffer);
+                    if(selectedOfferForRespondToOffer >=0) {
+                        tmpOfferedJob = tmpStudent.getOfferedJob(selectedOfferForRespondToOffer);
+                    }
+
+                    StudentController studentController = new StudentController(department);
+
+                    try {
+                        studentController.respondToJobOffer(tmpStudent, tmpOfferedJob, true);
+                        respondToOfferErrorLabel.setText("");
+                    } catch (InvalidInputException e1) {
+                        respondToOfferErrorLabel.setText(e1.getMessage());
+                    }
+                }else{
+                    respondToOfferErrorLabel.setText("");
+
+                }
+                updateDisplay();
+
+            }
+        });
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(acceptButton, gridBagConstraints);
+
+        final WebButton declineButton = new WebButton("Decline");
+        declineButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                int confirmation = WebOptionPane.showConfirmDialog(scrollPane,"Are you sure you want to decline the job offer?","",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE);
+
+                if(confirmation == JOptionPane.YES_OPTION) {
+
+                    Job tmpOfferedJob = null;
+                    Student tmpStudent = department.getAllStudent(selectedStudentForRespondToOffer);
+
+                    if(selectedOfferForRespondToOffer >=0) {
+                        tmpOfferedJob = tmpStudent.getOfferedJob(selectedOfferForRespondToOffer);
+                    }
+                    StudentController studentController = new StudentController(department);
+
+                    try {
+                        studentController.respondToJobOffer(tmpStudent, tmpOfferedJob, false);
+                        respondToOfferErrorLabel.setText("");
+                    } catch (InvalidInputException e1) {
+                        respondToOfferErrorLabel.setText(e1.getMessage());
+                    }
+                }else{
+                    respondToOfferErrorLabel.setText("");
+                }
+                updateDisplay();
+            }
+        });
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(declineButton, gridBagConstraints);
+
+
+
+
+        studentListForRespondToOffer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedStudentForRespondToOffer = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0) {
+
+                    Student tmpStudent = department.getAllStudent(cb.getSelectedIndex());
+
+                    offerListForRespondToOffer.removeAllItems();
+                    for(Job j: tmpStudent.getOfferedJobs()){
+                        String tmp = j.getCorrespondingCourse().getCode() + ": " + j.getCorrespondingCourse().getName()+ "("+j.getPosType().toString()+")";
+                        offerListForRespondToOffer.addItem(tmp);
+                    }
+
+
+                }else{
+
+                }
+            }
+        });
+
+        offerListForRespondToOffer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedOfferForRespondToOffer = cb.getSelectedIndex();
+
+            }
+        });
+
+
+        return scrollPane;
     }
 }
