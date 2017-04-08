@@ -20,18 +20,11 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->contr = new InstructorController();
 		$this->persis = new PersistenceTamas();
 		$this->dpt = $this->persis->loadDataFromStore();
-		$this->dpt->delete();
+		$this->dpt->delete();		
 		
 		//note that date and course do not have to be valid for testing purposes.
 		//$this->contr->createInstructor('William', '876543210', 'a@b.ca');
 		
-		$instructorA = new Instructor('William', '876543210', 'a@b.ca');
-		$this->dpt->addAllInstructor($instructorA);
-		$testCourse = new Course('ECSE321', 'IntroToSoftEng', 'Winter', 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
-		$this->dpt->addAllCourse($testCourse);
-		$testJob = new Job('TA', "2016-10-16";, $testCourse);
-		$this->testJobID = $testJob->getJobID();
-		$this->dpt->addAllJob($testJob);
 		$this->persis->writeDataToStore($this->dpt);
 	}
 
@@ -58,7 +51,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
@@ -92,7 +85,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -120,7 +113,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -148,7 +141,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -176,7 +169,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -204,7 +197,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -232,18 +225,51 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
 
 	public function testCreateJobPosting(){
-		/*$jobID=;
+		$this->dpt = $this->persis->loadDataFromStore();
+		
+		$instructorA = new Instructor('William', '1234', 'a@b.ca');
+		$this->dpt->addAllInstructor($instructorA);
+		$testCourse = new Course('ECSE321', 'IntroToSoftEng', 'Winter', 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job('TA', "2016-10-16", $testCourse);
+		$this->testJobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
+		
+		$this->persis->writeDataToStore($this->dpt);
+		
+		
+		$jobID= '1234';
 		$jobDesc = 'Help Students solve problems';
 		$skillsReq = 'Good at writing software';
 		$experienceReq = 'Must have at least 1 year of TA-ing experience';
-		$deadlineDate = "2017-12-31";*/
+		$deadlineDate = "2017-12-31";
+		
+		try{
+			$this->contr->createJobPosting($JobID, $jobDesc, $skillsReq, $experienceReq, $deadlineDate);
+		} catch (Exception $e) {
+			$this->fail();
+		}
+			
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+			
+		$this->assertEquals(0, count($this->dpt->getAllInstructor_index(0)->getCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructor_index(0)->getReviewText()));
+		$this->assertEquals($name, $this->dpt->getAllInstructor_index(0)->getName());
+		$this->assertEquals($id, $this->dpt->getAllInstructor_index(0)->getInstructorID());
+		$this->assertEquals($email, $this->dpt->getAllInstructor_index(0)->getEmail());
+		//$this->assertEquals(0, 0);
 	}
 
 	public function testCreateJobPostingNull(){
