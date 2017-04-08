@@ -72,9 +72,9 @@ public class TestStudentController {
         Student student = null;
 
         //create student
-        int studentID = 123456789;
-        String name = "Jonathan";
-        String email = "jonathan@mcgill.ca";
+        int studentID = 123456799;
+        String name = "Sam";
+        String email = "Sam@mcgill.ca";
         boolean isGrad = true;
         int year = 1;
         String jobPreference = "Preference to be a TA";
@@ -288,6 +288,8 @@ public class TestStudentController {
 
         }
         assertEquals(0, department.getAllStudents().size());
+
+
     }
 
     @Test
@@ -300,9 +302,9 @@ public class TestStudentController {
         StudentController studentController = new StudentController(department);
 
         //Create Student
-        int studentID = 123456789;
-        String name = "Jonathan";
-        String email = "jonathan@mcgill.ca";
+        int studentID = 123456689;
+        String name = "Tim";
+        String email = "tim@mcgill.ca";
         boolean isGrad = true;
         int year = 1;
         String jobPreference = "Preference to be a TA";
@@ -314,9 +316,9 @@ public class TestStudentController {
         assertEquals(0, student.getPreviousJobExperiences().size());
 
         //Create Instructor
-        String instructorName = "James";
+        String instructorName = "Tim";
         int instructorID = 12345;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorEmail = "tim@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
@@ -770,9 +772,9 @@ public class TestStudentController {
 
 
         //Create Student
-        int studentID = 123456789;
-        String name = "Jonathan";
-        String email = "jonathan@mcgill.ca";
+        int studentID = 133456789;
+        String name = "Jon";
+        String email = "jon@mcgill.ca";
         boolean isGrad = true;
         int year = 1;
         String jobPreference = "Preference to be a TA";
@@ -783,9 +785,9 @@ public class TestStudentController {
         assertEquals(1, department.getAllStudents().size());
 
         //Create Instructor
-        String instructorName = "James";
+        String instructorName = "Tom";
         int instructorID = 12345;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorEmail = "tom@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
