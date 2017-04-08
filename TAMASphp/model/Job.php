@@ -39,13 +39,13 @@ class Job
   // CONSTRUCTOR
   //------------------------
 
-  public function __construct($aPosType, $aCorrespondingCourse)
+  public function __construct($aPosType, $aPostingDeadlineDate, $aCorrespondingCourse)
   {
     $this->jobDescription = NULL;
     $this->posType = $aPosType;
     $this->skillsRequired = NULL;
     $this->experienceRequired = NULL;
-    $this->postingDeadlineDate = NULL;
+    $this->postingDeadlineDate = $aPostingDeadlineDate;
     $this->offerDeadlineDate = NULL;
     $this->resetState();
     $this->jobID = self::$nextJobID++;
