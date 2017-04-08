@@ -7,9 +7,6 @@ require_once __DIR__.'/../model/Instructor.php';
 require_once __DIR__.'/../model/Job.php';
 require_once __DIR__.'/../model/Review.php';
 require_once __DIR__.'/../model/Student.php';
-require_once __DIR__.'/../model/JobStatus.php';
-require_once __DIR__.'/../model/PositionTypeEnum.php';
-
 
 class instructorControllerTest extends PHPUnit_Framework_TestCase
 {
@@ -25,10 +22,14 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->dpt->delete();
 		
-		
-		$this->testJobID = PositionTypeEnum::TA;
 		//note that date and course do not have to be valid for testing purposes.
-		$testJob = new Job(PositionTypeEnum::TA, 'date', 'course');
+		//$this->contr->createInstructor('William', '876543210', 'a@b.ca');
+		
+		$instructorA = new Instructor('William', '876543210', 'a@b.ca');
+		$this->dpt->addAllInstructor($instructorA);
+		$testCourse = new Course('ECSE321', 'IntroToSoftEng', 'Winter', 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job('TA', 'date', $testCourse);
 		$this->testJobID = $testJob->getJobID();
 		$this->dpt->addAllJob($testJob);
 		$this->persis->writeDataToStore($this->dpt);
