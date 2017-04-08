@@ -747,7 +747,11 @@ public class TestStudentController {
 
         assertEquals(0, jobOffer.getEmployee().size());
 
-        studentController.respondToJobOffer(student, jobOffer, accept);
+        try {
+            studentController.respondToJobOffer(student, jobOffer, accept);
+        } catch (InvalidInputException e){
+
+        }
 
         assertEquals(1, jobOffer.getEmployee().size());
 
@@ -821,8 +825,11 @@ public class TestStudentController {
 
         assertEquals(0, jobOffer.getEmployee().size());
 
-        studentController.respondToJobOffer(student, jobOffer, reject);
+        try {
+            studentController.respondToJobOffer(student, jobOffer, reject);
+        } catch (InvalidInputException e){
 
+        }
         assertEquals(0, jobOffer.getEmployee().size());
 
         student.delete();
