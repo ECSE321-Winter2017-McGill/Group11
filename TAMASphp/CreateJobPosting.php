@@ -1,8 +1,12 @@
 <?php
-require_once 'controller/InstructorController.php';
+require_once 'controller\InstructorController.php';
+require_once 'persistence\PersistenceTAMAS.php';
+require_once 'model\Job.php';
+require_once 'model\Course.php';
+require_once 'model\Department.php';
+require_once 'model\Instructor.php';
 
 session_start();
-
 $c = new InstructorController();
 try{
 	$_SESSION['errorJobID'] = "";
@@ -10,7 +14,9 @@ try{
 	$_SESSION['errorSkillsReq'] = "";
 	$_SESSION['errorExpReq'] = "";
 	$_SESSION['errorOfferDate'] = "";
+	$_SESSION['pobPostingSuccess'] = "";
 	$c->createJobPosting($_POST['aJobID'], $_POST['jobDescription'], $_POST['skillsRequired'], $_POST['experienceRequired'], $_POST['offerDeadlineDate']);
+	$_SESSION['pobPostingSuccess'] = "Job published successfully.";
 } catch (Exception $e){
 	$e = $e->getMessage();
 	$e_array = explode('@', $e);
@@ -32,7 +38,6 @@ try{
 		}
 	}
 }
-
 ?>
 
 <!DOCTYPE html>

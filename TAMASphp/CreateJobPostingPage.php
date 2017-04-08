@@ -1,9 +1,3 @@
-<?php
-require_once 'persistence/PersistenceTAMAS.php';
-session_start();
-$persis= new PersistenceTamas();
-$dpt = $persis -> loadDataFromStore();?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,6 +9,7 @@ $dpt = $persis -> loadDataFromStore();?>
 	
 	<style>
 			.error {color: #FF0000;}
+			.success {color: #36DE1C;}
 	</style>
 	
     <meta name="description" content="Source code generated using layoutit.com">
@@ -59,6 +54,9 @@ $dpt = $persis -> loadDataFromStore();?>
 							</li>
 						</ul>
 					</li>
+					<li class="enabled pull-right">
+						<a href="LogoutPage.php">Logout</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -70,15 +68,48 @@ $dpt = $persis -> loadDataFromStore();?>
 					</h1>
 				</div>
 				<form action="CreateJobPosting.php" method="post">
-					<p>Job ID? <select name = "aJobID" > 
 					<?php
-					foreach($dpt->getAllJobs() as $job){ ?>
-						<option value="<?php $job->getJobID();?>">
-						<?php $job->getJobID();?>
-						</option><?php } ?>
-						<option name="aJobID"> </option>
+					require_once 'controller\InvalidInputException.php';
+					require_once 'persistence\PersistenceTAMAS.php';
+					require_once 'model\Course.php';
+					require_once 'model\Department.php';
+					require_once 'model\Instructor.php';
+					require_once 'model\Job.php';
+					require_once 'model\Review.php';
+					require_once 'model\Student.php';
+					session_start();
+					
+					$persis = new PersistenceTamas();
+					$dpt = $persis -> loadDataFromStore();
+					$_SESSION['allJobs'] = $dpt -> getAllJobs();
+					
+					$allJobs = $_SESSION['allJobs'];
+					$_SESSION['jobNamesArray'] = array();
+					foreach($allJobs as $job){
+						$optionValue = $job -> getJobID();
+					
+						$jobCode = $job -> getCorrespondingCourse() -> getCode();
+						$jobType = $job -> getPosType();
+					
+						$optionSeenName = $jobCode . " " . $jobType;
+						
+						$assocInstructor = $job -> getCorrespondingCourse() -> getInstructors();
+						foreach($assocInstructor as $theInstructor){
+							if(strcmp($theInstructor -> getEmail(), $_SESSION['user']) == 0){
+							$_SESSION['jobNamesArray'][$optionValue] = $optionSeenName;
+							}
+						}
+					}?>
+				
+					<p>Job offering: <select name = "aJobID" id = "aJobID">
+					<option value='-1'>Choose an option...</option>
+					<?php
+					foreach($_SESSION['jobNamesArray'] as $key => $value) { ?>
+						<option value="<?php echo $key ?>"><?php echo $value ?></option>
+					<?php
+						} ?>
 				    </select>
-				    
+
 				    <span class="error">
 					<?php
 					if (isset($_SESSION['errorJobID']) && !empty($_SESSION['errorJobID'])){
@@ -87,7 +118,7 @@ $dpt = $persis -> loadDataFromStore();?>
 					?>
 					</span></p>
 					
-					<p>Job Description? <input type="text" name="jobDescription" />
+					<p>Job Description: <input type="text" style="height:100px; width:200px;" name="jobDescription" />
 					
 					<span class="error">
 					<?php
@@ -97,7 +128,7 @@ $dpt = $persis -> loadDataFromStore();?>
 					?>
 					</span></p>
 					
-					<p>Skills Required? <input type="text" name="skillsRequired" />
+					<p>Skills Required: <input type="text" style="height:100px; width:200px;" name="skillsRequired" />
 					
 					<span class="error">
 					<?php
@@ -107,7 +138,7 @@ $dpt = $persis -> loadDataFromStore();?>
 					?>
 					</span></p>
 					
-					<p>Experience Required? <input type="text" name="experienceRequired" />
+					<p>Experience Required: <input type="text" style="height:100px; width:200px;" name="experienceRequired" />
 					
 					<span class="error">
 					<?php
@@ -117,7 +148,7 @@ $dpt = $persis -> loadDataFromStore();?>
 					?>
 					</span></p>
 					
-					<p>Offer Date? <input type="date" name="offerDeadlineDate" value="<?php echo date('Y-m-d'); ?>" />
+					<p>Offer deadline: <input type="date" name="offerDeadlineDate" value="<?php echo date('Y-m-d'); ?>" />
 					
 					<span class="error">
 					<?php
@@ -127,12 +158,10 @@ $dpt = $persis -> loadDataFromStore();?>
 					?>
 					</span></p>
 					
-					<p><span class="sucess">
+					<p><span class="success">
 					<?php 
-					if(empty($_SESSION['errorOfferDate']) && !empty($_SESSION['errorExpReq']) &&
-							empty($_SESSION['errorSkillsReq']) && empty($_SESSION['errorJobDesc']) &&
-							empty($_SESSION['errorJobID'])){
-						echo "Job published successfully.";
+					if (isset($_SESSION['pobPostingSuccess']) && !empty($_SESSION['pobPostingSuccess'])){
+						echo " * " . $_SESSION["pobPostingSuccess"];
 					}
 					?>
 					</span></p>
