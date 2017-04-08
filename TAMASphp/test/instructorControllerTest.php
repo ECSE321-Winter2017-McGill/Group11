@@ -32,7 +32,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		 
 		$name = "Daniel";
 		$id = "123456789";
-		$email = "daniel@mcgill.ca";
+		$email = "daniel@mcgill.com";
 		 
 		try{
 			$this->contr->createInstructor($name, $id, $email);
@@ -126,8 +126,76 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
 
-	public function testCreateInstructorInvalidFormats(){
-		$this->assertEquals(0, 0);
+	public function testCreateInstructorInvalidFormatsOne(){
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		
+		$name = "Sahil";
+		$id = "87654321";
+		$email = "Sahilmcgill.ca";
+		
+		$error = "";
+		try{
+			$this->contr->createInstructor($name, $id, $email);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+		
+		$this->assertEquals($error, "@3Instructor ID must be a 9-digit integer! @5Instructor E-mail address has to be of the form stringA@stringB.com!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+	}
+	
+	public function testCreateInstructorInvalidFormatsOTwo(){
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+	
+		$name = "Yash";
+		$id = "0246813579";
+		$email = "Yash@mcgillca";
+	
+		$error = "";
+		try{
+			$this->contr->createInstructor($name, $id, $email);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+	
+		$this->assertEquals($error, "@3Instructor ID must be a 9-digit integer! @5Instructor E-mail address has to be of the form stringA@stringB.com!");
+	
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+	}
+	
+	public function testCreateInstructorInvalidFormatsThree(){
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+	
+		$name = "Aren";
+		$id = "123a45678";
+		$email = "Arenmcgillca";
+	
+		$error = "";
+		try{
+			$this->contr->createInstructor($name, $id, $email);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+	
+		$this->assertEquals($error, "@3Instructor ID must be a 9-digit integer! @5Instructor E-mail address has to be of the form stringA@stringB.com!");
+	
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
 
 	public function testCreateJobPosting(){
