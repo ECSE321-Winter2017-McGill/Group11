@@ -386,9 +386,9 @@ public class TestStudentController {
         assertEquals(1, department.getAllStudents().size());
 
         //Create Instructor
-        String instructorName = "James";
-        int instructorID = 23456;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorName = "Ned";
+        int instructorID = 23459;
+        String instructorEmail = "ned@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
@@ -528,9 +528,9 @@ public class TestStudentController {
         assertEquals(0, department.getAllStudents().size());
 
         //Create Instructor
-        String instructorName = "James";
-        int instructorID = 23456;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorName = "Daniel";
+        int instructorID = 23457;
+        String instructorEmail = "daniel@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
@@ -636,9 +636,9 @@ public class TestStudentController {
         assertEquals(1, department.getAllStudents().size());
 
         //Create Instructor
-        String instructorName = "James";
-        int instructorID = 23456;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorName = "Brandon";
+        int instructorID = 23458;
+        String instructorEmail = "brandon@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
@@ -707,9 +707,9 @@ public class TestStudentController {
         assertEquals(1, department.getAllStudents().size());
 
         //Create Instructor
-        String instructorName = "James";
-        int instructorID = 12345;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorName = "Robert";
+        int instructorID = 12355;
+        String instructorEmail = "robert@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
