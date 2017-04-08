@@ -24,6 +24,9 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->persis = new PersistenceTamas();
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->dpt->delete();
+		
+		
+		$this->testJobID = PositionTypeEnum::TA;
 		//note that date and course do not have to be valid for testing purposes.
 		$testJob = new Job(PositionTypeEnum::TA, 'date', 'course');
 		$this->testJobID = $testJob->getJobID();

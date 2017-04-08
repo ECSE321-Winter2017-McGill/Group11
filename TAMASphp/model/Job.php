@@ -166,7 +166,7 @@ class Job
 
   public function getDefaultState()
   {
-    return JobStatus.Ready;
+    return "Ready";
   }
 
   public function getJobID()
