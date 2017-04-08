@@ -29,7 +29,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->dpt->addAllInstructor($instructorA);
 		$testCourse = new Course('ECSE321', 'IntroToSoftEng', 'Winter', 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
 		$this->dpt->addAllCourse($testCourse);
-		$testJob = new Job('TA', 'date', $testCourse);
+		$testJob = new Job('TA', "2016-10-16";, $testCourse);
 		$this->testJobID = $testJob->getJobID();
 		$this->dpt->addAllJob($testJob);
 		$this->persis->writeDataToStore($this->dpt);
@@ -40,6 +40,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateInstructor(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 		 
 		$name = "Daniel";
@@ -67,6 +71,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateInstructorNull(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 		 
 		$name = null;
@@ -91,6 +99,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateInstructorEmpty(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 
 		$name = "";
@@ -115,6 +127,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateInstructorSpace(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 
 		$name = " ";
@@ -139,6 +155,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateInstructorInvalidFormatsOne(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 		
 		$name = "Sahil";
@@ -163,6 +183,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testCreateInstructorInvalidFormatsOTwo(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	
 		$name = "Yash";
@@ -187,6 +211,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testCreateInstructorInvalidFormatsThree(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->dpt->delete();
+		$this->persis->writeDataToStore($this->dpt);
+		
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	
 		$name = "Aren";
@@ -211,7 +239,11 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateJobPosting(){
-		$this->assertEquals(0, 0);
+		/*$jobID=;
+		$jobDesc = 'Help Students solve problems';
+		$skillsReq = 'Good at writing software';
+		$experienceReq = 'Must have at least 1 year of TA-ing experience';
+		$deadlineDate = "2017-12-31";*/
 	}
 
 	public function testCreateJobPostingNull(){
