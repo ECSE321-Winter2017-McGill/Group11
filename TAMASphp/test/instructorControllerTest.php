@@ -7,12 +7,16 @@ require_once __DIR__.'/../model/Instructor.php';
 require_once __DIR__.'/../model/Job.php';
 require_once __DIR__.'/../model/Review.php';
 require_once __DIR__.'/../model/Student.php';
+require_once __DIR__.'/../model/JobStatus.php';
+require_once __DIR__.'/../model/PositionTypeEnum.php';
+
 
 class instructorControllerTest extends PHPUnit_Framework_TestCase
 {
 	protected $contr;
 	protected $persis;
 	protected $dpt;
+	protected $testJobID;
 
 	protected function setUp()
 	{
@@ -20,6 +24,10 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->persis = new PersistenceTamas();
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->dpt->delete();
+		//note that date and course do not have to be valid for testing purposes.
+		$testJob = new Job(PositionTypeEnum::TA, 'date', 'course');
+		$this->testJobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
 		$this->persis->writeDataToStore($this->dpt);
 	}
 
@@ -42,7 +50,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
@@ -72,7 +80,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -96,7 +104,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -120,7 +128,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -144,7 +152,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -168,7 +176,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
@@ -192,7 +200,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));

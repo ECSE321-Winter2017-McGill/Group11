@@ -1,5 +1,5 @@
 <?php
-abstract class JobStatusEnum{
+abstract class JobStatus{
 	const Ready = 'Ready';
 	const Posted = 'Posted';
 	const AppliedTo = 'AppliedTo';
