@@ -68,7 +68,7 @@ class InstructorController
 		$dpt = $persis -> loadDataFromStore();
 
 		//2. find job
-		//REVIEW****************
+
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
 			if(strcmp($job->getJobID(), $aJobID) == 0){
@@ -76,8 +76,6 @@ class InstructorController
 				break;
 			}
 		}
-		//END REVIEW****************
-
 
 
 		$error = "";
@@ -123,7 +121,7 @@ class InstructorController
 			//3. remove current version of the job in question
 			$dpt->removeAllJob($myJob);
 			//deletes the job saved in dpt equal to myJob
-				
+
 			//4. Convert date
 			$dateConv = date('Y-m-d', strtotime($offerDate));
 
@@ -136,9 +134,10 @@ class InstructorController
 			$myJob->setOfferDeadlineDate($dateConv);
 
 			$myJob->setState("Posted");
-			//REVIEW****************
+			
+			
+			
 			$dpt->addAllJob($myJob);
-			//END REVIEW****************
 			$persis->writeDataToStore($dpt);
 		}
 	}
