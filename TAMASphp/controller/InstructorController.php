@@ -150,22 +150,20 @@ class InstructorController
 		}
 	}
 
-	public function modifyAllocaion($ajobID, $allocatedStudentID, $appliedStudentID){
+	public function modifyAllocaion($aJobID, $allocatedStudentID, $appliedStudentID){
 
 		//1. load data
 		$persis= new PersistenceTamas();
 		$dpt = $persis -> loadDataFromStore();
 
 		//2. find job
-		//REVIEW****************
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
-			if(strcmp($job->getJobID(), $ajobID) == 0){
+			if(strcmp($job->getJobID(), $aJobID) == 0){
 				$myJob = $job;
 				break;
 			}
 		}
-		//END REVIEW****************
 
 
 
@@ -174,18 +172,15 @@ class InstructorController
 
 		if($myJob != null){
 			//3. find allocated student
-			//REVIEW****************
 			foreach ($myJob->getAllocatedStudent() as $student){
 				if(strcmp($student->getStudentID(), $allocatedStudentID) == 0){
 					$myAllocStud = $student;
 					break;
 				}
 			}
-			//END REVIEW****************
 				
 			//4. find applied student
-			//REVIEW****************
-			foreach ($myJob->getApplicantt() as $student){
+			foreach ($myJob->getApplicant() as $student){
 				if(strcmp($student->getStudentID(), $appliedStudentID) == 0){
 					$myApplStud = $student;
 					break;
@@ -193,7 +188,6 @@ class InstructorController
 			}
 		}
 
-		//END REVIEW****************
 
 
 		//5. validating inputs
@@ -205,16 +199,22 @@ class InstructorController
 				$error .= $aJobID;
 			}
 			$error .= " not found! ";
+		} else {
+			if ($myJob->getState() != "Allocated"){
+				$error .= "@2Job ";
+				$error .= $aJobID;
+				$error .= " must be allocated! ";
+			}
 		}
 		if ($myAllocStud == null) {
-			$error .= "@2Allocated student ";
+			$error .= "@3Allocated student ";
 			if($allocatedStudentID != null){
 				$error .= $allocatedStudentID;
 			}
 			$error .= " not found in job! ";
 		}
 		if ($myApplStud == null) {
-			$error .= "@3Applied student ";
+			$error .= "@4Applied student ";
 			if($appliedStudentID != null){
 				$error .= $appliedStudentID;
 			}
