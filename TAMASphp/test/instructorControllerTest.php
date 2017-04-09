@@ -205,11 +205,9 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	
 
 	public function testCreateJobPosting(){
-		$this->dpt = $this->persis->loadDataFromStore();
-		
 		$testInstr = new Instructor("Hugo", "99777881", "lloris@b.ca");
 		$this->dpt->addAllInstructor($testInstr);
-		$testCourse = new Course("ECSE321", "IntroToSoftEng", "Winter", 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
+		$testCourse = new Course("ECSE321", "IntroToSoftEng", "Winter2015", 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
 		$this->dpt->addAllCourse($testCourse);
 		$testJob = new Job("TA", "2016-10-16", $testCourse);
 		$jobID = $testJob->getJobID();
@@ -279,7 +277,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 			
 		$this->assertEquals($error, "@1Job  not found! @2Job description field cannot be empty! @3Skills required field cannot be empty! @4Experience required field cannot be empty! @5Offer deadline date must be specified correctly (YYYY-MM-DD)!");
 			
-		$this->dpt = $this->persis->loadDataFromStore();
+		
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
 		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
@@ -305,7 +303,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 			
 		$this->assertEquals($error, "@1Job  not found! @2Job description field cannot be empty! @3Skills required field cannot be empty! @4Experience required field cannot be empty! @5Offer deadline date must be specified correctly (YYYY-MM-DD)!");
 			
-		$this->dpt = $this->persis->loadDataFromStore();
+		
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
 		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
@@ -330,7 +328,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 			
 		$this->assertEquals($error, "@1Job   not found! @2Job description field cannot be empty! @3Skills required field cannot be empty! @4Experience required field cannot be empty! @5Offer deadline date must be specified correctly (YYYY-MM-DD)!");
 			
-		$this->dpt = $this->persis->loadDataFromStore();
+		
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
 		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
@@ -354,7 +352,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 			
 		$this->assertEquals($error, "@1Job 665544332 not found!");
 		
-		$this->dpt = $this->persis->loadDataFromStore();
+		
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
 		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
@@ -363,11 +361,11 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		}
 		
 		public function testCreateJobPostingOfferDeadlineDateBeforePostingDeadlineDate(){
-			$this->dpt = $this->persis->loadDataFromStore();
+			
 		
 			$testInstr = new Instructor("Mousa", "99777882", "dembele@b.ca");
 			$this->dpt->addAllInstructor($testInstr);
-			$testCourse = new Course("ECSE323", "DSD", "Fall", 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
+			$testCourse = new Course("ECSE323", "DSD", "Fall2017", 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
 			$this->dpt->addAllCourse($testCourse);
 			$testJob = new Job("Grader", "2018-01-01", $testCourse);
 			$jobID = $testJob->getJobID();
@@ -416,12 +414,12 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals("Ready", $this->dpt->getAllJob_index(0)->getState());
 	}
 
-	public function testmodifyAllocation(){
-		$this->dpt = $this->persis->loadDataFromStore();
+	public function testModifyAllocation(){
+		
 		
 		$testInstr = new Instructor("Victor", "99777883", "wanyama@b.ca");
 		$this->dpt->addAllInstructor($testInstr);
-		$testCourse = new Course("ECSE306", "Signals and Systems", "Summer", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$testCourse = new Course("ECSE306", "Signals and Systems", "Summer2020", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
 		$this->dpt->addAllCourse($testCourse);
 		$testJob = new Job("Grader", "2008-01-01", $testCourse);
 		$jobID = $testJob->getJobID();
@@ -479,12 +477,13 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(null, $this->dpt->getAllJob_index(0)->getSkillsRequired());
 		$this->assertEquals("Allocated", $this->dpt->getAllJob_index(0)->getState());
 		
+		//modified Attributes
 		$this->assertEquals(1, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
 		$this->assertEquals($testStudentAppl, $this->dpt->getAllJob_index(0)->getAllocatedStudent_index(0));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
 	}
 
-	public function testmodifyAllocationNull(){
+	public function testModifyAllocationNull(){
 		
 		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
@@ -501,7 +500,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals($error, "@1Job  not found! @3Allocated student  not found in job! @4Applied student  not found in job!");
 		
-		$this->dpt = $this->persis->loadDataFromStore();
+		
 		$this->assertEquals(0, count($this->dpt->getAllCourses()));
 		$this->assertEquals(0, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
@@ -509,8 +508,8 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
 
-	public function testmodifyAllocationJobInexistant(){
-		$this->dpt = $this->persis->loadDataFromStore();
+	public function testModifyAllocationJobInexistant(){
+		
 		
 		$testStudApplID = "260680002";
 		$testStudentAppl = new Student($testStudApplID, "Edward Zhao", "edward.zhaon@mail.mcgill.ca", false, 1, "Fun matriel", 2);
@@ -543,12 +542,12 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
 
-	public function testmodifyAllocationStudentsInexistant(){
-		$this->dpt = $this->persis->loadDataFromStore();
+	public function testModifyAllocationStudentsInexistant(){
+		
 		
 		$testInstr = new Instructor("Toby", "99777884", "alderweireld@b.ca");
 		$this->dpt->addAllInstructor($testInstr);
-		$testCourse = new Course("ECSE330", "Electronics", "Summer", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$testCourse = new Course("ECSE330", "Electronics", "Summer2016", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
 		$this->dpt->addAllCourse($testCourse);
 		$testJob = new Job("Grader", "2007-01-01", $testCourse);
 		$jobID = $testJob->getJobID();
@@ -588,12 +587,12 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		
 	}
 
-	public function testmodifyAllocationJobNotAllocated(){
-		$this->dpt = $this->persis->loadDataFromStore();
+	public function testModifyAllocationJobNotAllocated(){
+		
 		
 		$testInstr = new Instructor("Jan", "99777885", "vertonghen@b.ca");
 		$this->dpt->addAllInstructor($testInstr);
-		$testCourse = new Course("MATH363", "Discrete Math", "Fall", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$testCourse = new Course("MATH363", "Discrete Math", "Fall2006", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
 		$this->dpt->addAllCourse($testCourse);
 		$testJob = new Job("Grader", "2007-03-02", $testCourse);
 		$jobID = $testJob->getJobID();
@@ -631,7 +630,51 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 	
 	public function testCreateReview(){
-		$this->assertEquals(0, 0);
+		$instructorID = "99777886";
+		$testInstr = new Instructor("Danny", $instructorID, "rose@b.ca");
+		$this->dpt->addAllInstructor($testInstr);
+		$testCourse = new Course("COMP250", "Algos", "Winter2054", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job("Grader", "2002-01-01", $testCourse);
+		$jobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
+		
+		$testStudentID = "260680008";
+		$testStudent = new Student($testStudentID, "Johnny Walker", "johnny.walker@mail.mcgill.ca", false, 2, "Lots of free time", 0);
+		$this->dpt->addAllStudent($testStudent);
+		$testJob->addEmployee($testStudent);
+		
+		$testJob->setState("JobFull");
+		
+		$this->persis->writeDataToStore($this->dpt);
+		
+		
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+				
+		$content = "Excellent Work";
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
+		} catch (Exception $e) {
+			echo $e->getMessage();
+			$this->fail();
+		}
+
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(1, count($this->dpt->getAllCourses()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(1, count($this->dpt->getAllReviews()));
+		
+		//because the original $testInstr did not have a connected review object
+		//$testInstr->addReviewText($this->dpt->getAllReview_index(0));
+		$testStudent->addReviewText($this->dpt->getAllReview_index(0));
+		
+		//$this->assertEquals($testInstr, $this->dpt->getAllReview_index(0)->getReviewer());
+		$this->assertEquals($content, $this->dpt->getAllReview_index(0)->getContent());
+		//$this->assertEquals($testJob, $this->dpt->getAllReview_index(0)->getReviewedJob());
+		$this->assertEquals($testStudent, $this->dpt->getAllReview_index(0)->getReviewee());
 	}
 
 	public function testCreateReviewNull(){
@@ -646,7 +689,19 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, 0);
 	}
 
-	public function testCreateReviewInstructorJobAndStudentInexistant(){
+	public function testCreateReviewJobInexistant(){
+		$this->assertEquals(0, 0);
+	}
+	
+	public function testCreateReviewInstructorAndStudentInexistant(){
+		$this->assertEquals(0, 0);
+	}
+	
+	public function testCreateReviewJobStateNotJobFull(){
+		$this->assertEquals(0, 0);
+	}
+	
+	public function testCreateReviewStudentNotEmployee(){
 		$this->assertEquals(0, 0);
 	}
 }
