@@ -97,7 +97,7 @@ public class ViewOfferActivity extends AppCompatActivity {
         String jobDesc = offerSpinner.getSelectedItem().toString();
         Job jobOffer = null;
         for (Job j : d.getAllJobs()) {
-            String offerDesc = j.getJobDescription();
+            String offerDesc = j.getPosType().toString() + j.getCorrespondingCourse().getName();
             if (offerDesc.contentEquals(jobDesc)) {
                 jobOffer = j;
                 break;
