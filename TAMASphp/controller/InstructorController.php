@@ -150,22 +150,20 @@ class InstructorController
 		}
 	}
 
-	public function modifyAllocaion($ajobID, $allocatedStudentID, $appliedStudentID){
+	public function modifyAllocaion($aJobID, $allocatedStudentID, $appliedStudentID){
 
 		//1. load data
 		$persis= new PersistenceTamas();
 		$dpt = $persis -> loadDataFromStore();
 
 		//2. find job
-		//REVIEW****************
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
-			if(strcmp($job->getJobID(), $ajobID) == 0){
+			if(strcmp($job->getJobID(), $aJobID) == 0){
 				$myJob = $job;
 				break;
 			}
 		}
-		//END REVIEW****************
 
 
 
@@ -174,18 +172,15 @@ class InstructorController
 
 		if($myJob != null){
 			//3. find allocated student
-			//REVIEW****************
 			foreach ($myJob->getAllocatedStudent() as $student){
 				if(strcmp($student->getStudentID(), $allocatedStudentID) == 0){
 					$myAllocStud = $student;
 					break;
 				}
 			}
-			//END REVIEW****************
 				
 			//4. find applied student
-			//REVIEW****************
-			foreach ($myJob->getApplicantt() as $student){
+			foreach ($myJob->getApplicant() as $student){
 				if(strcmp($student->getStudentID(), $appliedStudentID) == 0){
 					$myApplStud = $student;
 					break;
@@ -193,7 +188,6 @@ class InstructorController
 			}
 		}
 
-		//END REVIEW****************
 
 
 		//5. validating inputs
@@ -205,16 +199,22 @@ class InstructorController
 				$error .= $aJobID;
 			}
 			$error .= " not found! ";
+		} else {
+			if ($myJob->getState() != "Allocated"){
+				$error .= "@2Job ";
+				$error .= $aJobID;
+				$error .= " must be allocated! ";
+			}
 		}
 		if ($myAllocStud == null) {
-			$error .= "@2Allocated student ";
+			$error .= "@3Allocated student ";
 			if($allocatedStudentID != null){
 				$error .= $allocatedStudentID;
 			}
 			$error .= " not found in job! ";
 		}
 		if ($myApplStud == null) {
-			$error .= "@3Applied student ";
+			$error .= "@4Applied student ";
 			if($appliedStudentID != null){
 				$error .= $appliedStudentID;
 			}
@@ -243,15 +243,7 @@ class InstructorController
 		$persis= new PersistenceTamas();
 		$dpt = $persis -> loadDataFromStore();
 
-		$content = InputValidator::validate_input ( $reviewContent );
-
-		$myReviewer = NULL;
-		foreach ($dpt->getAllInstructors() as $instructor){
-			if(strcmp($instructor->getInstructorID(), $aninstructorID) == 0){
-				$myReviewer = $instructor;
-				break;
-			}
-		}
+		$content = InvalidInputException::validate_input ( $reviewContent );
 
 		$myJob = NULL;
 		foreach ($dpt->getAllJobs() as $job){
@@ -260,45 +252,55 @@ class InstructorController
 				break;
 			}
 		}
-
+		$myReviewer = NULL;
 		$myReviewee = NULL;
-		if($myJob != null){
-			foreach ($myJob->getEmployee() as $student){
-				if(strcmp($student->getStudentID(), $aStudentID) == 0){
+		if ($myJob != null) {
+			foreach ( $myJob->getCorrespondingCourse ()->getInstructors () as $instructor ) {
+				if (strcmp ( $instructor->getInstructorID (), $aninstructorID ) == 0) {
+					$myReviewer = $instructor;
+					break;
+				}
+			}
+			foreach ( $myJob->getEmployee () as $student ) {
+				if (strcmp ( $student->getStudentID (), $astudentID ) == 0) {
 					$myReviewee = $student;
 					break;
 				}
 			}
 		}
-
+		
 		$error = "";
 
-		if($content == null || srtlen ($content) == 0){
+		//if($content == null || strlen($content)){
+			if($content == null){
 			$error .= "@1Review content cannot be empty! ";
 		}
-
+		if ($myJob == null) {
+			$error .= "@2Job ";
+			if($ajobID != null){
+				$error .= $ajobID;
+			}
+			$error .= " not found! ";
+		} else {
+			if ($myJob->getState() != "JobFull"){
+				$error .= "@3Job ";
+				$error .= $ajobID;
+				$error .= " must be in the JobFull state! ";
+			}
+		}
 		if ($myReviewer == null) {
-			$error .= "@2Reviewer ";
+			$error .= "@4Reviewer ";
 			if($aninstructorID != null){
 				$error .= $aninstructorID;
 			}
-			$error .= " not found! ";
+			$error .= " not found in job! ";
 		}
-
-		if ($myJob == null) {
-			$error .= "@3Job ";
-			if($aJobID != null){
-				$error .= $aJobID;
-			}
-			$error .= " not found! ";
-		}
-
 		if ($myReviewee == null) {
-			$error .= "@4Reviewed student ";
+			$error .= "@5Reviewed student ";
 			if($astudentID != null){
 				$error .= $astudentID;
 			}
-			$error .= " not found! ";
+			$error .= " not found in job! ";
 		}
 		if (strlen($error) > 0){
 			throw new Exception (trim($error));
@@ -309,14 +311,16 @@ class InstructorController
 			$review = new Review ($content, $myReviewee, $myJob, $myReviewer);
 			$dpt->addAllReview($review);
 				
-			$dpt->removeAllStudent($myReviewee);
+			//other end of connections (for student and instructor) are set automatically
+			
+			/*$dpt->removeAllStudent($myReviewee);
 			$dpt->removeAllInstructor($myReviewer);
 				
 			$myReviewee->addReviewText($review);
 			$myReviewer->addReviewText($review);
 
 			$dpt->addAllStudent($myReviewee);
-			$dpt->addAllInstructor($myReviewer);
+			$dpt->addAllInstructor($myReviewer);*/
 
 			$persis->writeDataToStore($dpt);
 		}
