@@ -14,9 +14,9 @@ try{
 	$_SESSION['errorSkillsReq'] = "";
 	$_SESSION['errorExpReq'] = "";
 	$_SESSION['errorOfferDate'] = "";
-	$_SESSION['pobPostingSuccess'] = "";
+	$_SESSION['jobPostingSuccess'] = "";
 	$c->createJobPosting($_POST['aJobID'], $_POST['jobDescription'], $_POST['skillsRequired'], $_POST['experienceRequired'], $_POST['offerDeadlineDate']);
-	$_SESSION['pobPostingSuccess'] = "Job published successfully.";
+	$_SESSION['jobPostingSuccess'] = "Job published successfully.";
 } catch (Exception $e){
 	$e = $e->getMessage();
 	$e_array = explode('@', $e);
@@ -34,6 +34,9 @@ try{
 			$_SESSION['errorExpReq'] = substr($entry, 1);
 		}
 		else if(!empty($entry) && $entry[0] == "5"){
+			$_SESSION['errorOfferDateFormat'] = substr($entry, 1);
+		}
+		else if(!empty($entry) && $entry[0] == "6"){
 			$_SESSION['errorOfferDate'] = substr($entry, 1);
 		}
 	}

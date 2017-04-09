@@ -37,7 +37,7 @@
 						$value = NULL;
 					}
 					session_destroy();
-					header( "refresh:3; url=/TAMASphp/LoginPage.php" );
+					header( "refresh:3; url=/TAMASphp/Index.php" );
 					exit;
 					?>
 				</p>

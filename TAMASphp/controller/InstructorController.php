@@ -118,7 +118,7 @@ class InstructorController
 				$bool_myOfferDateBeforePostingDate = strtotime($offerDate) < strtotime($postDate);
 					
 				if ($bool_myOfferDateBeforePostingDate) {
-					$error .= "@6Offer deadline date must be after Posting deadline! ";
+					$error .= "@6Offer deadline date must be after Posting deadline: " . $postDate . "!";
 				}
 		}
 		if (strlen($error) > 0){

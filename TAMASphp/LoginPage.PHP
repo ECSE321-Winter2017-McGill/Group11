@@ -93,17 +93,6 @@
 									260102344
 								</td>
 							</tr>
-							<tr>
-								<td>
-									Test Instructor
-								</td>
-								<td>
-									test.instructor@mcgill.ca
-								</td>
-								<td>
-									000000000
-								</td>
-							</tr>
 						</tbody>
 					</table>
 				</form>

@@ -49,8 +49,8 @@
 							</li>
 							<li class="divider">
 							</li>
-							<li class="disabled">
-								<a href="#">Write Review</a>
+							<li>
+								<a href="WriteReviewPage.php">Write Review</a>
 							</li>
 						</ul>
 					</li>
@@ -95,7 +95,7 @@
 						
 						$assocInstructor = $job -> getCorrespondingCourse() -> getInstructors();
 						foreach($assocInstructor as $theInstructor){
-							if(strcmp($theInstructor -> getEmail(), $_SESSION['user']) == 0){
+							if(strcmp($theInstructor -> getEmail(), $_SESSION['user'] -> getEmail()) == 0){
 							$_SESSION['jobNamesArray'][$optionValue] = $optionSeenName;
 							}
 						}
@@ -152,6 +152,9 @@
 					
 					<span class="error">
 					<?php
+					if (isset($_SESSION['errorOfferDateFormat']) && !empty($_SESSION['errorOfferDateFormat'])){
+						echo " * " . $_SESSION["errorOfferDateFormat"];
+					}
 					if (isset($_SESSION['errorOfferDate']) && !empty($_SESSION['errorOfferDate'])){
 						echo " * " . $_SESSION["errorOfferDate"];
 					}
@@ -160,8 +163,8 @@
 					
 					<p><span class="success">
 					<?php 
-					if (isset($_SESSION['pobPostingSuccess']) && !empty($_SESSION['pobPostingSuccess'])){
-						echo " * " . $_SESSION["pobPostingSuccess"];
+					if (isset($_SESSION['jobPostingSuccess']) && !empty($_SESSION['jobPostingSuccess'])){
+						echo " * " . $_SESSION['jobPostingSuccess'];
 					}
 					?>
 					</span></p>
