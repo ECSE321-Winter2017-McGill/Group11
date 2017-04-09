@@ -111,7 +111,15 @@ class InstructorController
 			$error .= "@4Experience required field cannot be empty! ";
 		}
 		if ($bool_myOfferDate) {
-			$error .= "@5Posting deadline date must be specified correctly (YYYY-MM-DD)! ";
+			$error .= "@5Offer deadline date must be specified correctly (YYYY-MM-DD)! ";
+		}
+		if(!$bool_myJob && !$bool_myOfferDate){
+			$postDate = $myJob->getPostingDeadlineDate();
+			$bool_myOfferDateBeforePostingDate = strtotime($offerDate) < strtotime($postDate);
+			
+			if ($bool_myOfferDateBeforePostingDate) {
+			$error .= "@6Offer deadline date must be after Posting deadline! ";
+			}
 		}
 		if (strlen($error) > 0){
 			throw new Exception (trim($error));

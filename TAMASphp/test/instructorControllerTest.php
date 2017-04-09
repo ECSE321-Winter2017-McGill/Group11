@@ -235,7 +235,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	public function testCreateJobPosting(){
 		$this->dpt = $this->persis->loadDataFromStore();
 		
-		$testInstr = new Instructor("William", "99777881", "a1@b.ca");
+		$testInstr = new Instructor("Hugo", "99777881", "lloris@b.ca");
 		$this->dpt->addAllInstructor($testInstr);
 		$testCourse = new Course("ECSE321", "IntroToSoftEng", "Winter", 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
 		$this->dpt->addAllCourse($testCourse);
@@ -245,6 +245,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		
 		$this->persis->writeDataToStore($this->dpt);
 		
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
 
 		$jobDesc = "Help Students solve problems";
 		$skillsReq = "Good at writing software";
@@ -269,7 +270,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		//kept attributes
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
-		$this->assertEquals($testCourse, $this->dpt->getAllJob_index(0)->getCorrespondingCourse());
+		//$this->assertEquals($testCourse, $this->dpt->getAllJob_index(0)->getCorrespondingCourse());
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getEmployee()));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getOfferReceiver()));
 		$this->assertEquals("2016-10-16", $this->dpt->getAllJob_index(0)->getPostingDeadlineDate());
@@ -289,23 +290,157 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 	}
 
 	public function testCreateJobPostingNull(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		
+		$jobID = null;
+		$jobDesc = null;
+		$skillsReq = null;
+		$experienceReq = null;
+		$deadlineDate = null;
+		
+		try{
+			$this->contr->createJobPosting($jobID, $jobDesc, $skillsReq, $experienceReq, $deadlineDate);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+			}
+			
+		$this->assertEquals($error, "@1Job  not found! @2Job description field cannot be empty! @3Skills required field cannot be empty! @4Experience required field cannot be empty! @5Offer deadline date must be specified correctly (YYYY-MM-DD)!");
+			
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		
 	}
 
 	public function testCreateJobPostingEmpty(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		
+		$jobID = "";
+		$jobDesc = "";
+		$skillsReq = "";
+		$experienceReq = "";
+		$deadlineDate = "";
+		
+		try{
+			$this->contr->createJobPosting($jobID, $jobDesc, $skillsReq, $experienceReq, $deadlineDate);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+			
+		$this->assertEquals($error, "@1Job  not found! @2Job description field cannot be empty! @3Skills required field cannot be empty! @4Experience required field cannot be empty! @5Offer deadline date must be specified correctly (YYYY-MM-DD)!");
+			
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
 
 	public function testCreateJobPostingSpace(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		
+		$jobID = " ";
+		$jobDesc = " ";
+		$skillsReq = " ";
+		$experienceReq = " ";
+		$deadlineDate = " ";
+		
+		try{
+			$this->contr->createJobPosting($jobID, $jobDesc, $skillsReq, $experienceReq, $deadlineDate);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+			
+		$this->assertEquals($error, "@1Job   not found! @2Job description field cannot be empty! @3Skills required field cannot be empty! @4Experience required field cannot be empty! @5Offer deadline date must be specified correctly (YYYY-MM-DD)!");
+			
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
-
-	public function testCreateJobPostingOfferDeadlineDateBeforePostingDeadlineDate(){
-		$this->assertEquals(0, 0);
-	}
-
+	
 	public function testCreateJobPostingJobInexistant(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		
+		$jobID = "665544332";
+		$jobDesc = "Present tutorial sessions to students.";
+		$skillsReq = "Good at preparing classes.";
+		$experienceReq = "No experience needed.";
+		$deadlineDate = "2018-01-01";
+		try{
+			$this->contr->createJobPosting($jobID, $jobDesc, $skillsReq, $experienceReq, $deadlineDate);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+			
+		$this->assertEquals($error, "@1Job 665544332 not found!");
+				
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+	}
+	
+	public function testCreateJobPostingOfferDeadlineDateBeforePostingDeadlineDate(){
+		$this->dpt = $this->persis->loadDataFromStore();
+		
+		$testInstr = new Instructor("Mousa", "99777882", "dembele@b.ca");
+		$this->dpt->addAllInstructor($testInstr);
+		$testCourse = new Course("ECSE323", "DSD", "Fall", 3, 2, 3, 4, 123, 5, 6, 20, 21, 123, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job("Grader", "2018-01-01", $testCourse);
+		$jobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
+		
+		$this->persis->writeDataToStore($this->dpt);
+		
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+		
+		$jobDesc = "Correct examinations";
+		$skillsReq = "Good at basic arithmetic";
+		$experienceReq = "MNo experience needed";
+		$deadlineDate = "2016-11-30";
+		
+		try{
+			$this->contr->createJobPosting($jobID, $jobDesc, $skillsReq, $experienceReq, $deadlineDate);
+		} catch (Exception $e) {
+			$error =$e->getMessage();
+		}
+				
+		$this->assertEquals($error, "@6Offer deadline date must be after Posting deadline!");
+		
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(1, count($this->dpt->getAllCourses()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+			
+		//kept attributes
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
+		$this->assertEquals($testCourse, $this->dpt->getAllJob_index(0)->getCorrespondingCourse());
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getEmployee()));
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getOfferReceiver()));
+		$this->assertEquals("2018-01-01", $this->dpt->getAllJob_index(0)->getPostingDeadlineDate());
+		$this->assertEquals("Grader", $this->dpt->getAllJob_index(0)->getPosType());
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getPreviousWorker()));
+		
+		$this->assertEquals(null, $this->dpt->getAllJob_index(0)->getExperienceRequired());
+		$this->assertEquals(null, $this->dpt->getAllJob_index(0)->getJobDescription());
+		$this->assertEquals($jobID, $this->dpt->getAllJob_index(0)->getJobID());
+		$this->assertEquals(null, $this->dpt->getAllJob_index(0)->getOfferDeadlineDate());
+		$this->assertEquals(null, $this->dpt->getAllJob_index(0)->getSkillsRequired());
+		$this->assertEquals("Ready", $this->dpt->getAllJob_index(0)->getState());
 	}
 
 	public function testmodyifyAllocation(){
