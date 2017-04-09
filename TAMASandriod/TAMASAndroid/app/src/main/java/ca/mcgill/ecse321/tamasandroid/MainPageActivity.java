@@ -13,7 +13,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.sql.Date;
+import java.util.Calendar;
+
+import ca.mcgill.ecse321.tamas.model.Course;
 import ca.mcgill.ecse321.tamas.model.Department;
+import ca.mcgill.ecse321.tamas.model.Instructor;
+import ca.mcgill.ecse321.tamas.model.Job;
+import ca.mcgill.ecse321.tamas.model.PositionType;
+import ca.mcgill.ecse321.tamas.model.Review;
 import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
@@ -62,4 +70,5 @@ public class MainPageActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ViewReviewsActivity.class);
         startActivity(intent);
     }
+
 }

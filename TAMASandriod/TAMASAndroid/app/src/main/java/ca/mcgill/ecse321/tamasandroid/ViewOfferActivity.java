@@ -54,7 +54,7 @@ public class ViewOfferActivity extends AppCompatActivity {
     public void generateOffer(View view){
         //Create Instructor
         String instructorName = "James";
-        int instructorID = 12345;
+        int instructorID = 12346;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
