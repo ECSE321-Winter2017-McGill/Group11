@@ -15,6 +15,7 @@ try{
 	$_SESSION['errorRevDesc'] = "";
 	$_SESSION['errorJobState'] = "";
 	$_SESSION['revPostingSuccess'] = "";
+	$_SESSION['wrongEmployeeAssoc'] = "";
 	$c->createReview($_POST['author'], $_POST['revDescription'], $_POST['aRevJobID'], $_POST['anEmployeeID']);
 	$_SESSION['revPostingSuccess'] = "Review published successfully.";
 } catch (Exception $e){
@@ -36,6 +37,10 @@ try{
 		else if(!empty($entry) && $entry[0] == "4"){
 			$_SESSION['errorEmployee'] = substr($entry, 1);
 		}
+	}
+	if(empty($_SESSION['errorRevDesc']) && empty($_SESSION['errorRevJobID']) && empty($_SESSION['errorJobState'])
+			&& empty($_SESSION['errorAuthor']) && empty($_SESSION['errorEmployee'])){
+		$_SESSION['wrongEmployeeAssoc'] = "Wrong employee associated to chosen job.";
 	}
 }
 ?>

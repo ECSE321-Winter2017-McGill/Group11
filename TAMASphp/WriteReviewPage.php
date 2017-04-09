@@ -125,7 +125,6 @@
 					</span></p>
 					
 					<?php 
-					$employees = array();
 					foreach ($courses as $course){
 						$jobs = $course -> getJobs();
 						foreach($jobs as $job) {
@@ -140,9 +139,11 @@
 					<p>Employee reviewed: <select name = "anEmployeeID" id = "anEmployeeID">
 					<option value='-1'>Choose an option...</option>
 					<?php
-					foreach($employees as $employee) { ?>
-						<option value="<?php echo $employee -> getStudentID() ?>"><?php echo $employee -> getName() ?></option>
+					foreach($employees as $employee) {
+						foreach($employee as $subemployee){?>
+						<option value="<?php echo $subemployee -> getStudentID() ?>"><?php echo $subemployee -> getName() ?></option>
 					<?php
+							}
 						}?>
 				    </select>
 
@@ -160,6 +161,14 @@
 					<?php
 					if (isset($_SESSION['errorRevDesc']) && !empty($_SESSION['errorRevDesc'])){
 						echo " * " . $_SESSION["errorRevDesc"];
+					}
+					?>
+					</span></p>
+					
+					<span class="error">
+					<?php
+					if (isset($_SESSION['wrongEmployeeAssoc']) && !empty($_SESSION['wrongEmployeeAssoc'])){
+						echo " * " . $_SESSION["wrongEmployeeAssoc"];
 					}
 					?>
 					</span></p>

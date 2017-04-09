@@ -282,7 +282,7 @@ class InstructorController
 			}
 			$error .= " not found! ";
 		} else {
-			if ($myJob->getState() != "JobFull"){
+			if ($myJob->getState() != "Accepted"){
 				$error .= "@3Job ";
 				$error .= $ajobID;
 				$error .= " must be in the JobFull state! ";
