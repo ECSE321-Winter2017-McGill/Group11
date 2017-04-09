@@ -252,15 +252,15 @@ class InstructorController
 				break;
 			}
 		}
+		$myReviewer = NULL;
+		$myReviewee = NULL;
 		if ($myJob != null) {
-			$myReviewer = NULL;
 			foreach ( $myJob->getCorrespondingCourse ()->getInstructors () as $instructor ) {
 				if (strcmp ( $instructor->getInstructorID (), $aninstructorID ) == 0) {
 					$myReviewer = $instructor;
 					break;
 				}
 			}
-			$myReviewee = NULL;
 			foreach ( $myJob->getEmployee () as $student ) {
 				if (strcmp ( $student->getStudentID (), $astudentID ) == 0) {
 					$myReviewee = $student;
@@ -278,7 +278,7 @@ class InstructorController
 		if ($myJob == null) {
 			$error .= "@2Job ";
 			if($ajobID != null){
-				$error .= $aJobID;
+				$error .= $ajobID;
 			}
 			$error .= " not found! ";
 		} else {
@@ -293,14 +293,14 @@ class InstructorController
 			if($aninstructorID != null){
 				$error .= $aninstructorID;
 			}
-			$error .= " not found! ";
+			$error .= " not found in job! ";
 		}
 		if ($myReviewee == null) {
 			$error .= "@5Reviewed student ";
 			if($astudentID != null){
 				$error .= $astudentID;
 			}
-			$error .= " not found! ";
+			$error .= " not found in job! ";
 		}
 		if (strlen($error) > 0){
 			throw new Exception (trim($error));

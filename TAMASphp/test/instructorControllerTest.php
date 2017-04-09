@@ -656,7 +656,6 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		try{
 			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
 		} catch (Exception $e) {
-			echo $e->getMessage();
 			$this->fail();
 		}
 
@@ -667,41 +666,230 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
 		$this->assertEquals(1, count($this->dpt->getAllReviews()));
 		
+		//*******************
 		//because the original $testInstr did not have a connected review object
 		//$testInstr->addReviewText($this->dpt->getAllReview_index(0));
-		$testStudent->addReviewText($this->dpt->getAllReview_index(0));
+		//$testStudent->addReviewText($this->dpt->getAllReview_index(0));
 		
 		//$this->assertEquals($testInstr, $this->dpt->getAllReview_index(0)->getReviewer());
 		$this->assertEquals($content, $this->dpt->getAllReview_index(0)->getContent());
 		//$this->assertEquals($testJob, $this->dpt->getAllReview_index(0)->getReviewedJob());
-		$this->assertEquals($testStudent, $this->dpt->getAllReview_index(0)->getReviewee());
+		//$this->assertEquals($testStudent, $this->dpt->getAllReview_index(0)->getReviewee());
 	}
 
 	public function testCreateReviewNull(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$instructorID = null;
+		$content = null;
+		$jobID = null;
+		$testStudentID = null;
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+		}
+		
+		$this->assertEquals($error, "@1Review content cannot be empty! @2Job  not found! @4Reviewer  not found in job! @5Reviewed student  not found in job!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 
 	public function testCreateReviewEmptyContent(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$instructorID = "";
+		$content = "";
+		$jobID = "";
+		$testStudentID = "";
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+		}
+		
+		$this->assertEquals($error, "@1Review content cannot be empty! @2Job  not found! @4Reviewer  not found in job! @5Reviewed student  not found in job!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 
 	public function testCreateReviewSpaceContent(){
-		$this->assertEquals(0, 0);
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$instructorID = " ";
+		$content = " ";
+		$jobID = " ";
+		$testStudentID = " ";
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+		}
+		
+		$this->assertEquals($error, "@1Review content cannot be empty! @2Job   not found! @4Reviewer   not found in job! @5Reviewed student   not found in job!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 
 	public function testCreateReviewJobInexistant(){
-		$this->assertEquals(0, 0);
+		$instructorID = "99777887";
+		$testInstr = new Instructor("Kyle", $instructorID, "walker@b.ca");
+		$this->dpt->addAllInstructor($testInstr);
+		
+		$testStudentID = "260680009";
+		$testStudent = new Student($testStudentID, "Tommy Hilfiger", "tommy.hilfiger@mail.mcgill.ca", false, 2, "easy course to teach", 0);
+		$this->dpt->addAllStudent($testStudent);
+		
+		$this->persis->writeDataToStore($this->dpt);
+		
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$content = "Terrible TA";
+		$fakeJobID = "a12c";
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $fakeJobID, $testStudentID);
+		} catch (Exception $e) {
+			$error = $e->getMessage();
+		}
+		
+		$this->assertEquals($error, "@2Job a12c not found! @4Reviewer 99777887 not found in job! @5Reviewed student 260680009 not found in job!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(0, count($this->dpt->getAllCourses()));
+		$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 	
 	public function testCreateReviewInstructorAndStudentInexistant(){
-		$this->assertEquals(0, 0);
+		$testInstr = new Instructor("Christian", "99777888", "eriksen@b.ca");
+		$this->dpt->addAllInstructor($testInstr);
+		$testCourse = new Course("CIVE281", "Mechanics", "Fall1998", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job("TA", "1992-01-01", $testCourse);
+		$jobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
+		
+		$testJob->setState("JobFull");
+		
+		$this->persis->writeDataToStore($this->dpt);
+				
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$fakeInstructorID = "27101214";
+		$content = "Good performance";
+		$fakeStudentID = "010203";
+		
+		try{
+			$this->contr->createReview($fakeInstructorID, $content, $jobID, $fakeStudentID);
+		} catch (Exception $e) {
+			$error =  $e->getMessage();
+		}
+		
+		$this->assertEquals($error, "@4Reviewer 27101214 not found in job! @5Reviewed student 010203 not found in job!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(1, count($this->dpt->getAllCourses()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(0, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 	
 	public function testCreateReviewJobStateNotJobFull(){
-		$this->assertEquals(0, 0);
+		$instructorID = "99777889";
+		$testInstr = new Instructor("Heung-Min", $instructorID, "son@b.ca");
+		$this->dpt->addAllInstructor($testInstr);
+		$testCourse = new Course("PHIL230", "Moral philosophy", "Fall2016", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job("Grader", "2222-02-02", $testCourse);
+		$jobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
+		
+		$testStudentID = "260680010";
+		$testStudent = new Student($testStudentID, "Michael Jackson", "michael.jackson@mail.mcgill.ca", false, 2, "Fun times", 0);
+		$this->dpt->addAllStudent($testStudent);
+		$testJob->addEmployee($testStudent);
+		
+		$this->persis->writeDataToStore($this->dpt);
+		
+		
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$content = "Not bad";
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
+		} catch (Exception $e) {
+			$error =  $e->getMessage();
+			}
+			
+		$this->assertEquals($error, "@3Job ".$jobID." must be in the JobFull state!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(1, count($this->dpt->getAllCourses()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 	
 	public function testCreateReviewStudentNotEmployee(){
-		$this->assertEquals(0, 0);
+		$instructorID = "99777890";
+		$testInstr = new Instructor("Erik", $instructorID, "lamela@b.ca");
+		$this->dpt->addAllInstructor($testInstr);
+		$testCourse = new Course("FACC100", "Engineering profession", "Summer2006", 4, 3, 4, 5, 124, 6, 7, 21, 22, 125, $this->dpt->getAllInstructors());
+		$this->dpt->addAllCourse($testCourse);
+		$testJob = new Job("Grader", "2010-10-11", $testCourse);
+		$jobID = $testJob->getJobID();
+		$this->dpt->addAllJob($testJob);
+		
+		$testJob->setState("JobFull");
+		
+		$testStudentID = "260680011";
+		$testStudent = new Student($testStudentID, "Eddie Murphy", "eddie.murphy@mail.mcgill.ca", false, 2, "Learning new stuff", 0);
+		$this->dpt->addAllStudent($testStudent);
+		
+		$this->persis->writeDataToStore($this->dpt);
+		
+		
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
+		
+		$content = "Could have been better";
+		
+		try{
+			$this->contr->createReview($instructorID, $content, $jobID, $testStudentID);
+		} catch (Exception $e) {
+			$error =  $e->getMessage();
+		}
+			
+		$this->assertEquals($error, "@5Reviewed student 260680011 not found in job!");
+		
+		$this->dpt = $this->persis->loadDataFromStore();
+		$this->assertEquals(1, count($this->dpt->getAllCourses()));
+		$this->assertEquals(1, count($this->dpt->getAllJobs()));
+		$this->assertEquals(1, count($this->dpt->getAllStudents()));
+		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 	}
 }
