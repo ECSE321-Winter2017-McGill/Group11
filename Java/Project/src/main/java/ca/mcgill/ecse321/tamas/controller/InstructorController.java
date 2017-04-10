@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.tamas.controller;
 
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +20,8 @@ public class InstructorController {
 	private final String createJobPostingNullSkillsRequiredErrorMessage = " Skills required cannot be empty!<br>";
 	private final String createJobPostingNullExperienceRequiredErrorMessage = " Experience required cannot be empty!<br>";
 	//private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
-	private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!<br>";
+	private final String createJobPostingNullOfferDeadlineErrorMessage = " Job offer deadline date cannot be empty!<br>";
+	private final String createJobPostingInvalidDateError = " Offer deadline cannot be before today!<br>";
 
 	private final String createInstructorNotIntegerIDError = " Input a valid 9 digit ID number!<br>";
 	private final String createInstructorDuplicateIDError = " Instructor ID already registered!<br>";
@@ -33,6 +35,8 @@ public class InstructorController {
 	private final String createReviewNullJobError = " Please select a job!<br>";
 
 
+
+
 	private Department department;
 	
 	public InstructorController(Department department) {
@@ -41,6 +45,15 @@ public class InstructorController {
 		
 	}
 
+    /**
+     * This method creates an instructor, which is represented by a name, a unique ID number (9 digits) and
+     * a valid McGill email which ends with either @mail.mcgill.ca or simply @mcgill.ca.
+     *
+     * @param name
+     * @param instructorIDString
+     * @param email
+     * @throws InvalidInputException
+     */
 	public void createInstructor(String name, String instructorIDString, String email) throws InvalidInputException {
 
 	    String error = "";
@@ -88,11 +101,15 @@ public class InstructorController {
 	}
 	
 	/**
+     * This method creates a job posting, the department must choose a valid associated job and fill in some information
+     * about the job posting for the students. Note that the offer deadline must be later than the time at which it is created.
+     *
 	 * @param job
 	 * @param jobDescription
 	 * @param skillsRequired
 	 * @param experienceRequired
 	 * @param offerDeadlineDate
+     * @throws InvalidInputException
 	 */
 	public void createJobPosting(Job job, String jobDescription, String skillsRequired, String experienceRequired, Date offerDeadlineDate) throws InvalidInputException{
 
@@ -113,6 +130,14 @@ public class InstructorController {
 		if(offerDeadlineDate == null){
 			error = error + createJobPostingNullOfferDeadlineErrorMessage;
 		}
+
+		Calendar c = Calendar.getInstance();
+		long current = c.getTimeInMillis();
+
+		if (offerDeadlineDate != null && current > offerDeadlineDate.getTime()) {
+			error += createJobPostingInvalidDateError;
+		}
+
 		if (error.length()>0){
 			throw new InvalidInputException(error);
 		}
@@ -128,9 +153,12 @@ public class InstructorController {
 	}
 	
 	/**
+     * An instructor (or the department) can write a review to a student using this method.
+     *
 	 * @param reviewer
 	 * @param reviewee
 	 * @param content
+     * @throws InvalidInputException
 	 */
 	public void createReview(Instructor reviewer, Student reviewee, String content, Job reviewedJob) throws InvalidInputException{
 
@@ -159,33 +187,5 @@ public class InstructorController {
 	    department.addAllReview(review);
 		PersistenceXStream.saveToXMLwithXStream(department);
 	}
-	
-	/**
-	 * @param job
-	 * @param applicant
-	 */
-	public void modifyAllocation(Job job, Student applicant){
-
-		boolean validApplicant = false;
-		//Check if student is an applicant
-		for(Student st: job.getApplicant()){
-			if(st == applicant){
-				validApplicant = true;
-				break;
-			}
-		}
-
-		if(validApplicant) {
-			job.removeApplicant(applicant);
-			job.addAllocatedStudent(applicant);
-		} else {
-			//// IMPLEMENT EXCEPTION \\\\\\\\\\\\\\\\\
-			return;
-		}
-
-		PersistenceXStream.saveToXMLwithXStream(department);
-
-	}
-	
 
 }

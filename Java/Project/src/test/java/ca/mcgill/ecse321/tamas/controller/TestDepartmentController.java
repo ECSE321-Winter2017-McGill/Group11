@@ -8,10 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -64,13 +61,13 @@ public class TestDepartmentController {
         String courseNumOfCredits = "3";
         String courseNumOfLabs = "0";
         String courseNumOfTutorials = "2";
-        String courseNumOfHours = "1";
+        String courseNumOfHours = "100";
         String courseNumOfStudentsEnrolled = "100";
         String courseTasRequired = "1";
         String courseGradersRequired = "1";
         String courseTaHourlyRates = "12";
         String courseGraderHourlyRates = "12";
-        String courseBudget = "10000";
+        String courseBudget = "100";
 
         try {
             departmentController.createCourse(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructorA);
@@ -108,7 +105,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Input a non-negative number of credits!<br> Input a non-negative number of labs!<br> Input a non-negative number of tutorials!<br> Input a non-negative number of hours!<br> Input a non-negative number of student enrolled!<br> Input a non-negative number of TAs needed!<br> Input a non-negative number of graders needed!<br> Input a non-negative TA hourly rate!<br> Input a non-negative grader hourly rate!<br> Input a non-negative budget!<br>", error);
+        assertEquals(" Input a non-negative number of credits!<br> Input a non-negative number of labs!<br> Input a non-negative number of tutorials!<br> Input a non-negative number of hours!<br> Input a non-negative number of student enrolled!<br> Input a non-negative number of TAs needed!<br> Input a non-negative number of graders needed!<br> Input a non-negative TA hourly rate!<br> Input a non-negative grader hourly rate!<br> Input a non-negative budget!<br>Please input valid number of hourse ranging between 45 hours to 180 hours!<br>", error);
         assertEquals(1,department.numberOfAllCourses());
 
         //remove the instructor for next test suits
@@ -131,7 +128,7 @@ public class TestDepartmentController {
         PositionType posType = PositionType.Grader;
 
         Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        c.set(2020, Calendar.MARCH, 16, 9, 0, 0);
         java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
 
 
@@ -166,7 +163,6 @@ public class TestDepartmentController {
         try {
             departmentController.createJob(posType,postDeadLine,courseA);
         } catch (InvalidInputException e) {
-            System.out.println(e.getMessage());
             fail();
         }
 
@@ -177,6 +173,18 @@ public class TestDepartmentController {
         }
         assertEquals(" Must select a Position!<br> Posting deadline cannot be empty!<br> Selected course cannot be empty!<br>", error);
         assertEquals(1,department.numberOfAllJobs());
+
+        Calendar c2 = Calendar.getInstance();
+        c.set(2013, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date postDeadLine2 = new java.sql.Date(c.getTimeInMillis());
+
+        try {
+            departmentController.createJob(posType,postDeadLine2,courseA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Posting deadline cannot be before today!<br>", error);
+        assertEquals(1, department.numberOfAllJobs());
 
 
         //remove instructor and course for next test suite

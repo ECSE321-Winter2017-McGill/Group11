@@ -33,6 +33,16 @@ public class StudentController {
 		
 	}
 
+	/**
+	 *
+	 * @param studentID
+	 * @param name
+	 * @param email
+	 * @param isGrad
+	 * @param year
+	 * @param jobPreference
+	 * @param numberOfHours
+	 */
     public void createStudent(int studentID, String name, String email, boolean isGrad, int year, String jobPreference, int numberOfHours){
 		String error = "";
 
@@ -42,6 +52,20 @@ public class StudentController {
 
     }
 
+	/**
+	 * This method is used to create a student, inputs are either string or boolean that will be used to identify a
+	 * student by. The ID should be unique to the student, the email should contain the correct pattern, the year of
+	 * the student should be in the range [0,1,2,3,4], number of hours will be 0, non empty name and job preference.
+	 *
+	 * @param studentIDString
+	 * @param name
+	 * @param email
+	 * @param isGrad
+	 * @param yearString
+	 * @param jobPreference
+	 * @param numberOfHoursString
+	 * @throws InvalidInputException
+	 */
 	public void createStudent(String studentIDString, String name, String email, boolean isGrad, String yearString, String jobPreference, String numberOfHoursString) throws InvalidInputException {
 		String error = "";
 		int studentID = -999;
@@ -123,8 +147,15 @@ public class StudentController {
         PersistenceXStream.saveToXMLwithXStream(department);
 
     }
-	
 
+
+	/**
+	 * Student will apply to a job posting through this method
+	 *
+	 * @param jobPosting
+	 * @param applicant
+	 * @throws InvalidInputException
+	 */
 	public void applyToJobPosting(Job jobPosting,Student applicant) throws InvalidInputException {
 		
 		String error = "";
@@ -152,9 +183,15 @@ public class StudentController {
 		PersistenceXStream.saveToXMLwithXStream(department);
 		
 	}
-	
-	
 
+	/**
+	 * Student will be able to respond to a job offer with this method, answering with a accept or not accept
+	 *
+	 * @param student
+	 * @param jobOffer
+	 * @param accept
+	 * @throws InvalidInputException
+	 */
 	public void respondToJobOffer(Student student,Job jobOffer, boolean accept) throws InvalidInputException {
 		String error = "";
 		int maximumWorkHoursForStudent = 180;
