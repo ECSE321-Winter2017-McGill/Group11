@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.sql.Date;
 import java.util.Calendar;
 
+import ca.mcgill.ecse321.tamas.controller.InstructorController;
+import ca.mcgill.ecse321.tamas.controller.InvalidInputException;
 import ca.mcgill.ecse321.tamas.controller.StudentController;
 import ca.mcgill.ecse321.tamas.model.Course;
 import ca.mcgill.ecse321.tamas.model.Department;
@@ -26,6 +28,7 @@ import static ca.mcgill.ecse321.tamasandroid.R.id.studentspinner;
 public class ViewOfferActivity extends AppCompatActivity {
     private Department d = null;
     private String fileName;
+    String error = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class ViewOfferActivity extends AppCompatActivity {
 
         fileName = getFilesDir().getAbsolutePath() + "/tamasandroid.xml";
         d = PersistenceXStream.initializeModelManager(fileName);
+        addJobPosting();
         refreshData();
     }
 
@@ -51,6 +55,25 @@ public class ViewOfferActivity extends AppCompatActivity {
         }
         spinner2.setAdapter(jobOfferAdapter);
 
+    }
+
+    public void addJobPosting(){
+        //create a dummy posting
+        Instructor dummyInstructor = new Instructor("John", 123456799, "john@mail.uni.ca");
+        Course dummyCourse = new Course("EECC 111", "Introduction", "W2017", 15, 0, 3, 120, 200, 5, 4, 20, 15, 500, dummyInstructor);
+        Calendar c = Calendar.getInstance();
+        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date dummyPostDeadLine = new java.sql.Date(c.getTimeInMillis());
+        Job dummyJob = new Job(PositionType.TA, dummyPostDeadLine, dummyCourse);
+
+        InstructorController instructor = new InstructorController(d);
+        d.addAllJob(dummyJob);
+        try {
+            instructor.createJobPosting(dummyJob, "Tutorial for first years", "Should have knowledge of EECC 112", "Should have been TA at least once before", dummyPostDeadLine);
+            error = "";
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
     }
 
     public void acceptOffer(View view){
