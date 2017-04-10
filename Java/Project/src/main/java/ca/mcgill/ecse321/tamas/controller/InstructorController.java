@@ -175,33 +175,5 @@ public class InstructorController {
 	    department.addAllReview(review);
 		PersistenceXStream.saveToXMLwithXStream(department);
 	}
-	
-	/**
-	 * @param job
-	 * @param applicant
-	 */
-	public void modifyAllocation(Job job, Student applicant){
-
-		boolean validApplicant = false;
-		//Check if student is an applicant
-		for(Student st: job.getApplicant()){
-			if(st == applicant){
-				validApplicant = true;
-				break;
-			}
-		}
-
-		if(validApplicant) {
-			job.removeApplicant(applicant);
-			job.addAllocatedStudent(applicant);
-		} else {
-			//// IMPLEMENT EXCEPTION \\\\\\\\\\\\\\\\\
-			return;
-		}
-
-		PersistenceXStream.saveToXMLwithXStream(department);
-
-	}
-	
 
 }

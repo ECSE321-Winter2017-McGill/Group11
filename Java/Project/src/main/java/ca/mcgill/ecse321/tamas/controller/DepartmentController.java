@@ -276,12 +276,12 @@ public class DepartmentController {
             error += createJobNullCourse;
         }
 
-//        Calendar c = Calendar.getInstance();
-//        Date currentDate = new Date(c.getTimeInMillis());
-//
-//        if (postingDeadlineDate.before(currentDate)) {
-//            error += createJobInvalidDateError;
-//        }
+        Calendar c = Calendar.getInstance();
+        long current = c.getTimeInMillis();
+
+        if (postingDeadlineDate != null && current > postingDeadlineDate.getTime()) {
+            error += createJobInvalidDateError;
+        }
 
         if (error.length()>0){
             throw new InvalidInputException(error);

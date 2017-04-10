@@ -8,10 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -131,7 +128,7 @@ public class TestDepartmentController {
         PositionType posType = PositionType.Grader;
 
         Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        c.set(2020, Calendar.MARCH, 16, 9, 0, 0);
         java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
 
 
@@ -166,7 +163,6 @@ public class TestDepartmentController {
         try {
             departmentController.createJob(posType,postDeadLine,courseA);
         } catch (InvalidInputException e) {
-            System.out.println(e.getMessage());
             fail();
         }
 
@@ -177,6 +173,18 @@ public class TestDepartmentController {
         }
         assertEquals(" Must select a Position!<br> Posting deadline cannot be empty!<br> Selected course cannot be empty!<br>", error);
         assertEquals(1,department.numberOfAllJobs());
+
+        Calendar c2 = Calendar.getInstance();
+        c.set(2013, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date postDeadLine2 = new java.sql.Date(c.getTimeInMillis());
+
+        try {
+            departmentController.createJob(posType,postDeadLine2,courseA);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Posting deadline cannot be before today!<br>", error);
+        assertEquals(1, department.numberOfAllJobs());
 
 
         //remove instructor and course for next test suite
