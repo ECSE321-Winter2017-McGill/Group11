@@ -51,44 +51,6 @@ public class ViewOfferActivity extends AppCompatActivity {
         spinner2.setAdapter(jobOfferAdapter);
     }
 
-    public void generateOffer(View view){
-        //Create Instructor
-        String instructorName = "James";
-        int instructorID = 12346;
-        String instructorEmail = "james@mcgill.ca";
-
-        Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
-        d.addAllInstructor(instructor);
-
-
-        //Create Course
-        String courseCode = "ECSE321";
-        String courseName = "Software Engineering";
-        String courseSemester = "W2017";
-        int courseNumOfCredits = 3;
-        int courseNumOfLabs = 0;
-        int courseNumOfTutorials = 2;
-        int courseNumOfHours = 1;
-        int courseNumOfStudentsEnrolled = 100;
-        int courseTasRequired = 1;
-        int courseGradersRequired = 1;
-        int courseTaHourlyRates = 12;
-        int courseGraderHourlyRates = 12;
-        int courseBudget = 10000;
-
-        Course course = new Course(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructor);
-        d.addAllCourse(course);
-
-        //Create Job
-        PositionType posType = PositionType.Grader;
-        Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
-        Date postDeadLine = new Date(c.getTimeInMillis());
-
-        Job jobOffer = new Job(posType,postDeadLine, course);
-        d.addAllJob(jobOffer);
-    }
-
     public void acceptOffer(View view){
         StudentController studentController = new StudentController(d);
 
@@ -114,7 +76,7 @@ public class ViewOfferActivity extends AppCompatActivity {
         String jobDesc = offerSpinner.getSelectedItem().toString();
         Job jobOffer = null;
         for (Job j : d.getAllJobs()) {
-            String offerDesc = j.getJobDescription();
+            String offerDesc = j.getPosType().toString() + j.getCorrespondingCourse().getName();
             if (offerDesc.contentEquals(jobDesc)) {
                 jobOffer = j;
                 break;

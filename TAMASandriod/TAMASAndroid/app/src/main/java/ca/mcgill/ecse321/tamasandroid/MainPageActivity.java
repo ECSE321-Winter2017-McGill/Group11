@@ -44,7 +44,7 @@ public class MainPageActivity extends AppCompatActivity {
 
     private void refreshData(){
         TextView tv = (TextView) findViewById(R.id.studentDescription);
-        tv.setText(MainActivity.login.getName());
+        tv.setText(MainActivity.login.getName()+ " "+MainActivity.login.getEmail());
     }
 
     //Will access the view offers tab for job offers

@@ -48,53 +48,6 @@ public class ViewReviewsActivity extends AppCompatActivity {
         spinner2.setAdapter(reviewAdapter);
     }
 
-    //useless
-    /*
-    public void generateReview(View view){
-        //generate a view to be available to be viewed
-        //Create Instructor
-        String instructorName = "James";
-        int instructorID = 12347;
-        String instructorEmail = "james@mcgill.ca";
-
-        Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
-        d.addAllInstructor(instructor);
-
-        //Create Course
-        String courseCode = "ECSE323";
-        String courseName = "Software Engineering Adv";
-        String courseSemester = "W2017";
-        int courseNumOfCredits = 3;
-        int courseNumOfLabs = 0;
-        int courseNumOfTutorials = 2;
-        int courseNumOfHours = 1;
-        int courseNumOfStudentsEnrolled = 100;
-        int courseTasRequired = 1;
-        int courseGradersRequired = 1;
-        int courseTaHourlyRates = 12;
-        int courseGraderHourlyRates = 12;
-        int courseBudget = 10000;
-
-        Course course = new Course(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructor);
-        d.addAllCourse(course);
-
-        //Create Job
-        PositionType posType = PositionType.Grader;
-        Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
-        Date postDeadLine = new Date(c.getTimeInMillis());
-
-        Job job = new Job(posType,postDeadLine, course);
-        d.addAllJob(job);
-
-        String content = "Student was very efficient and always on time would hire again and provide a recommendation";
-
-        //i.createReview(instructor, MainActivity.login, content, job);
-        Review review = new Review(content, MainActivity.login, job, instructor);
-
-        d.addAllReview(review);
-    }
-*/
     public void generateReview(){
         //generate a view to be available to be viewed
         //Create Instructor
