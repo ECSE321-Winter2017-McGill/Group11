@@ -29,6 +29,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.util.Vector;
 
 //model classes
 //Controller class
@@ -190,6 +191,19 @@ public class BetaDepartmentPage extends JFrame {
 
     //End Respond to Offer
 
+    //Allocation Manager
+
+    private JComboBox<String> courseListForAllocationManager;
+    private JComboBox<String> jobListForAllocationManager;
+
+
+    private DefaultTableModel applicantTableModelForApplicantManager = new DefaultTableModel();
+    private DefaultTableModel allocatedTableModelForApplicantManager = new DefaultTableModel();
+    private Course associatedCourseForAllocationManager = null;
+
+
+    //End Allocation Manager
+
 
     private Integer selectedInstructorForPublishJobPosting = -1;
     private Integer selectedJobForPublishJobPosting = -1;
@@ -214,6 +228,9 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedCourseForCreateReview = -1;
     private Integer selectedJobForCreateReview = -1;
     private Integer selectedStudentForCreateReview = -1;
+
+    private Integer selectedCourseListForAllocationManager = -1;
+    private Integer selectedJobListForAllocationManager = -1;
 
 
 
@@ -266,6 +283,7 @@ public class BetaDepartmentPage extends JFrame {
         addNewFrame(desktopPane, ViewJob(), "View Job Info", "View Job Info", webPanel, 700, 400);
         addNewFrame(desktopPane, CreateReview(), "Create Review", "Create Review", webPanel, 500, 300);
         addNewFrame(desktopPane, RespondToOffer(), "Respond to Offer", "Respond to Offer", webPanel, 500, 300);
+        addNewFrame(desktopPane, AllocationManager(), "Allocation Manager", "Allocation Manager", webPanel, 500, 300);
 
 
         webPanel.setBounds(0, 0, 900, 900);
@@ -294,6 +312,7 @@ public class BetaDepartmentPage extends JFrame {
         updateJobView();
         updateCreateReview(null,null,null,true);
         updateRespondToOffer();
+        updateAllocationManager();
     }
 
     private void updatePublishJobView(Instructor instructor, Course course, boolean clearData) {
@@ -400,7 +419,7 @@ public class BetaDepartmentPage extends JFrame {
         //Clear and Update job list for apply job
         jobListForStudentApplyJob.removeAllItems();
         for (Job j : department.getAllJobs()) {
-            if (j.getState() == JobStatus.Posted) {
+            if (j.getState() == JobStatus.Posted || j.getState() == JobStatus.AppliedTo) {
                 String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
                 jobListForStudentApplyJob.addItem(tmp);
             }
@@ -476,7 +495,7 @@ public class BetaDepartmentPage extends JFrame {
 
         createOfferJobComboBox.removeAllItems();
         for (Job j : department.getAllJobs()) {
-            if (j.getState() == JobStatus.Posted) {
+            if (j.getState() == JobStatus.AllocationFinalized) {
                 String tmp = j.getCorrespondingCourse().getName() + "-" + j.getPosType().toString();
                 createOfferJobComboBox.addItem(tmp);
             }
@@ -641,6 +660,18 @@ public class BetaDepartmentPage extends JFrame {
 
         selectedOfferForRespondToOffer = -1;
         offerListForRespondToOffer.setSelectedIndex(selectedOfferForRespondToOffer);
+    }
+
+    private void updateAllocationManager(){
+        courseListForAllocationManager.removeAllItems();
+        for (Course c : department.getAllCourses()) {
+            String tmp = c.getCode() + ": " + c.getName();
+            courseListForAllocationManager.addItem(tmp);
+        }
+
+        Object[] columns = {"Student ID", "Student Name", "Email", "Education"};
+        allocatedTableModel.setColumnIdentifiers(columns);
+        applicantTableModel.setColumnIdentifiers(columns);
     }
 
 
@@ -2948,9 +2979,9 @@ public class BetaDepartmentPage extends JFrame {
                     scrollApplicantTable.setVisible(false);
 
 
-                    currentJobTableModel.setRowCount(0);
-                    appliedToJobsTableModel.setRowCount(0);
-                    previousJobsTableModel.setRowCount(0);
+                    employeeTableModel.setRowCount(0);
+                    allocatedTableModel.setRowCount(0);
+                    applicantTableModel.setRowCount(0);
 
                 }
 
@@ -3244,6 +3275,286 @@ public class BetaDepartmentPage extends JFrame {
             }
         });
 
+
+        return scrollPane;
+    }
+
+    private Component AllocationManager(){
+
+        final WebPanel contentPane = new WebPanel();
+        contentPane.setLayout(new GridBagLayout());
+        GridBagConstraints gridBagConstraints = new GridBagConstraints();
+        gridBagConstraints.anchor = GridBagConstraints.WEST;
+        final WebScrollPane scrollPane = new WebScrollPane(contentPane);
+
+        contentPane.setBackground(new Color(255, 255, 255));
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+        final JLabel allocationManagerLabel = new JLabel("Allocation Manager");
+        allocationManagerLabel.setFont(new Font("Lucida Grande", Font.BOLD, 14));
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = 1;
+        contentPane.add(allocationManagerLabel, gridBagConstraints);
+
+        final JLabel courseLabel = new JLabel("Course");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(courseLabel,gridBagConstraints);
+
+        courseListForAllocationManager = new JComboBox<String>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(courseListForAllocationManager, gridBagConstraints);
+
+        final JLabel jobLabel = new JLabel("Job");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(jobLabel,gridBagConstraints);
+
+        jobListForAllocationManager = new JComboBox<>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(jobListForAllocationManager,gridBagConstraints);
+
+        final JLabel allocatedLabel = new JLabel("Allocated Students");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 1;
+        contentPane.add(allocatedLabel, gridBagConstraints);
+        allocatedLabel.setVisible(false);
+
+
+        final WebTable tableAllocated = new WebTable();
+        tableAllocated.setModel(allocatedTableModelForApplicantManager);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy+=3;
+        gridBagConstraints.gridwidth = 2;
+        tableAllocated.setEditable(false);
+
+        final WebScrollPane scrollAllocatedTable = new WebScrollPane(tableAllocated);
+        tableAllocated.setFillsViewportHeight(true);
+
+        scrollAllocatedTable.setMinimumWidth(600);
+        contentPane.add(scrollAllocatedTable,gridBagConstraints);
+        scrollAllocatedTable.setVisible(false);
+
+
+        final JLabel applicantLabel = new JLabel("Applicants");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 1;
+        contentPane.add(applicantLabel, gridBagConstraints);
+        applicantLabel.setVisible(false);
+
+        final WebTable tableApplicants = new WebTable();
+        tableApplicants.setModel(applicantTableModelForApplicantManager);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy+=3;
+        gridBagConstraints.gridwidth = 2;
+        tableApplicants.setEditable(false);
+
+        final JLabel allocationManagerErrorLabel = new JLabel("");
+        allocationManagerErrorLabel.setForeground(Color.RED);
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        gridBagConstraints.gridwidth = 2;
+        contentPane.add(allocationManagerErrorLabel,gridBagConstraints);
+
+        final WebScrollPane scrollApplicantTable = new WebScrollPane(tableApplicants);
+        tableApplicants.setFillsViewportHeight(true);
+
+        scrollApplicantTable.setMinimumWidth(600);
+        contentPane.add(scrollApplicantTable,gridBagConstraints);
+        scrollApplicantTable.setVisible(false);
+
+        WebButton autoAllocateStudents = new WebButton("Auto Allocate");
+        autoAllocateStudents.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                Job job = null;
+
+                //search through all the jobs of the department to find the corresponding job object
+                if(associatedCourseForAllocationManager!=null && selectedJobListForAllocationManager >= 0) {
+                    job = associatedCourseForAllocationManager.getJob(selectedJobListForAllocationManager);
+                }
+
+
+
+                try {
+                    departmentController.autoAllocation(job);
+                } catch (InvalidInputException error) {
+                }
+
+                updateDisplay();
+
+            }
+        });
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(autoAllocateStudents, gridBagConstraints);
+
+        WebButton removeAllocatedStudents = new WebButton("Remove Allocated");
+        removeAllocatedStudents.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+
+                String selectedStudent = null;
+                String[] splittedStudentData = null;
+
+                Job job = null;
+                Student student = null;
+
+                //search through all the jobs of the department to find the corresponding job object
+                if(associatedCourseForAllocationManager!=null && selectedJobListForAllocationManager >= 0) {
+                    job = associatedCourseForAllocationManager.getJob(selectedJobListForAllocationManager);
+                }
+
+                if(job != null){
+
+                    try {
+                        selectedStudent = allocatedTableModelForApplicantManager.getDataVector().elementAt(tableAllocated.getSelectedRow()).toString();
+                        splittedStudentData = selectedStudent.split("\\p{P}");
+                    }catch(Exception e1){
+                    }
+                }
+
+                if(selectedStudent != null){
+                    for(Student s: department.getAllStudents()){
+                        if(splittedStudentData[1].contentEquals(s.getStudentID()+"")){
+                            student = s;
+                            break;
+                        }
+                    }
+                }
+
+
+                try {
+                    departmentController.removeAllocation(job,student);
+                } catch (InvalidInputException error) {
+                }
+
+                updateDisplay();
+
+            }
+        });
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(removeAllocatedStudents, gridBagConstraints);
+
+
+        courseListForAllocationManager.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedCourseListForAllocationManager = cb.getSelectedIndex();
+                if(cb.getSelectedIndex() >= 0) {
+
+                    associatedCourseForAllocationManager = department.getAllCourse(cb.getSelectedIndex());
+
+                    jobListForAllocationManager.removeAllItems();
+                    for(Job j: associatedCourseForAllocationManager.getJobs()){
+                        String tmp = j.getPosType().toString();
+                        jobListForAllocationManager.addItem(tmp);
+                    }
+                    selectedJobListForAllocationManager = -1;
+                    jobListForAllocationManager.setSelectedIndex(selectedJobListForAllocationManager);
+
+
+                }else{
+
+                }
+
+            }
+        });
+
+        jobListForAllocationManager.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedJobListForAllocationManager = cb.getSelectedIndex();
+
+                if (cb.getSelectedIndex() >= 0) {
+                    applicantLabel.setVisible(true);
+                    scrollApplicantTable.setVisible(true);
+
+                    allocatedLabel.setVisible(true);
+                    scrollAllocatedTable.setVisible(true);
+
+
+
+                    String tmpPos = cb.getSelectedItem().toString();
+                    Job tmpJob = null;
+                    if(associatedCourseForAllocationManager != null) {
+                        for (Job j : associatedCourseForAllocationManager.getJobs()) {
+
+                            if (j.getPosType().toString().contains(tmpPos)) {
+                                tmpJob = j;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (tmpJob != null) {
+
+                        Object[] columns = {"Student ID", "Student Name", "Email", "Education"};
+                        allocatedTableModelForApplicantManager.setColumnIdentifiers(columns);
+                        applicantTableModelForApplicantManager.setColumnIdentifiers(columns);
+
+                        allocatedTableModelForApplicantManager.setRowCount(0);
+                        applicantTableModelForApplicantManager.setRowCount(0);
+
+
+                        for (Student s : tmpJob.getAllocatedStudent()) {
+                            String studentID = s.getStudentID()+"";
+                            String studentName = s.getName();
+                            String studentEmail = s.getEmail();
+                            String education= "";
+                            boolean isGrad = s.getIsGrad();
+                            if (isGrad) {
+                                education = "Graduate";
+                            } else {
+                                education = "Undergraduate";
+                            }
+
+                            Object[] tmpData = {studentID,studentName,studentEmail,education};
+                            allocatedTableModelForApplicantManager.addRow(tmpData);
+                        }
+
+                        for (Student s : tmpJob.getApplicant()) {
+                            String studentID = s.getStudentID()+"";
+                            String studentName = s.getName();
+                            String studentEmail = s.getEmail();
+                            String education= "";
+                            boolean isGrad = s.getIsGrad();
+                            if (isGrad) {
+                                education = "Graduate";
+                            } else {
+                                education = "Undergraduate";
+                            }
+
+                            Object[] tmpData = {studentID,studentName,studentEmail,education};
+                            applicantTableModelForApplicantManager.addRow(tmpData);
+                        }
+
+
+                    }
+
+
+                } else {
+
+                    applicantLabel.setVisible(false);
+                    scrollApplicantTable.setVisible(false);
+
+                    allocatedLabel.setVisible(false);
+                    scrollAllocatedTable.setVisible(false);
+
+
+                    applicantTableModelForApplicantManager.setRowCount(0);
+                    allocatedTableModelForApplicantManager.setRowCount(0);
+
+                }
+
+
+
+            }
+        });
 
         return scrollPane;
     }

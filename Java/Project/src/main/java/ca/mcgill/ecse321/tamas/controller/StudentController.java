@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.tamas.controller;
 
 import ca.mcgill.ecse321.tamas.model.Department;
 import ca.mcgill.ecse321.tamas.model.Job;
+import ca.mcgill.ecse321.tamas.model.JobStatus;
 import ca.mcgill.ecse321.tamas.model.Student;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
@@ -146,6 +147,8 @@ public class StudentController {
 			throw new InvalidInputException(error);
 		
 		jobPosting.addApplicant(applicant);
+		jobPosting.setState(JobStatus.AppliedTo);
+
 		PersistenceXStream.saveToXMLwithXStream(department);
 		
 	}

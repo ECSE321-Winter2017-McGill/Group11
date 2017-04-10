@@ -1,14 +1,10 @@
 package ca.mcgill.ecse321.tamas.controller;
 
-import ca.mcgill.ecse321.tamas.model.Course;
-import ca.mcgill.ecse321.tamas.model.Department;
-import ca.mcgill.ecse321.tamas.model.Instructor;
-import ca.mcgill.ecse321.tamas.model.Job;
-import ca.mcgill.ecse321.tamas.model.PositionType;
-import ca.mcgill.ecse321.tamas.model.Student;
+import ca.mcgill.ecse321.tamas.model.*;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DepartmentController {
@@ -49,9 +45,15 @@ public class DepartmentController {
     private final String createAllocationNullJobError = " Job cannot be empty!<br>";
     private final String createAllocationNullStudentError = " Student cannot be empty!<br>";
     private final String createAllocationStudentAlreadyAllocatedError = " Student is already allocated!<br>";
+    private final String createAllocationStudentNotApplicantError = " Student has not applied to this job!<br>";
     private final String removeAllocationStudentNotAllocatedError = " Student is not allocated for this job!<br>";
 
     private final String createJobOfferOfferNotAddedError = " Offer already made to this student!<br>";
+
+    private final String autoAllocationNullJobError = " Job cannot be empty!<br>";
+    private final String autoAllocationWrongJobStatusError = " Job is not ready to be allocated! No applicants!<br>";
+    private final String autoAllocationFullError = " Allocation for current job is full!<br>";
+
 
     private Department department;
 
@@ -292,6 +294,18 @@ public class DepartmentController {
                     error += createAllocationStudentAlreadyAllocatedError;
                 }
             }
+
+            boolean isApplicant = false;
+            for (Student s : job.getApplicant()) {
+                if (s.getStudentID() == student.getStudentID()) {
+                    isApplicant = true;
+                    break;
+                }
+            }
+
+            if(!isApplicant){
+                error += createAllocationStudentNotApplicantError;
+            }
         }
 
         if (error.length()>0) {
@@ -299,6 +313,7 @@ public class DepartmentController {
         }
 
         job.addAllocatedStudent(student);
+        job.removeApplicant(student);
 
 		PersistenceXStream.saveToXMLwithXStream(department);
 
@@ -339,6 +354,8 @@ public class DepartmentController {
 
         job.removeAllocatedStudent(student);
 
+        job.addApplicant(student);
+
 		PersistenceXStream.saveToXMLwithXStream(department);
 
 	}
@@ -371,6 +388,83 @@ public class DepartmentController {
 	    PersistenceXStream.saveToXMLwithXStream(department);
 	}
 
-	
+	public void autoAllocation(Job job) throws InvalidInputException{
+
+        String error = "";
+        if (job == null) {
+            error += autoAllocationNullJobError;
+        }else {
+            int numberOfAllocated = 0;
+            if(job.getPosType() == PositionType.Grader){
+                numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
+            }else{
+                numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
+
+            }
+
+            if (job.getState() != JobStatus.AppliedTo) {
+                error += autoAllocationWrongJobStatusError;
+            }
+
+        }
+
+        if (error.length()>0) {
+            throw new InvalidInputException(error);
+        }
+
+        ArrayList<Student> tmpUndergraduateList = new ArrayList<>();
+        ArrayList<Student> tmpGraduateList = new ArrayList<>();
+
+        for(Student s: job.getAllocatedStudent()){
+            job.addApplicant(s);
+        }
+
+        ArrayList<Student> studentList = new ArrayList<>(job.getAllocatedStudent());
+
+        for(Student s: studentList){
+            job.removeAllocatedStudent(s);
+        }
+
+        for(Student s: job.getApplicant()){
+            if(s.isIsGrad() == true){
+                tmpGraduateList.add(s);
+            }else{
+                tmpUndergraduateList.add(s);
+            }
+        }
+
+        int numberOfAllocated = 0;
+        if(job.getPosType() == PositionType.Grader){
+            numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
+        }else{
+            numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
+
+        }
+
+
+
+        for(int i = 0; job.getAllocatedStudent().size() < numberOfAllocated; i++){
+            if(tmpGraduateList.size() > 0){
+                try {
+                    createAllocation(job, tmpGraduateList.get(0));
+                }catch (InvalidInputException e){
+                    e.getMessage();
+                }
+                tmpGraduateList.remove(0);
+            }else if(tmpUndergraduateList.size() > 0){
+                try {
+                    createAllocation(job, tmpUndergraduateList.get(0));
+                }catch (InvalidInputException e){
+
+                }
+                tmpUndergraduateList.remove(0);
+            }else{
+                break;
+            }
+        }
+
+        PersistenceXStream.saveToXMLwithXStream(department);
+
+    }
 
 }
