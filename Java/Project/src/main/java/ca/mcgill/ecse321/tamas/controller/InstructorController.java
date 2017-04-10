@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.tamas.controller;
 
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +20,8 @@ public class InstructorController {
 	private final String createJobPostingNullSkillsRequiredErrorMessage = " Skills required cannot be empty!<br>";
 	private final String createJobPostingNullExperienceRequiredErrorMessage = " Experience required cannot be empty!<br>";
 	//private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
-	private final String createJobPostingNullOfferDeadlineErrorMessage = "Job offer deadline date cannot be empty!<br>";
+	private final String createJobPostingNullOfferDeadlineErrorMessage = " Job offer deadline date cannot be empty!<br>";
+	private final String createJobPostingInvalidDateError = " Offer deadline cannot be before today!<br>";
 
 	private final String createInstructorNotIntegerIDError = " Input a valid 9 digit ID number!<br>";
 	private final String createInstructorDuplicateIDError = " Instructor ID already registered!<br>";
@@ -31,6 +33,8 @@ public class InstructorController {
 	private final String createReviewNullStudentError = " Please select a student!<br>";
 	private final String createReviewNullContentError = " Content cannot be empty!<br>";
 	private final String createReviewNullJobError = " Please select a job!<br>";
+
+
 
 
 	private Department department;
@@ -126,6 +130,14 @@ public class InstructorController {
 		if(offerDeadlineDate == null){
 			error = error + createJobPostingNullOfferDeadlineErrorMessage;
 		}
+
+		Calendar c = Calendar.getInstance();
+		long current = c.getTimeInMillis();
+
+		if (offerDeadlineDate != null && current > offerDeadlineDate.getTime()) {
+			error += createJobPostingInvalidDateError;
+		}
+
 		if (error.length()>0){
 			throw new InvalidInputException(error);
 		}

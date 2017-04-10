@@ -111,6 +111,8 @@ public class TestInstructorController {
         assertEquals(0, department.getAllCourses().size());
         assertEquals(0, department.getAllInstructors().size());
 
+        String error = "";
+
         InstructorController instructorController = new InstructorController(department);
 
         //Create Instructor
@@ -146,7 +148,7 @@ public class TestInstructorController {
         //Create Job
         PositionType posType = PositionType.Grader;
         Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        c.set(2020, Calendar.MARCH, 16, 9, 0, 0);
         Date postDeadLine = new Date(c.getTimeInMillis());
 
         Job job = new Job(posType,postDeadLine, course);
@@ -158,7 +160,7 @@ public class TestInstructorController {
         String jobDescription = "Learn Software Engineering";
         String skillsRequired = "COMP202";
         String experienceRequired = "None";
-        c.set(2017, Calendar.MARCH, 30, 9, 0, 0);
+        c.set(2013, Calendar.MARCH, 30, 9, 0, 0);
         Date offerDeadLine = new Date(c.getTimeInMillis());
 
 
@@ -168,9 +170,33 @@ public class TestInstructorController {
         }catch (InvalidInputException e){
             fail();
         }
+        assertEquals(JobStatus.Posted, job.getState());
+
+        try {
+            instructorController.createJobPosting(null,null,null, null,null);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(error," Must select Job!<br> Job description cannot be empty!<br> Skills required cannot be empty!<br> Experience required cannot be empty!<br> Job offer deadline date cannot be empty!<br>");
+        assertEquals(JobStatus.Posted, job.getState());
+
+        try {
+            instructorController.createJobPosting(null, "", "", "", null);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(error," Must select Job!<br> Job description cannot be empty!<br> Skills required cannot be empty!<br> Experience required cannot be empty!<br> Job offer deadline date cannot be empty!<br>");
+        assertEquals(JobStatus.Posted, job.getState());
+
+        try{
+            instructorController.createJobPosting(job, jobDescription,skillsRequired,experienceRequired,offerDeadLine);
+        }catch (InvalidInputException e){
+            error = e.getMessage();
+        }
+        assertEquals(error," Offer deadline cannot be before today!<br>");
+        assertEquals(JobStatus.Posted, job.getState());
 
         checkJobPosting(job,jobDescription,skillsRequired,experienceRequired,postDeadLine,department);
-
         Department department2 = (Department)PersistenceXStream.loadFromXMLwithXStream();
         checkJobPosting(job,jobDescription,skillsRequired,experienceRequired,postDeadLine,department2);
 
