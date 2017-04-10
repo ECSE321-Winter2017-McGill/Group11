@@ -61,12 +61,12 @@ class Job{
 	
 	autounique jobID;
 	lazy jobDescription;
-	posType;
+	PositionType posType;
 	lazy skillsRequired;
 	lazy experienceRequired;
 	Date postingDeadlineDate;
 	lazy Date offerDeadlineDate;
-	defaulted state = "Ready";
+	defaulted JobStatus state = JobStatus.Ready;
 
 	0..3 -> * Student allocatedStudent;
 
