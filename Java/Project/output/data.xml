@@ -1,56 +1,22 @@
 <ca.mcgill.ecse321.tamas.model.Department id="1">
-  <allJobs id="2">
-    <Job id="3">
-      <jobDescription>Learn Software Engineering</jobDescription>
-      <posType>Grader</posType>
-      <skillsRequired>COMP202</skillsRequired>
-      <experienceRequired>None</experienceRequired>
-      <postingDeadlineDate id="4">2020-03-16</postingDeadlineDate>
-      <offerDeadlineDate reference="4"/>
-      <state>Posted</state>
-      <jobID>2</jobID>
-      <allocatedStudent id="5"/>
-      <previousWorker id="6"/>
-      <applicant id="7"/>
-      <offerReceiver id="8"/>
-      <employee id="9"/>
-      <correspondingCourse id="10">
-        <code>ECSE321</code>
-        <name>Software Engineering</name>
-        <semester>W2017</semester>
-        <numberOfCredits>3</numberOfCredits>
-        <numberOfLabs>0</numberOfLabs>
-        <numberOfTutorials>2</numberOfTutorials>
-        <numberOfHours>1</numberOfHours>
-        <studentsEnrolled>100</studentsEnrolled>
-        <tasNeeded>1</tasNeeded>
-        <gradersNeeded>1</gradersNeeded>
-        <taHourlyRate>12</taHourlyRate>
-        <graderHourlyRate>12</graderHourlyRate>
-        <budget>10000</budget>
-        <jobs id="11">
-          <Job reference="3"/>
-        </jobs>
-        <instructors id="12">
-          <Instructor id="13">
-            <name>James</name>
-            <instructorID>12345</instructorID>
-            <email>james@mcgill.ca</email>
-            <courses id="14">
-              <Course reference="10"/>
-            </courses>
-            <reviewText id="15"/>
-          </Instructor>
-        </instructors>
-      </correspondingCourse>
-    </Job>
-  </allJobs>
-  <allCourses id="16">
-    <Course reference="10"/>
-  </allCourses>
-  <allInstructors id="17">
-    <Instructor reference="13"/>
-  </allInstructors>
-  <allStudents id="18"/>
-  <allReviews id="19"/>
+  <allJobs id="2"/>
+  <allCourses id="3"/>
+  <allInstructors id="4"/>
+  <allStudents id="5">
+    <Student id="6">
+      <studentID>123456799</studentID>
+      <name>Sam</name>
+      <email>Sam@mcgill.ca</email>
+      <isGrad>true</isGrad>
+      <year>1</year>
+      <jobPreference>Preference to be a TA</jobPreference>
+      <numberOfHours>0</numberOfHours>
+      <previousJobExperiences id="7"/>
+      <jobsAppliedTo id="8"/>
+      <offeredJobs id="9"/>
+      <currentJobs id="10"/>
+      <reviewText id="11"/>
+    </Student>
+  </allStudents>
+  <allReviews id="12"/>
 </ca.mcgill.ecse321.tamas.model.Department>
