@@ -25,7 +25,7 @@ foreach($Teachers as $Teacher){
 		$id = $Teacher -> getInstructorID();
 		if(strcmp($id, $_POST['instructorID']) == 0){
 			$MatchingID = true;
-			$_SESSION['user'] = $email;
+			$_SESSION['user'] = $Teacher;
 		}
 	}
 }

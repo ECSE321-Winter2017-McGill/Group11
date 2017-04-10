@@ -44,8 +44,8 @@
 							</li>
 							<li class="divider">
 							</li>
-							<li class="disabled">
-								<a href="#">Write Review</a>
+							<li>
+								<a href="WriteReviewPage.php">Write Review</a>
 							</li>
 						</ul>
 					</li>

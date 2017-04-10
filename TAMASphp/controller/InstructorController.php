@@ -118,7 +118,7 @@ class InstructorController
 				$bool_myOfferDateBeforePostingDate = strtotime($offerDate) < strtotime($postDate);
 					
 				if ($bool_myOfferDateBeforePostingDate) {
-					$error .= "@6Offer deadline date must be after Posting deadline! ";
+					$error .= "@6Offer deadline date must be after Posting deadline: " . $postDate . "!";
 				}
 		}
 		if (strlen($error) > 0){
@@ -282,7 +282,7 @@ class InstructorController
 			}
 			$error .= " not found! ";
 		} else {
-			if ($myJob->getState() != "JobFull"){
+			if ($myJob->getState() != "Accepted"){
 				$error .= "@3Job ";
 				$error .= $ajobID;
 				$error .= " must be in the JobFull state! ";

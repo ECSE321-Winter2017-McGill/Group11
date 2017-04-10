@@ -10,7 +10,7 @@ require_once __DIR__.'\..\model\Student.php';
 
 class PersistenceTamas {
 	private $filename;
-	function __construct($filename = 'data.txt') {
+	function __construct($filename = 'TAMASdata.txt') {
 		$this->filename = $filename;
 	}
 	function loadDataFromStore() {
