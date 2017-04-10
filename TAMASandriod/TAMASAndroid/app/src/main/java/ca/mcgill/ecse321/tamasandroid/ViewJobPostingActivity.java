@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.util.Calendar;
 
@@ -56,6 +57,10 @@ public class ViewJobPostingActivity extends AppCompatActivity {
             jobPostingAdapter.add(posting);
         }
         spinner2.setAdapter(jobPostingAdapter);
+
+        //Set error in error TextView
+        TextView errorText = (TextView) findViewById(R.id.errorlabel);
+        errorText.setText(error);
     }
 
     public void addJobPosting(){

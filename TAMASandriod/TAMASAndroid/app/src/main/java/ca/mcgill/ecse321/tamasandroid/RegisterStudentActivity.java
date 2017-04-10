@@ -45,6 +45,10 @@ public class RegisterStudentActivity extends AppCompatActivity {
         tvPreference.setText("");
         TextView tvHours = (TextView) findViewById(R.id.newstudent_hours);
         tvHours.setText("");
+
+        //Set error in error TextView
+        TextView errorText = (TextView) findViewById(R.id.errorlabel);
+        errorText.setText(error);
     }
 
     public void addStudent(View v) {

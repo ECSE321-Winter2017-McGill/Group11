@@ -18,7 +18,15 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:weightSum="1">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/error_label"
+            android:id="@+id/errorlabel"
+            android:textColor="@android:color/holo_red_light"/>
 
         <LinearLayout
             android:orientation="horizontal"
@@ -51,5 +59,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="36dp" />
+
+
 
 </RelativeLayout>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import java.sql.Date;
 import java.util.Calendar;
@@ -49,6 +50,7 @@ public class ViewOfferActivity extends AppCompatActivity {
             jobOfferAdapter.add(posting);
         }
         spinner2.setAdapter(jobOfferAdapter);
+
     }
 
     public void acceptOffer(View view){
@@ -66,6 +68,9 @@ public class ViewOfferActivity extends AppCompatActivity {
             }
         }
         studentController.respondToJobOffer(MainActivity.login, jobOffer, true);
+
+        d.removeAllJob(jobOffer);
+        refreshData();
     }
 
     public void rejectOffer(View view){
@@ -83,5 +88,8 @@ public class ViewOfferActivity extends AppCompatActivity {
             }
         }
         studentController.respondToJobOffer(MainActivity.login, jobOffer, false);
+
+        d.removeAllJob(jobOffer);
+        refreshData();
     }
 }
