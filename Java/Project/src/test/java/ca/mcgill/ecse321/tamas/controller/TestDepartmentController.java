@@ -64,13 +64,13 @@ public class TestDepartmentController {
         String courseNumOfCredits = "3";
         String courseNumOfLabs = "0";
         String courseNumOfTutorials = "2";
-        String courseNumOfHours = "1";
+        String courseNumOfHours = "100";
         String courseNumOfStudentsEnrolled = "100";
         String courseTasRequired = "1";
         String courseGradersRequired = "1";
         String courseTaHourlyRates = "12";
         String courseGraderHourlyRates = "12";
-        String courseBudget = "10000";
+        String courseBudget = "100";
 
         try {
             departmentController.createCourse(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructorA);
@@ -108,7 +108,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Input a non-negative number of credits!<br> Input a non-negative number of labs!<br> Input a non-negative number of tutorials!<br> Input a non-negative number of hours!<br> Input a non-negative number of student enrolled!<br> Input a non-negative number of TAs needed!<br> Input a non-negative number of graders needed!<br> Input a non-negative TA hourly rate!<br> Input a non-negative grader hourly rate!<br> Input a non-negative budget!<br>", error);
+        assertEquals(" Input a non-negative number of credits!<br> Input a non-negative number of labs!<br> Input a non-negative number of tutorials!<br> Input a non-negative number of hours!<br> Input a non-negative number of student enrolled!<br> Input a non-negative number of TAs needed!<br> Input a non-negative number of graders needed!<br> Input a non-negative TA hourly rate!<br> Input a non-negative grader hourly rate!<br> Input a non-negative budget!<br>Please input valid number of hourse ranging between 45 hours to 180 hours!<br>", error);
         assertEquals(1,department.numberOfAllCourses());
 
         //remove the instructor for next test suits

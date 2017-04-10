@@ -41,6 +41,15 @@ public class InstructorController {
 		
 	}
 
+    /**
+     * This method creates an instructor, which is represented by a name, a unique ID number (9 digits) and
+     * a valid McGill email which ends with either @mail.mcgill.ca or simply @mcgill.ca.
+     *
+     * @param name
+     * @param instructorIDString
+     * @param email
+     * @throws InvalidInputException
+     */
 	public void createInstructor(String name, String instructorIDString, String email) throws InvalidInputException {
 
 	    String error = "";
@@ -88,11 +97,15 @@ public class InstructorController {
 	}
 	
 	/**
+     * This method creates a job posting, the department must choose a valid associated job and fill in some information
+     * about the job posting for the students. Note that the offer deadline must be later than the time at which it is created.
+     *
 	 * @param job
 	 * @param jobDescription
 	 * @param skillsRequired
 	 * @param experienceRequired
 	 * @param offerDeadlineDate
+     * @throws InvalidInputException
 	 */
 	public void createJobPosting(Job job, String jobDescription, String skillsRequired, String experienceRequired, Date offerDeadlineDate) throws InvalidInputException{
 
@@ -128,9 +141,12 @@ public class InstructorController {
 	}
 	
 	/**
+     * An instructor (or the department) can write a review to a student using this method.
+     *
 	 * @param reviewer
 	 * @param reviewee
 	 * @param content
+     * @throws InvalidInputException
 	 */
 	public void createReview(Instructor reviewer, Student reviewee, String content, Job reviewedJob) throws InvalidInputException{
 

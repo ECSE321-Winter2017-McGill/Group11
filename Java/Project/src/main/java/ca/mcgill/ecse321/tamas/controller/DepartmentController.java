@@ -61,7 +61,27 @@ public class DepartmentController {
 
 	}
 
-
+    /**
+     * This methods is used to create a course by the department. All inputs are strings but most will be converted to integers
+     * and therefore they must be convertible to type int (and must be strictly greater than 0). Moreover, the number of hours must
+     * be in the range ]45,180[ and a non-empty course name must be provided along with the instructor teaching the course.
+     *
+     * @param code
+     * @param name
+     * @param semester
+     * @param numberOfCreditsString
+     * @param numberOfLabsString
+     * @param numberOfTutorialsString
+     * @param numberOfHoursString
+     * @param studentsEnrolledString
+     * @param tasNeededString
+     * @param gradersNeededString
+     * @param taHourlyRateString
+     * @param graderHourlyRateString
+     * @param budgetString
+     * @param instructor
+     * @throws InvalidInputException
+     */
 	public void createCourse(String code, String name, String semester, String numberOfCreditsString, String numberOfLabsString, String numberOfTutorialsString, String numberOfHoursString, String studentsEnrolledString, String tasNeededString, String gradersNeededString, String taHourlyRateString, String graderHourlyRateString, String budgetString, Instructor instructor) throws InvalidInputException {
 
 	    String error = "";
@@ -233,12 +253,15 @@ public class DepartmentController {
 		PersistenceXStream.saveToXMLwithXStream(department);
 	}
 
-	/**
-	 * @param posType
-	 * @param postingDeadlineDate
-	 * @param course
-	 *
-	 */
+    /**
+     * Can create (initialize) a TA or grader job using the method. The posting deadline cannot be before the job is
+     * created.
+     *
+     * @param posType
+     * @param postingDeadlineDate
+     * @param course
+     * @throws InvalidInputException
+     */
 	public void createJob(PositionType posType, Date postingDeadlineDate, Course course) throws InvalidInputException {
 
 	    String error = "";
@@ -271,10 +294,15 @@ public class DepartmentController {
 	}
 
 
-	/**
-	 * @param job
-	 * @param student
-	 */
+    /**
+     *
+     * The department can create an allocation by linking a job and a student that applied for the job through
+     * this method.
+     *
+     * @param job
+     * @param student
+     * @throws InvalidInputException
+     */
 	public void createAllocation(Job job, Student student) throws InvalidInputException {
 
         String error = "";
@@ -304,10 +332,14 @@ public class DepartmentController {
 
 	}
 
-	/**
-	 * @param job
-	 * @param student
-	 */
+    /**
+     * The department can remove an allocation by removing the student that was already allocated for the particular
+     * job through this method.
+     *
+     * @param job
+     * @param student
+     * @throws InvalidInputException
+     */
 	public void removeAllocation(Job job, Student student) throws InvalidInputException {
 
         String error = "";
@@ -343,10 +375,13 @@ public class DepartmentController {
 
 	}
 
-	/**
-	 * @param job
-	 * @param student
-	 */
+    /**
+     * With this method, the department can issue a job posting for a specific job and student.
+     *
+     * @param job
+     * @param student
+     * @throws InvalidInputException
+     */
 	public void createJobOffer(Job job, Student student) throws  InvalidInputException {
 
         String error = "";
