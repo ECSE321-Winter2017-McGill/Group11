@@ -87,7 +87,7 @@ class InstructorController
 		$offerDate = InvalidInputException::validate_input($offerDeadlineDate);
 
 		$bool_myJob = $myJob == null;
-		$bool_aJobID = $aJobID == null;
+		$bool_aJobID = $aJobID == null || $aJobID == "-1";
 		$bool_myJobDesc = $jobDesc == null || strlen ( $jobDesc ) == 0;
 		$bool_mySkillsReq = $skillsReq == null || strlen ( $skillsReq ) == 0;
 		$bool_myExpReq = $expReq == null || strlen ( $expReq ) == 0;
@@ -277,7 +277,7 @@ class InstructorController
 		}
 		if ($myJob == null) {
 			$error .= "@2Job ";
-			if($ajobID != null){
+			if($ajobID != null && $ajobID != "-1"){
 				$error .= $ajobID;
 			}
 			$error .= " not found! ";
@@ -285,19 +285,19 @@ class InstructorController
 			if ($myJob->getState() != "Accepted"){
 				$error .= "@3Job ";
 				$error .= $ajobID;
-				$error .= " must be in the JobFull state! ";
+				$error .= " must be in the Accepted state! ";
 			}
 		}
 		if ($myReviewer == null) {
 			$error .= "@4Reviewer ";
-			if($aninstructorID != null){
+			if($aninstructorID != null && $aninstructorID != "-1"){
 				$error .= $aninstructorID;
 			}
 			$error .= " not found in job! ";
 		}
 		if ($myReviewee == null) {
 			$error .= "@5Reviewed student ";
-			if($astudentID != null){
+			if($astudentID != null && $astudentID != "-1"){
 				$error .= $astudentID;
 			}
 			$error .= " not found in job! ";
