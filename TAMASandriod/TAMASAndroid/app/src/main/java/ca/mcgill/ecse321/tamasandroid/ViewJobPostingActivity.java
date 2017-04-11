@@ -63,6 +63,9 @@ public class ViewJobPostingActivity extends AppCompatActivity {
         errorText.setText(error);
     }
 
+    /**
+     * Method to generate a job posting
+     */
     public void addJobPosting(){
         //create a dummy posting
         Instructor dummyInstructor = new Instructor("Henry Smith", 123456789, "henry.smith@mail.uni.ca");
@@ -82,6 +85,10 @@ public class ViewJobPostingActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to apply to job posting
+     * @param view
+     */
     public void applyToPosting(View view){
         //implement apply methods
 

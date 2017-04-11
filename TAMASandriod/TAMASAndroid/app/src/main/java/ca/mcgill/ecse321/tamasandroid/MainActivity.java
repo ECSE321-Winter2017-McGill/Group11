@@ -87,6 +87,10 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(participantAdapter);
     }
 
+    /**
+     * login as a student
+     * @param view
+     */
     public void loginActivity(View view){
         //select student in spinner for login
         final Spinner studentSpinner = (Spinner) findViewById(R.id.studentspinner);
@@ -104,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Register a new student
+     * @param view
+     */
     public void registerActivity(View view){
         Intent intent = new Intent(this, RegisterStudentActivity.class);
         startActivity(intent);
