@@ -228,7 +228,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 			$this->fail;
 		}
 
-		
+
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(1, count($this->dpt->getAllCourses()));
@@ -236,16 +236,16 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
-		
+
 		//adding the new modified job to the testCourse variable initally connected to the old non modified job
-		$testCourse->addJob($this->dpt->getAllJob_index(0));	
-		
+		$testCourse->addJob($this->dpt->getAllJob_index(0));
+
 		//kept attributes
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
 		//DONE**********************
 		$this->assertEquals($testCourse, $this->dpt->getAllJob_index(0)->getCorrespondingCourse());
-		
+
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getEmployee()));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getOfferReceiver()));
 		$this->assertEquals("2016-10-16", $this->dpt->getAllJob_index(0)->getPostingDeadlineDate());
@@ -458,10 +458,11 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 		//because $testStudAlloc had not applied to any jobs before being allocated
 		$testStudentAppl->removeJobsAppliedTo($testJob);
-		
+
 		//manually replacing Tharsan by Aren as allocated student
 		$testCourse->getJob_index(0)->removeAllocatedStudent($testStudentAlloc);
 		$testCourse->getJob_index(0)->addAllocatedStudent($testStudentAppl);
+		$testCourse->getJob_index(0)->addApplicant($testStudentAlloc);
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(1, count($this->dpt->getAllCourses()));
@@ -488,7 +489,8 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		//modified Attributes
 		$this->assertEquals(1, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
 		$this->assertEquals($testStudentAppl, $this->dpt->getAllJob_index(0)->getAllocatedStudent_index(0));
-		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
+		$this->assertEquals(1, count($this->dpt->getAllJob_index(0)->getApplicant()));
+		$this->assertEquals($testStudentAlloc, $this->dpt->getAllJob_index(0)->getApplicant_index(0));
 	}
 
 	public function testModifyAllocationNull(){
@@ -515,30 +517,30 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
-	
+
 	public function testModifyAllocationBlanksAndMinus1(){
 		$this->assertEquals(0, 0);
 		/*$this->assertEquals(0, count($this->dpt->getAllJobs()));
-		$this->assertEquals(0, count($this->dpt->getAllStudents()));
-	
-		$jobID = "-1";
-		$testStudAllocID = "-1";
-		$testStudApplID = "";
-	
-		try{
+		 $this->assertEquals(0, count($this->dpt->getAllStudents()));
+
+		 $jobID = "-1";
+		 $testStudAllocID = "-1";
+		 $testStudApplID = "";
+
+		 try{
 			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
-		} catch (Exception $e) {
+			} catch (Exception $e) {
 			$error =  $e->getMessage();
-		}
-	
-		$this->assertEquals($error, "@1Job  not found! @3Allocated student  not found in job! @4Applied student  not found in job!");
-	
-	
-		$this->assertEquals(0, count($this->dpt->getAllCourses()));
-		$this->assertEquals(0, count($this->dpt->getAllJobs()));
-		$this->assertEquals(0, count($this->dpt->getAllReviews()));
-		$this->assertEquals(0, count($this->dpt->getAllStudents()));
-		$this->assertEquals(0, count($this->dpt->getAllInstructors()));*/
+			}
+
+			$this->assertEquals($error, "@1Job  not found! @3Allocated student  not found in job! @4Applied student  not found in job!");
+
+
+			$this->assertEquals(0, count($this->dpt->getAllCourses()));
+			$this->assertEquals(0, count($this->dpt->getAllJobs()));
+			$this->assertEquals(0, count($this->dpt->getAllReviews()));
+			$this->assertEquals(0, count($this->dpt->getAllStudents()));
+			$this->assertEquals(0, count($this->dpt->getAllInstructors()));*/
 	}
 
 	public function testModifyAllocationJobInexistant(){

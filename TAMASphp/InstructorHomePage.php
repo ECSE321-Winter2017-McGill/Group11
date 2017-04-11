@@ -63,7 +63,25 @@
 					</h1>
 				</div>
 				<p>
-					Please navigate via the heading thumbnails. The greyed-out ones are extra features that remained unimplemented.
+					<?php
+					require_once 'controller\InvalidInputException.php';
+					require_once 'persistence\PersistenceTAMAS.php';
+					require_once 'model\Course.php';
+					require_once 'model\Department.php';
+					require_once 'model\Instructor.php';
+					require_once 'model\Job.php';
+					require_once 'model\Review.php';
+					require_once 'model\Student.php';
+					session_start();
+					$persis = new PersistenceTamas();
+					$dpt = $persis -> loadDataFromStore();
+					?>
+					
+					Welcome <?php echo $_SESSION['user'] -> getName()?>!
+				</p>
+				<p>
+					Please navigate via the heading thumbnails.
+					The greyed-out ones are extra features that remained unimplemented.
 				</p>
 			</div>
 		</div>
