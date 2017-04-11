@@ -31,12 +31,6 @@
 				<p>
 					You have logged out sucessfully. Redirecting to home page.
 					<?php
-					session_start();
-					foreach($_SESSION as $key => $value){
-						$key = NULL;
-						$value = NULL;
-					}
-					session_destroy();
 					header( "refresh:3; url=/TAMASphp/Index.php" );
 					exit;
 					?>

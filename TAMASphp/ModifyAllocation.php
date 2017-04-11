@@ -8,15 +8,24 @@ require_once 'model\Instructor.php';
 
 session_start();
 $c = new InstructorController();
+
+// Try modifying the allocation
 try{
+	
+	// Reset the error messages
 	$_SESSION['errorAllocID'] = "";
 	$_SESSION['errorAllocJobState'] = "";
 	$_SESSION['errorAllocStudent'] = "";
 	$_SESSION['errorAllocAppliedStudent'] = "";
 	$_SESSION['modAllocationSuccess'] = "";
+	
 	$c->modifyAllocation($_POST['aJobID'], $_POST['allocatedStudentID'], $_POST['appliedStudentID']);
+	
+	// If it is succesful, this line will return a success notification
 	$_SESSION['modAllocationSuccess'] = "Allocation modified succesfully.";
 } catch (Exception $e){
+	
+	// Parse and cut the error message from the controller
 	$e = $e->getMessage();
 	$e_array = explode('@', $e);
 	foreach($e_array as $entry){

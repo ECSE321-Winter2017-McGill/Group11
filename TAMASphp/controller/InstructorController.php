@@ -19,14 +19,14 @@ class InstructorController
 		$instructorName = InvalidInputException::validate_input($myinstructorName);
 		$instructorID = InvalidInputException::validate_input($myinstructorID);
 		$instructorEmail = InvalidInputException::validate_input($myinstructorEmail);
-		
+
 		//ID validity checks
 		$validIDlength = strlen($instructorID) == 9;
 		$validIDFormat = is_numeric($instructorID);
-		 
+			
 		//Email validity check
 		$validEmailFormat = filter_var($instructorEmail, FILTER_VALIDATE_EMAIL);
-		
+
 		// throw exceptions, if need be
 		if ($instructorName == null || strlen ( $instructorName ) == 0) {
 			$error .= "@1Instructor name cannot be empty! ";
@@ -112,20 +112,20 @@ class InstructorController
 		}
 		if ($bool_myOfferDate) {
 			$error .= "@5Offer deadline date must be specified correctly (YYYY-MM-DD)! ";
+		}
+		if(!$bool_myJob && !$bool_myOfferDate){
+			$postDate = $myJob->getPostingDeadlineDate();
+			$bool_myOfferDateBeforePostingDate = strtotime($offerDate) < strtotime($postDate);
+				
+			if ($bool_myOfferDateBeforePostingDate) {
+				$error .= "@6Offer deadline date must be after Posting deadline: " . $postDate . "!";
 			}
-			if(!$bool_myJob && !$bool_myOfferDate){
-				$postDate = $myJob->getPostingDeadlineDate();
-				$bool_myOfferDateBeforePostingDate = strtotime($offerDate) < strtotime($postDate);
-					
-				if ($bool_myOfferDateBeforePostingDate) {
-					$error .= "@6Offer deadline date must be after Posting deadline: " . $postDate . "!";
-				}
 		}
 		if (strlen($error) > 0){
 			throw new Exception (trim($error));
 		}
 		else{
-				
+
 			//3. remove current version of the job in question
 			$dpt->removeAllJob($myJob);
 			//deletes the job saved in dpt equal to myJob
@@ -142,9 +142,9 @@ class InstructorController
 			$myJob->setOfferDeadlineDate($dateConv);
 
 			$myJob->setState("Posted");
-			
-			
-			
+				
+				
+				
 			$dpt->addAllJob($myJob);
 			$persis->writeDataToStore($dpt);
 		}
@@ -178,7 +178,7 @@ class InstructorController
 					break;
 				}
 			}
-				
+
 			//4. find applied student
 			foreach ($myJob->getApplicant() as $student){
 				if(strcmp($student->getStudentID(), $appliedStudentID) == 0){
@@ -226,14 +226,14 @@ class InstructorController
 		}
 		else{
 			$dpt->removeAllJob($myJob);
-				
+
 			$myJob->addAllocatedStudent($myApplStud);
 			$myJob->addApplicant($myAllocStud);
 			$myJob->removeAllocatedStudent($myAllocStud);
 			$myJob->removeApplicant($myApplStud);
-				
+
 			$dpt->addAllJob($myJob);
-				
+
 			$persis->writeDataToStore($dpt);
 		}
 	}
@@ -269,11 +269,11 @@ class InstructorController
 				}
 			}
 		}
-		
+
 		$error = "";
 
 		//if($content == null || strlen($content)){
-			if($content == null){
+		if($content == null){
 			$error .= "@1Review content cannot be empty! ";
 		}
 		if ($myJob == null) {
@@ -308,20 +308,20 @@ class InstructorController
 			// throw exceptions, if need be
 		}
 		else{
-				
+
 			$review = new Review ($content, $myReviewee, $myJob, $myReviewer);
 			$dpt->addAllReview($review);
-				
-			//other end of connections (for student and instructor) are set automatically
-			
-			/*$dpt->removeAllStudent($myReviewee);
-			$dpt->removeAllInstructor($myReviewer);
-				
-			$myReviewee->addReviewText($review);
-			$myReviewer->addReviewText($review);
 
-			$dpt->addAllStudent($myReviewee);
-			$dpt->addAllInstructor($myReviewer);*/
+			//other end of connections (for student and instructor) are set automatically
+				
+			/*$dpt->removeAllStudent($myReviewee);
+			 $dpt->removeAllInstructor($myReviewer);
+
+			 $myReviewee->addReviewText($review);
+			 $myReviewer->addReviewText($review);
+
+			 $dpt->addAllStudent($myReviewee);
+			 $dpt->addAllInstructor($myReviewer);*/
 
 			$persis->writeDataToStore($dpt);
 		}

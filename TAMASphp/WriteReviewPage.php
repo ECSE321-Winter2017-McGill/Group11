@@ -165,14 +165,6 @@
 					?>
 					</span></p>
 					
-					<span class="error">
-					<?php
-					if (isset($_SESSION['wrongEmployeeAssoc']) && !empty($_SESSION['wrongEmployeeAssoc'])){
-						echo " * " . $_SESSION["wrongEmployeeAssoc"];
-					}
-					?>
-					</span></p>
-					
 					<p><span class="success">
 					<?php 
 					if (isset($_SESSION['revPostingSuccess']) && !empty($_SESSION['revPostingSuccess'])){
