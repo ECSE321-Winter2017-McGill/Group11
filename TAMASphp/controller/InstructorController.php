@@ -130,13 +130,8 @@ class InstructorController
 			throw new Exception (trim($error));
 		}
 		else{
-<<<<<<< HEAD
 				
 			//5. remove current version of the job in question
-=======
-
-			//3. remove current version of the job in question
->>>>>>> origin/master
 			$dpt->removeAllJob($myJob);
 
 			//6. Convert date
@@ -148,14 +143,8 @@ class InstructorController
 			$myJob->setExperienceRequired($expReq);
 			$myJob->setOfferDeadlineDate($dateConv);
 			$myJob->setState("Posted");
-<<<<<<< HEAD
-			
+
 			//8. adding the job to persistence
-=======
-				
-				
-				
->>>>>>> origin/master
 			$dpt->addAllJob($myJob);
 			$persis->writeDataToStore($dpt);
 		}
@@ -188,11 +177,6 @@ class InstructorController
 					break;
 				}
 			}
-
-<<<<<<< HEAD
-=======
-			//4. find applied student
->>>>>>> origin/master
 			foreach ($myJob->getApplicant() as $student){
 				if(strcmp($student->getStudentID(), $appliedStudentID) == 0){
 					$myApplStud = $student;
@@ -234,23 +218,15 @@ class InstructorController
 		}
 		else{
 			$dpt->removeAllJob($myJob);
-<<<<<<< HEAD
-			
+
 			//the previously allocated student is replaced in the applicants list in case the instructor makes a mistake
 			//and choses the incorrect applicant to replace the allocated student with.
-=======
-
->>>>>>> origin/master
 			$myJob->addAllocatedStudent($myApplStud);
 			$myJob->addApplicant($myAllocStud);
 			$myJob->removeAllocatedStudent($myAllocStud);
 			$myJob->removeApplicant($myApplStud);
 
 			$dpt->addAllJob($myJob);
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
 			$persis->writeDataToStore($dpt);
 		}
 	}
@@ -291,11 +267,6 @@ class InstructorController
 		}
 
 		$error = "";
-<<<<<<< HEAD
-=======
-
-		//if($content == null || strlen($content)){
->>>>>>> origin/master
 		if($content == null){
 			$error .= "@1Review content cannot be empty! ";
 		}
@@ -330,26 +301,9 @@ class InstructorController
 			throw new Exception (trim($error));
 		}
 		else{
-<<<<<<< HEAD
-			$review = new Review ($content, $myReviewee, $myJob, $myReviewer);
-			$dpt->addAllReview($review);
-=======
-
 			$review = new Review ($content, $myReviewee, $myJob, $myReviewer);
 			$dpt->addAllReview($review);
 
-			//other end of connections (for student and instructor) are set automatically
-				
-			/*$dpt->removeAllStudent($myReviewee);
-			 $dpt->removeAllInstructor($myReviewer);
-
-			 $myReviewee->addReviewText($review);
-			 $myReviewer->addReviewText($review);
-
-			 $dpt->addAllStudent($myReviewee);
-			 $dpt->addAllInstructor($myReviewer);*/
-
->>>>>>> origin/master
 			$persis->writeDataToStore($dpt);
 		}
 	}
