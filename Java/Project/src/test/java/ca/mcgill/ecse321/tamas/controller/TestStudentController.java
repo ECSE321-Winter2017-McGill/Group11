@@ -457,9 +457,9 @@ public class TestStudentController {
         Student student = null;
 
         //Create Instructor
-        String instructorName = "James";
+        String instructorName = "Johnny";
         int instructorID = 23456;
-        String instructorEmail = "james@mcgill.ca";
+        String instructorEmail = "johnny@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
         department.addAllInstructor(instructor);
@@ -498,6 +498,8 @@ public class TestStudentController {
         try{
             studentController.applyToJobPosting(jobPosting, student);
         } catch (InvalidInputException e){
+
+        } catch (NullPointerException a){
 
         }
         assertEquals(0, jobPosting.getApplicant().size());
@@ -786,7 +788,7 @@ public class TestStudentController {
 
         //Create Instructor
         String instructorName = "Tom";
-        int instructorID = 12345;
+        int instructorID = 12222;
         String instructorEmail = "tom@mcgill.ca";
 
         Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
@@ -836,6 +838,124 @@ public class TestStudentController {
 
         student.delete();
         instructor.delete();
+    }
+
+    @Test
+    public void testRespondToOfferNull(){
+        assertEquals(0, department.getAllStudents().size());
+        assertEquals(0, department.getAllJobs().size());
+        assertEquals(0, department.getAllCourses().size());
+        assertEquals(0, department.getAllInstructors().size());
+
+        StudentController studentController = new StudentController(department);
+
+
+        //Create Student
+        Student student = null;
+
+        //Create Instructor
+        String instructorName = "Tam";
+        int instructorID = 13333;
+        String instructorEmail = "tam@mcgill.ca";
+
+        Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
+        department.addAllInstructor(instructor);
+        assertEquals(1, department.getAllInstructors().size());
+
+        //Create Course
+        String courseCode = "ECSE321";
+        String courseName = "Software Engineering";
+        String courseSemester = "W2017";
+        int courseNumOfCredits = 3;
+        int courseNumOfLabs = 0;
+        int courseNumOfTutorials = 2;
+        int courseNumOfHours = 1;
+        int courseNumOfStudentsEnrolled = 100;
+        int courseTasRequired = 1;
+        int courseGradersRequired = 1;
+        int courseTaHourlyRates = 12;
+        int courseGraderHourlyRates = 12;
+        int courseBudget = 10000;
+
+        Course course = new Course(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructor);
+        department.addAllCourse(course);
+        assertEquals(1, department.getAllCourses().size());
+
+        //Create Job
+        PositionType posType = PositionType.Grader;
+        Calendar c = Calendar.getInstance();
+        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        Date postDeadLine = new Date(c.getTimeInMillis());
+
+        Job jobOffer = new Job(posType,postDeadLine, course);
+        department.addAllJob(jobOffer);
+        assertEquals(1, department.getAllJobs().size());
+
+        //accept or decline
+        boolean reject = false;
+
+        assertEquals(0, jobOffer.getEmployee().size());
+
+        try {
+            studentController.respondToJobOffer(student, jobOffer, reject);
+        } catch (InvalidInputException e){
+
+        } catch (NullPointerException a){
+
+        }
+        assertEquals(0, jobOffer.getEmployee().size());
+
+        instructor.delete();
+    }
+
+    @Test
+    public void testRespondToOfferNull2(){
+        assertEquals(0, department.getAllStudents().size());
+        assertEquals(0, department.getAllJobs().size());
+        assertEquals(0, department.getAllCourses().size());
+        assertEquals(0, department.getAllInstructors().size());
+
+        StudentController studentController = new StudentController(department);
+
+
+        //Create Student
+        int studentID = 133456789;
+        String name = "Jon";
+        String email = "jon@mcgill.ca";
+        boolean isGrad = true;
+        int year = 1;
+        String jobPreference = "Preference to be a TA";
+        int numberOfHours = 0;
+
+        Student student = new Student(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+        department.addAllStudent(student);
+        assertEquals(1, department.getAllStudents().size());
+
+        //Create Instructor
+        String instructorName = "Tom";
+        int instructorID = 12222;
+        String instructorEmail = "tom@mcgill.ca";
+
+        Instructor instructor = new Instructor(instructorName,instructorID,instructorEmail);
+        department.addAllInstructor(instructor);
+        assertEquals(1, department.getAllInstructors().size());
+
+        //Create Course
+        Job jobOffer = null;
+
+        //accept or decline
+        boolean reject = false;
+
+        try {
+            studentController.respondToJobOffer(student, jobOffer, reject);
+        } catch (InvalidInputException e){
+
+        } catch (NullPointerException a){
+
+        }
+        assertEquals(0, student.numberOfCurrentJobs());
+
+        student.delete();
     }
 
 }
