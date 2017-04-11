@@ -228,6 +228,7 @@ class InstructorController
 			$dpt->removeAllJob($myJob);
 				
 			$myJob->addAllocatedStudent($myApplStud);
+			$myJob->addApplicant($myAllocStud);
 			$myJob->removeAllocatedStudent($myAllocStud);
 			$myJob->removeApplicant($myApplStud);
 				

@@ -462,6 +462,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		//manually replacing Tharsan by Aren as allocated student
 		$testCourse->getJob_index(0)->removeAllocatedStudent($testStudentAlloc);
 		$testCourse->getJob_index(0)->addAllocatedStudent($testStudentAppl);
+		$testCourse->getJob_index(0)->addApplicant($testStudentAlloc);
 
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(1, count($this->dpt->getAllCourses()));
@@ -488,7 +489,8 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		//modified Attributes
 		$this->assertEquals(1, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
 		$this->assertEquals($testStudentAppl, $this->dpt->getAllJob_index(0)->getAllocatedStudent_index(0));
-		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
+		$this->assertEquals(1, count($this->dpt->getAllJob_index(0)->getApplicant()));
+		$this->assertEquals($testStudentAlloc, $this->dpt->getAllJob_index(0)->getApplicant_index(0));
 	}
 
 	public function testModifyAllocationNull(){
