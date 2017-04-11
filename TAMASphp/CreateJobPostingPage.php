@@ -44,8 +44,8 @@
 							<li class="disabled">
 								<a href="#">Job Posting List</a>
 							</li>
-							<li class="disabled">
-								<a href="#">Modify Allocation</a>
+							<li>
+								<a href="ModifyAllocationPage.php">Modify Allocation</a>
 							</li>
 							<li class="divider">
 							</li>

@@ -29,7 +29,7 @@
 					</h1>
 				</div>
 				<p>
-					Welcome to the Instructor module. This login page is not fully implemented yet.
+					Welcome to the Instructor module.
 				</p>
 				<form action="Login.php" method="post">
 					<p> Email: <input type="text" name="instructorEmail"/>

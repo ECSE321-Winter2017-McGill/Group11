@@ -1,34 +1,10 @@
-<<<<<<< HEAD
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>TAMAS</title>
-		<style>
-			.error {color: #FF0000;}
-		</style>
-	</head>
-	<body>
-	<?php
-   		header("Location: InstructorHomePage.php");
-   		exit;
-	?>
-	</body>
-=======
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8">
-		<title>TAMAS</title>
-		<style>
-			.error {color: #FF0000;}
-		</style>
-	</head>
-	<body>
-	<?php
-   		header("Location: InstructorHomePage.php");
-   		exit;
-	?>
-	</body>
->>>>>>> origin/master
-</html>
+<?php
+session_start();
+foreach($_SESSION as $key => $value){
+	$key = NULL;
+	$value = NULL;
+}
+session_destroy();
+header("Location: Dummies.php");
+exit;
+?>

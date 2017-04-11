@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Write Review</title>
+    <title>Create Job Posting</title>
 	
 	<style>
 			.error {color: #FF0000;}
@@ -44,13 +44,13 @@
 							<li class="disabled">
 								<a href="#">Job Posting List</a>
 							</li>
-							<li>
-								<a href="ModifyAllocationPage.php">Modify Allocation</a>
+							<li class="active">
+								<a href="ModifyAllocation.php">Modify Allocation</a>
 							</li>
 							<li class="divider">
 							</li>
-							<li class="active">
-								<a href="#">Write Review</a>
+							<li>
+								<a href="WriteReviewPage.php">Write Review</a>
 							</li>
 						</ul>
 					</li>
@@ -64,10 +64,10 @@
 			<div class="col-md-12">
 				<div class="page-header">
 					<h1>
-						TAMAS <small>Write Review</small>
+						TAMAS <small>Create Job Posting</small>
 					</h1>
 				</div>
-				<form action="WriteReview.php" method="post">
+				<form action="ModifyAllocation.php" method="post">
 					<?php
 					require_once 'controller\InvalidInputException.php';
 					require_once 'persistence\PersistenceTAMAS.php';
@@ -81,106 +81,95 @@
 					
 					$persis = new PersistenceTamas();
 					$dpt = $persis -> loadDataFromStore();
-					?>
-				
-					<p>Author: <select name = "author" id = "author">
-					<option value='-1'>Choose an option...</option>
-						<option value="<?php echo $_SESSION['user'] -> getInstructorID() ?>"><?php echo $_SESSION['user'] -> getName() ?></option>
-				    </select>
-
-				    <span class="error">
-					<?php
-					if (isset($_SESSION['errorAuthor']) && !empty($_SESSION['errorAuthor'])){
-						echo " * " . $_SESSION["errorAuthor"];
-					}
-					?>
-					</span></p>
+					$_SESSION['allocAllJobs'] = $dpt -> getAllJobs();
 					
-					<?php 
-					$courses = $_SESSION['user'] -> getCourses();
-					?>
-					
-					<p>Job reviewed: <select name = "aRevJobID" id = "aRevJobID">
-					<option value='-1'>Choose an option...</option>
-					<?php
-					foreach ($courses as $course){
-						$jobs = $course -> getJobs();
-						foreach($jobs as $job) { ?>
-						<option value="<?php echo $job -> getJobID() ?>">
-						<?php echo $job -> getCorrespondingCourse() -> getCode() . " " . $job -> getPosType() ?></option>
-					<?php
+					$allJobs = $_SESSION['allocAllJobs'];
+					$_SESSION['allocJobNamesArray'] = array();
+					foreach($allJobs as $job){
+						$assocInstructor = $job -> getCorrespondingCourse() -> getInstructors();
+						if($job -> getState() == "Allocated"){
+							foreach($assocInstructor as $theInstructor){
+								if(strcmp($theInstructor -> getEmail(), $_SESSION['user'] -> getEmail()) == 0){
+									$_SESSION['allocJobNamesArray'][$job -> getJobID()] = $job -> getCorrespondingCourse() -> getCode() . " " . $job -> getPosType();
+									foreach($job -> getAllocatedStudent() as $allocStud){
+										$allocAllocStudents[] = $allocStud;
+									}
+									foreach($job -> getApplicant() as $appliStud){
+										$allocAppliStudents[] = $appliStud;
+									}
+								}
+							}
 						}
 					}?>
-				    </select>
-
-				    <span class="error">
-					<?php
-					if (isset($_SESSION['errorRevJobID']) && !empty($_SESSION['errorRevJobID'])){
-						echo " * " . $_SESSION["errorRevJobID"];
-					}
-					if (isset($_SESSION['errorJobState']) && !empty($_SESSION['errorJobState'])){
-						echo " * " . $_SESSION["errorJobState"];
-					}
-					?>
-					</span></p>
-					
-					<?php 
-					foreach ($courses as $course){
-						$jobs = $course -> getJobs();
-						foreach($jobs as $job) {
-							$someone = $job -> getEmployee();
-							if($someone != NULL){
-								$employees[] = $someone;
-							}
-						}
-					}
-					?>
-					
-					<p>Employee reviewed: <select name = "anEmployeeID" id = "anEmployeeID">
+				
+					<p>Job offering: <select name = "aJobID" id = "aJobID">
 					<option value='-1'>Choose an option...</option>
 					<?php
-					foreach($employees as $employee) {
-						foreach($employee as $subemployee){?>
-						<option value="<?php echo $subemployee -> getStudentID() ?>"><?php echo $subemployee -> getName() ?></option>
+					foreach($_SESSION['allocJobNamesArray'] as $key => $value) { ?>
+						<option value="<?php echo $key ?>"><?php echo $value ?></option>
 					<?php
-							}
-						}?>
+						} ?>
 				    </select>
 
 				    <span class="error">
 					<?php
-					if (isset($_SESSION['errorEmployee']) && !empty($_SESSION['errorEmployee'])){
-						echo " * " . $_SESSION["errorEmployee"];
+					if (isset($_SESSION['errorAllocID']) && !empty($_SESSION['errorAllocID'])){
+						echo " * " . $_SESSION["errorAllocID"];
+					}
+					?>
+					</span>
+					
+					<span class="error">
+					<?php
+					if (isset($_SESSION['errorAllocJobState']) && !empty($_SESSION['errorAllocJobState'])){
+						echo " * " . $_SESSION["errorAllocJobState"];
 					}
 					?>
 					</span></p>
 					
-					<p>Review: <input type="text" style="height:100px; width:200px;" name="revDescription" />
-					
-					<span class="error">
+					<p>Allocated student: <select name = "allocatedStudentID" id = "allocatedStudentID">
+					<option value='-1'>Choose an option...</option>
 					<?php
-					if (isset($_SESSION['errorRevDesc']) && !empty($_SESSION['errorRevDesc'])){
-						echo " * " . $_SESSION["errorRevDesc"];
+					foreach($allocAllocStudents as $allocStudent) { ?>
+						<option value="<?php echo $allocStudent -> getStudentID() ?>"><?php echo $allocStudent -> getName() ?></option>
+					<?php
+						} ?>
+				    </select>
+
+				    <span class="error">
+					<?php
+					if (isset($_SESSION['errorAllocStudent']) && !empty($_SESSION['errorAllocStudent'])){
+						echo " * " . $_SESSION["errorAllocStudent"];
 					}
 					?>
 					</span></p>
 					
-					<span class="error">
+					<p>Student to be allocated: <select name = "appliedStudentID" id = "appliedStudentID">
+					<option value='-1'>Choose an option...</option>
 					<?php
-					if (isset($_SESSION['wrongEmployeeAssoc']) && !empty($_SESSION['wrongEmployeeAssoc'])){
-						echo " * " . $_SESSION["wrongEmployeeAssoc"];
+					foreach($allocAppliStudents as $applicants) { ?>
+						<option value="<?php echo $applicants -> getStudentID() ?>"><?php echo $applicants -> getName() ?></option>
+					<?php
+						} ?>
+				    </select>
+
+				    <span class="error">
+					<?php
+					if (isset($_SESSION['errorAllocAppliedStudent']) && !empty($_SESSION['errorAllocAppliedStudent'])){
+						echo " * " . $_SESSION["errorAllocAppliedStudent"];
 					}
 					?>
 					</span></p>
 					
 					<p><span class="success">
 					<?php 
-					if (isset($_SESSION['revPostingSuccess']) && !empty($_SESSION['revPostingSuccess'])){
-						echo " * " . $_SESSION["revPostingSuccess"];
+					if (isset($_SESSION['modAllocationSuccess']) && !empty($_SESSION['modAllocationSuccess'])){
+						echo " * " . $_SESSION['modAllocationSuccess'];
 					}
 					?>
 					</span></p>
-					<p><input type="submit" value="Create Review"/></p>
+					
+					<p><input type="submit" value="Modify Allocation"/></p>
 				</form>
 				
 			</div>
