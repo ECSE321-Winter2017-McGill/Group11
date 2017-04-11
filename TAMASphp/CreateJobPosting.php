@@ -8,16 +8,25 @@ require_once 'model\Instructor.php';
 
 session_start();
 $c = new InstructorController();
+
+// Try to create a job posting
 try{
+	
+	// Reset the error messages
 	$_SESSION['errorJobID'] = "";
 	$_SESSION['errorJobDesc'] = "";
 	$_SESSION['errorSkillsReq'] = "";
 	$_SESSION['errorExpReq'] = "";
 	$_SESSION['errorOfferDate'] = "";
 	$_SESSION['jobPostingSuccess'] = "";
+	
 	$c->createJobPosting($_POST['aJobID'], $_POST['jobDescription'], $_POST['skillsRequired'], $_POST['experienceRequired'], $_POST['offerDeadlineDate']);
+	
+	// If it is succesful, this line will return a success notification
 	$_SESSION['jobPostingSuccess'] = "Job published successfully.";
 } catch (Exception $e){
+	
+	// Parse and cut the error message from the controller
 	$e = $e->getMessage();
 	$e_array = explode('@', $e);
 	foreach($e_array as $entry){

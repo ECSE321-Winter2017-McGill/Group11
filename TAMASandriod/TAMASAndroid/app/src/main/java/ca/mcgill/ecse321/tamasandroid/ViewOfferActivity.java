@@ -57,6 +57,9 @@ public class ViewOfferActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Method to generate a dummy job posting
+     */
     public void addJobPosting(){
         //create a dummy posting
         Instructor dummyInstructor = new Instructor("John", 123456799, "john@mail.uni.ca");
@@ -76,6 +79,12 @@ public class ViewOfferActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Method in order accept an offer
+     *
+     * @param view
+     */
     public void acceptOffer(View view){
         StudentController studentController = new StudentController(d);
 
@@ -96,6 +105,12 @@ public class ViewOfferActivity extends AppCompatActivity {
         refreshData();
     }
 
+
+    /**
+     * Method to reject an offer
+     *
+     * @param view
+     */
     public void rejectOffer(View view){
         StudentController studentController = new StudentController(d);
 

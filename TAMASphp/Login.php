@@ -18,11 +18,14 @@ $MatchingID = false;
 
 $Teachers = $dpt -> getAllInstructors();
 
+// Search for if the teacher email is within the repository
 foreach($Teachers as $Teacher){
 	$email = $Teacher -> getEmail();
 	if(strcmp($email, $_POST['instructorEmail']) == 0){
 		$TeacherFound = true;
 		$id = $Teacher -> getInstructorID();
+		
+		// If it is, check the ID provided match the one associated to the email
 		if(strcmp($id, $_POST['instructorID']) == 0){
 			$MatchingID = true;
 			$_SESSION['user'] = $Teacher;
@@ -30,6 +33,7 @@ foreach($Teachers as $Teacher){
 	}
 }
 
+// Error messages
 if(!$TeacherFound){
 	$_SESSION['errorEmail'] = "No instructor found associated with this email.";
 }

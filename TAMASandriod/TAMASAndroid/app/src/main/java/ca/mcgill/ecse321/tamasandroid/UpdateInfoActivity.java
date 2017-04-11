@@ -38,6 +38,10 @@ public class UpdateInfoActivity extends AppCompatActivity {
         tv3.setText(MainActivity.login.getJobPreference());
     }
 
+    /**
+     * To check if the user checked the is grad check box
+     * @param view
+     */
     public void isGrad(View view){
         CheckBox checkbox = (CheckBox) findViewById(R.id.checkBox);
 
@@ -51,6 +55,10 @@ public class UpdateInfoActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * method will update student with the text in the edit text fields
+     * @param v
+     */
     public void Update(View v){
         StudentController s = new StudentController(d);
         TextView tv = (TextView) findViewById(R.id.updatestudent_name);

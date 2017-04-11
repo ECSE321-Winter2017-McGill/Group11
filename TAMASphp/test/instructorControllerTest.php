@@ -235,20 +235,39 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		} catch (Exception $e) {
 			$this->fail;
 		}
+<<<<<<< HEAD
 		
 		//no new objects created
+=======
+
+
+
+>>>>>>> origin/master
 		$this->dpt = $this->persis->loadDataFromStore();
 		$this->assertEquals(1, count($this->dpt->getAllCourses()));
 		$this->assertEquals(1, count($this->dpt->getAllJobs()));
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(1, count($this->dpt->getAllInstructors()));
+<<<<<<< HEAD
 		
 			
 		
 		//kept attributes
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
+=======
+
+		//adding the new modified job to the testCourse variable initally connected to the old non modified job
+		$testCourse->addJob($this->dpt->getAllJob_index(0));
+
+		//kept attributes
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getAllocatedStudent()));
+		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getApplicant()));
+		//DONE**********************
+		$this->assertEquals($testCourse, $this->dpt->getAllJob_index(0)->getCorrespondingCourse());
+
+>>>>>>> origin/master
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getEmployee()));
 		$this->assertEquals(0, count($this->dpt->getAllJob_index(0)->getOfferReceiver()));
 		$this->assertEquals("2016-10-16", $this->dpt->getAllJob_index(0)->getPostingDeadlineDate());
@@ -460,8 +479,13 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 		//because $testStudAlloc had not applied to any jobs before being allocated
 		$testStudentAppl->removeJobsAppliedTo($testJob);
+<<<<<<< HEAD
 		
 		//manually replacing Tharsan by Aren as allocated student and making Tharsan an applicant
+=======
+
+		//manually replacing Tharsan by Aren as allocated student
+>>>>>>> origin/master
 		$testCourse->getJob_index(0)->removeAllocatedStudent($testStudentAlloc);
 		$testCourse->getJob_index(0)->addAllocatedStudent($testStudentAppl);
 		$testCourse->getJob_index(0)->addApplicant($testStudentAlloc);
@@ -518,6 +542,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
 	}
+<<<<<<< HEAD
 	
 	public function testModifyAllocationMinus1(){
 		$this->assertEquals(0, 0);
@@ -530,9 +555,23 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$testStudApplID = "-1";
 	
 		try{
+=======
+
+	public function testModifyAllocationBlanksAndMinus1(){
+		$this->assertEquals(0, 0);
+		/*$this->assertEquals(0, count($this->dpt->getAllJobs()));
+		 $this->assertEquals(0, count($this->dpt->getAllStudents()));
+
+		 $jobID = "-1";
+		 $testStudAllocID = "-1";
+		 $testStudApplID = "";
+
+		 try{
+>>>>>>> origin/master
 			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
-		} catch (Exception $e) {
+			} catch (Exception $e) {
 			$error =  $e->getMessage();
+<<<<<<< HEAD
 		}
 	
 		$this->assertEquals($error, "@1Job  not found! @3Allocated student  not found in job! @4Applied student  not found in job!");
@@ -543,6 +582,18 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(0, count($this->dpt->getAllReviews()));
 		$this->assertEquals(0, count($this->dpt->getAllStudents()));
 		$this->assertEquals(0, count($this->dpt->getAllInstructors()));
+=======
+			}
+
+			$this->assertEquals($error, "@1Job  not found! @3Allocated student  not found in job! @4Applied student  not found in job!");
+
+
+			$this->assertEquals(0, count($this->dpt->getAllCourses()));
+			$this->assertEquals(0, count($this->dpt->getAllJobs()));
+			$this->assertEquals(0, count($this->dpt->getAllReviews()));
+			$this->assertEquals(0, count($this->dpt->getAllStudents()));
+			$this->assertEquals(0, count($this->dpt->getAllInstructors()));*/
+>>>>>>> origin/master
 	}
 
 	public function testModifyAllocationJobInexistant(){
