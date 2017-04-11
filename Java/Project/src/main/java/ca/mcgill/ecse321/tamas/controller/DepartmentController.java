@@ -412,48 +412,17 @@ public class DepartmentController {
 
 	}
 
-    /**
-     * With this method, the department can issue a job posting for a specific job and student.
-     *
-     * @param job
-     * @param student
-     * @throws InvalidInputException
-     */
-	public void createJobOffer(Job job, Student student) throws  InvalidInputException {
 
-        String error = "";
-        boolean wasAdded = false;
-
-        if (job == null) {
-            error += createAllocationNullJobError;
-        }
-        if (student == null) {
-            error += createAllocationNullStudentError;
-        }
-
-        if (error.length()>0) {
-            throw new InvalidInputException(error);
-        }
-
-        //Job model class tells us if it worked by returning boolean
-        wasAdded = job.addOfferReceiver(student);
-        if (!wasAdded) {
-            throw new InvalidInputException(createJobOfferOfferNotAddedError);
-        }
-	    PersistenceXStream.saveToXMLwithXStream(department);
-	}
-
-	public void autoAllocation(Job job) throws InvalidInputException{
+	public void autoAllocation(Job job) throws InvalidInputException {
 
         String error = "";
         if (job == null) {
             error += autoAllocationNullJobError;
-        }else {
+        } else {
 
             if (job.getState() != JobStatus.AppliedTo && job.getState() != JobStatus.Allocated) {
                 error += " ("+job.getState().toString()+")" +  autoAllocationWrongJobStatusError;
             }
-
         }
 
         if (error.length()>0) {
@@ -463,7 +432,7 @@ public class DepartmentController {
         ArrayList<Student> tmpUndergraduateList = new ArrayList<>();
         ArrayList<Student> tmpGraduateList = new ArrayList<>();
 
-        for(Student s: job.getAllocatedStudent()){
+        for(Student s: job.getAllocatedStudent()) {
             job.addApplicant(s);
         }
 
@@ -482,31 +451,28 @@ public class DepartmentController {
         }
 
         int numberOfAllocated = 0;
-        if(job.getPosType() == PositionType.Grader){
+        if (job.getPosType() == PositionType.Grader){
             numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
-        }else{
+        } else {
             numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
-
         }
 
-
-
-        for(int i = 0; job.getAllocatedStudent().size() + job.getOfferReceiver().size() + job.getEmployee().size() < numberOfAllocated; i++){
-            if(tmpGraduateList.size() > 0){
+        for (int i = 0; job.getAllocatedStudent().size() + job.getOfferReceiver().size() + job.getEmployee().size() < numberOfAllocated; i++){
+            if (tmpGraduateList.size() > 0) {
                 try {
                     createAllocation(job, tmpGraduateList.get(0));
                 }catch (InvalidInputException e){
                     e.getMessage();
                 }
                 tmpGraduateList.remove(0);
-            }else if(tmpUndergraduateList.size() > 0){
+            } else if (tmpUndergraduateList.size() > 0){
                 try {
                     createAllocation(job, tmpUndergraduateList.get(0));
                 }catch (InvalidInputException e){
 
                 }
                 tmpUndergraduateList.remove(0);
-            }else{
+            } else {
                 break;
             }
         }
@@ -523,15 +489,15 @@ public class DepartmentController {
 
         if (job == null) {
             error += finalizeAllocationNullJobError;
-        }else{
+        } else {
             int numberOfAllocated = 0;
-            if(job.getPosType() == PositionType.Grader){
+            if (job.getPosType() == PositionType.Grader) {
                 numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
-            }else{
+            } else {
                 numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
             }
 
-            if(job.getAllocatedStudent().size() +job.getOfferReceiver().size() + job.getEmployee().size() < numberOfAllocated){
+            if (job.getAllocatedStudent().size() +job.getOfferReceiver().size() + job.getEmployee().size() < numberOfAllocated){
                 error += " Allocate "+ (numberOfAllocated - job.getAllocatedStudent().size() +job.getOfferReceiver().size()+ job.getEmployee().size()) + " more students!<br>" ;
             }
         }
