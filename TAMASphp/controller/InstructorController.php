@@ -150,7 +150,7 @@ class InstructorController
 		}
 	}
 
-	public function modifyAllocaion($aJobID, $allocatedStudentID, $appliedStudentID){
+	public function modifyAllocation($aJobID, $allocatedStudentID, $appliedStudentID){
 
 		//1. load data
 		$persis= new PersistenceTamas();

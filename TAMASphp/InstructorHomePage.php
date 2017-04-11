@@ -39,8 +39,8 @@
 							<li class="disabled">
 								<a href="#">Job Posting List</a>
 							</li>
-							<li class="disabled">
-								<a href="#">Modify Allocation</a>
+							<li>
+								<a href="ModifyAllocationPage.php">Modify Allocation</a>
 							</li>
 							<li class="divider">
 							</li>
@@ -63,7 +63,7 @@
 					</h1>
 				</div>
 				<p>
-					Currently only has the following function: Create Job Posting.
+					Please navigate via the heading thumbnails. The greyed-out ones are extra features that remained unimplemented.
 				</p>
 			</div>
 		</div>

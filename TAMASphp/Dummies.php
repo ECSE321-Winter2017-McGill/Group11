@@ -24,7 +24,7 @@ $dpt -> addAllInstructor($teacher2);
 // Dummy courses
 $allTeachers = $dpt -> getAllInstructors();
 $course1 = new Course("ECSE321", "ISE", "W2017", "3", "0", "2", "9", "60", "2", "5", "11.75", "11.75", "60", array($allTeachers[0]));
-$course2 = new Course("ECSE323", "DSD", "W2017", "5", "7", "2", "15", "300", "6", "5", "11.75", "11.75", "100", array($allTeachers[1]));
+$course2 = new Course("ECSE323", "DSD", "W2017", "5", "7", "2", "15", "300", "6", "5", "11.75", "11.75", "100", array($allTeachers[0]));
 $dpt -> addAllCourse($course1);
 $dpt -> addAllCourse($course2);
 
@@ -44,24 +44,36 @@ $student1 = new Student("260453125", "Student TA", "student.ta@mcgill.ca", false
 $student2 = new Student("260023784", "Grad TA", "grad.ta@mcgill.ca", true, "1", "TA", "30");
 $student3 = new Student("260146723", "Student Grader", "student.grader@mcgill.ca", false, "3", "Grader", "20");
 $student4 = new Student("260943112", "Grad Grader", "grad.grader@mcgill.ca", true, "3", "Grader", "35");
+$student5 = new Student("260345487", "Student TA Applicant", "student.ta.applicant@mcgill.ca", false, "1", "TA", "18");
+$student6 = new Student("260108995", "Grad TA Applicant", "grad.ta.applicant@mcgill.ca", true, "2", "TA", "27");
+$student7 = new Student("260163510", "Student Grader Applicant", "student.grader.applicant@mcgill.ca", false, "0", "Grader", "13");
+$student8 = new Student("260018943", "Grad Grader Applicant", "grad.grader.applicant@mcgill.ca", true, "1", "Grader", "31");
 $dpt -> addAllStudent($student1);
 $dpt -> addAllStudent($student2);
 $dpt -> addAllStudent($student3);
 $dpt -> addAllStudent($student4);
+$dpt -> addAllStudent($student5);
+$dpt -> addAllStudent($student6);
+$dpt -> addAllStudent($student7);
+$dpt -> addAllStudent($student8);
 
 // Allocate students to jobs
 $myJobs = $dpt -> getAllJobs();
 $TAs = $dpt -> getAllStudents();
 $myJobs[0] -> addEmployee($TAs[0]);
-$myJobs[2] -> addEmployee($TAs[1]);
 $myJobs[1] -> addEmployee($TAs[2]);
-$myJobs[3] -> addEmployee($TAs[3]);
+$myJobs[2] -> addAllocatedStudent($TAs[1]);
+$myJobs[3] -> addAllocatedStudent($TAs[3]);
+$myJobs[2] -> addApplicant($TAs[4]);
+$myJobs[3] -> addApplicant($TAs[6]);
+$myJobs[2] -> addApplicant($TAs[5]);
+$myJobs[3] -> addApplicant($TAs[7]);
 
 // Set the right state for the jobs
 $myJobs[0] -> setState("Accepted");
 $myJobs[1] -> setState("Accepted");
-$myJobs[2] -> setState("Accepted");
-$myJobs[3] -> setState("Accepted");
+$myJobs[2] -> setState("Allocated");
+$myJobs[3] -> setState("Allocated");
 
 // Write data to persistence
 $persis->writeDataToStore($dpt);

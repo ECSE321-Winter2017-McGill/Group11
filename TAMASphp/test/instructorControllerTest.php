@@ -451,7 +451,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($testStudentAppl, $this->dpt->getAllJob_index(0)->getApplicant_index(0));
 
 		try{
-			$this->contr->modifyAllocaion($jobID, $testStudAllocID, $testStudApplID);
+			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
 		} catch (Exception $e) {
 			$this->fail();
 		}
@@ -501,7 +501,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$testStudApplID = null;
 
 		try{
-			$this->contr->modifyAllocaion($jobID, $testStudAllocID, $testStudApplID);
+			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
 		} catch (Exception $e) {
 			$error =  $e->getMessage();
 		}
@@ -526,7 +526,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$testStudApplID = "";
 	
 		try{
-			$this->contr->modifyAllocaion($jobID, $testStudAllocID, $testStudApplID);
+			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
 		} catch (Exception $e) {
 			$error =  $e->getMessage();
 		}
@@ -560,7 +560,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 		$jobID = "abcde";
 
 		try{
-			$this->contr->modifyAllocaion($jobID, $testStudAllocID, $testStudApplID);
+			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
 		} catch (Exception $e) {
 			$error =  $e->getMessage();
 		}
@@ -604,7 +604,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 
 		try{
-			$this->contr->modifyAllocaion($jobID, $testStudAllocID, $testStudApplID);
+			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
 		} catch (Exception $e) {
 			$error =  $e->getMessage();
 		}
@@ -647,7 +647,7 @@ class instructorControllerTest extends PHPUnit_Framework_TestCase
 
 
 		try{
-			$this->contr->modifyAllocaion($jobID, $testStudAllocID, $testStudApplID);
+			$this->contr->modifyAllocation($jobID, $testStudAllocID, $testStudApplID);
 		} catch (Exception $e) {
 			$error =  $e->getMessage();
 		}
