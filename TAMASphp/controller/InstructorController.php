@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__.'/../controller/InvalidInputException.php';
-require_once __DIR__.'/../persistence/PersistenceTAMAS.php';
-require_once __DIR__.'/../model/Course.php';
-require_once __DIR__.'/../model/Department.php';
-require_once __DIR__.'/../model/Instructor.php';
-require_once __DIR__.'/../model/Job.php';
-require_once __DIR__.'/../model/Review.php';
-require_once __DIR__.'/../model/Student.php';
+require_once __DIR__.'\..\controller\InvalidInputException.php';
+require_once __DIR__.'\..\persistence\PersistenceTAMAS.php';
+require_once __DIR__.'\..\model\Course.php';
+require_once __DIR__.'\..\model\Department.php';
+require_once __DIR__.'\..\model\Instructor.php';
+require_once __DIR__.'\..\model\Job.php';
+require_once __DIR__.'\..\model\Review.php';
+require_once __DIR__.'\..\model\Student.php';
 
 class InstructorController
 {
