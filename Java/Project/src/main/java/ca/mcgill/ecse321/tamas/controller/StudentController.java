@@ -34,6 +34,7 @@ public class StudentController {
 	}
 
 	/**
+	 * Creates a student through this method though does not inhibit the inputs
 	 *
 	 * @param studentID
 	 * @param name
@@ -56,6 +57,7 @@ public class StudentController {
 	 * This method is used to create a student, inputs are either string or boolean that will be used to identify a
 	 * student by. The ID should be unique to the student, the email should contain the correct pattern, the year of
 	 * the student should be in the range [0,1,2,3,4], number of hours will be 0, non empty name and job preference.
+	 * Will throw exception if there is an error with inputs
 	 *
 	 * @param studentIDString
 	 * @param name
@@ -150,7 +152,8 @@ public class StudentController {
 
 
 	/**
-	 * Student will apply to a job posting through this method
+	 * Student will apply to a job posting through this method and will throw exception if an error for input
+	 * occurs
 	 *
 	 * @param jobPosting
 	 * @param applicant
@@ -185,7 +188,8 @@ public class StudentController {
 	}
 
 	/**
-	 * Student will be able to respond to a job offer with this method, answering with a accept or not accept
+	 * Student will be able to respond to a job offer with this method, answering with a accept or not accept, will
+	 * throw exception if error in input occurs
 	 *
 	 * @param student
 	 * @param jobOffer
@@ -208,7 +212,7 @@ public class StudentController {
 		if(accept&&error.length()==0){
 
 			if(student.getNumberOfHours()+jobOffer.getCorrespondingCourse().getNumberOfHours()> maximumWorkHoursForStudent){
-				error = error + "Sorry student can't accept anymore job. Wor hours exceeding " +maximumWorkHoursForStudent;
+				error = error + "Sorry student can't accept anymore job. Work hours exceeding " +maximumWorkHoursForStudent;
 			}
 
 			if(error.length()>0){
