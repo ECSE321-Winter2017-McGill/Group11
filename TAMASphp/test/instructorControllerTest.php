@@ -1,4 +1,5 @@
 <?php
+
 require_once __DIR__.'\..\controller\InstructorController.php';
 require_once __DIR__.'\..\persistence\PersistenceTAMAS.php';
 require_once __DIR__.'\..\model\Course.php';
