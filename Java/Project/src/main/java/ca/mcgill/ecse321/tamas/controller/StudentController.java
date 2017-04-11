@@ -1,9 +1,6 @@
 package ca.mcgill.ecse321.tamas.controller;
 
-import ca.mcgill.ecse321.tamas.model.Department;
-import ca.mcgill.ecse321.tamas.model.Job;
-import ca.mcgill.ecse321.tamas.model.JobStatus;
-import ca.mcgill.ecse321.tamas.model.Student;
+import ca.mcgill.ecse321.tamas.model.*;
 import ca.mcgill.ecse321.tamas.persistence.PersistenceXStream;
 
 import java.util.regex.Matcher;
@@ -166,13 +163,18 @@ public class StudentController {
   			error = error + "Applicant needs to be selected for registration! ";
 		else if (!department.getAllStudents().contains(applicant))
   			error = error + "Applicant does not exist! ";
-		if (applicant != null && jobPosting != null &&
-				jobPosting.getApplicant().contains(applicant))
+		if (applicant != null && jobPosting != null && (
+				jobPosting.getApplicant().contains(applicant)||jobPosting.getAllocatedStudent().contains(applicant) || jobPosting.getEmployee().contains(applicant)))
 			error = error + "Applicant already applied to Job!";
 		if (jobPosting == null)
 			error = error +"Job needs to be selected for registration!";
 		else if(!department.getAllJobs().contains(jobPosting))
 			error = error + "Job does not exist!";
+		else{
+			if(jobPosting.getState() != JobStatus.Posted && jobPosting.getState() != JobStatus.Allocated && jobPosting.getState() != JobStatus.AppliedTo){
+				error = error +  " ("+jobPosting.getState().toString()+")" +" Job cannot be allocated at the moment!";
+			}
+		}
 		error = error.trim();
 		if(applicant.getJobsAppliedTo().size() >= 3){
 			error = error + "Can't apply to more than 3 jobs!";
@@ -204,7 +206,8 @@ public class StudentController {
 		}
 		if(jobOffer == null){
 			error = error + "Offer needs to be selected to respond to offer! ";
-		}
+		}else if(!department.getAllJobs().contains(jobOffer))
+			error = error + "Job does not exist!";
 
 
 
@@ -222,6 +225,17 @@ public class StudentController {
 			jobOffer.removeOfferReceiver(student);
 			jobOffer.addEmployee(student);
 			student.setNumberOfHours(jobOffer.getCorrespondingCourse().getNumberOfHours());
+
+			int numberOfAllocated = 0;
+			if(jobOffer.getPosType() == PositionType.Grader){
+				numberOfAllocated = jobOffer.getCorrespondingCourse().getGradersNeeded();
+			}else{
+				numberOfAllocated = jobOffer.getCorrespondingCourse().getTasNeeded();
+			}
+			if(jobOffer.getEmployee().size() == numberOfAllocated){
+				jobOffer.setState(JobStatus.JobFull);
+			}
+
 		}else{
 
 			if(error.length()>0){
@@ -229,6 +243,11 @@ public class StudentController {
 			}
 
 			jobOffer.removeOfferReceiver(student);
+			if(jobOffer.getApplicant().size() > 0) {
+				jobOffer.setState(JobStatus.AppliedTo);
+			}else{
+				jobOffer.setState(JobStatus.Posted);
+			}
 		}
 		
 		PersistenceXStream.saveToXMLwithXStream(department);

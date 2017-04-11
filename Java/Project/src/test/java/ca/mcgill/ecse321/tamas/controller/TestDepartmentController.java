@@ -252,6 +252,8 @@ public class TestDepartmentController {
         java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
 
         Job jobA = new Job(posType,postDeadLine,courseA);
+        jobA.setState(JobStatus.AppliedTo);
+        jobA.addApplicant(studentA);
         department.addAllJob(jobA);
         assertEquals(1,department.getAllJobs().size());
 
@@ -272,13 +274,14 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
+        assertEquals(" Job cannot be empty!<br> Select student from the allocated table!<br>", error);
         assertEquals(1,department.getAllJobs().size());
         assertEquals(true,jobA.hasAllocatedStudent());
 
         instructorA.delete();
         studentA.delete();
         courseA.delete();
+
 
     }
 
@@ -342,6 +345,8 @@ public class TestDepartmentController {
         java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
 
         Job jobA = new Job(posType,postDeadLine,courseA);
+        jobA.setState(JobStatus.AppliedTo);
+        jobA.addApplicant(studentA);
         department.addAllJob(jobA);
         assertEquals(1,department.getAllJobs().size());
 
@@ -379,7 +384,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br> Student is not allocated for this job!<br>", error);
+        assertEquals(" Job cannot be empty!<br> Select student from the allocated table!<br>", error);
         assertEquals(1,department.getAllJobs().size());
         assertEquals(false,jobA.hasAllocatedStudent());
 
@@ -470,7 +475,7 @@ public class TestDepartmentController {
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Job cannot be empty!<br> Student cannot be empty!<br>", error);
+        assertEquals(" Job cannot be empty!<br> Select student from the allocated table!<br>", error);
         assertEquals(1,department.getAllJobs().size());
 
         instructorA.delete();

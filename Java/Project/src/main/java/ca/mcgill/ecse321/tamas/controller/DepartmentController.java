@@ -43,16 +43,20 @@ public class DepartmentController {
     private final String createJobInvalidDateError = " Posting deadline cannot be before today!<br>";
 
     private final String createAllocationNullJobError = " Job cannot be empty!<br>";
-    private final String createAllocationNullStudentError = " Student cannot be empty!<br>";
+    private final String createAllocationNullStudentError = " Select student from the allocated table!<br>";
     private final String createAllocationStudentAlreadyAllocatedError = " Student is already allocated!<br>";
     private final String createAllocationStudentNotApplicantError = " Student has not applied to this job!<br>";
+    private final String createAllocationStudentMaxAllocationError = " Allocation maxed out! Please wait for availability!<br>";
+    private final String createAllocationWrongJobStatusError = " Job cannot be allocated at the moment!<br>";
     private final String removeAllocationStudentNotAllocatedError = " Student is not allocated for this job!<br>";
 
     private final String createJobOfferOfferNotAddedError = " Offer already made to this student!<br>";
 
     private final String autoAllocationNullJobError = " Job cannot be empty!<br>";
-    private final String autoAllocationWrongJobStatusError = " Job is not ready to be allocated! No applicants!<br>";
+    private final String autoAllocationWrongJobStatusError = " Job cannot be allocated at the moment!<br>";
     private final String autoAllocationFullError = " Allocation for current job is full!<br>";
+
+    private final String finalizeAllocationNullJobError = " Job cannot be empty!<br>";
 
 
     private Department department;
@@ -334,6 +338,22 @@ public class DepartmentController {
             if(!isApplicant){
                 error += createAllocationStudentNotApplicantError;
             }
+
+            if (job.getState() != JobStatus.AppliedTo && job.getState() != JobStatus.Allocated) {
+                error += " ("+job.getState().toString()+")" + createAllocationWrongJobStatusError;
+            }
+
+            int numberOfAllocated = 0;
+            if(job.getPosType() == PositionType.Grader){
+                numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
+            }else{
+                numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
+
+            }
+
+            if(job.getAllocatedStudent().size() +job.getOfferReceiver().size()+ job.getEmployee().size()>= numberOfAllocated){
+                error += createAllocationStudentMaxAllocationError;
+            }
         }
 
         if (error.length()>0) {
@@ -368,7 +388,7 @@ public class DepartmentController {
         }
 
         //cannot do that if the job is null
-        if (job != null) {
+        if (job != null && student != null) {
             for (Student s : job.getAllocatedStudent()) {
                 if (s.getStudentID() == student.getStudentID()) {
                     studentNotFound = false;
@@ -376,7 +396,7 @@ public class DepartmentController {
             }
         }
 
-        if (studentNotFound) {
+        if (job != null && student != null &&studentNotFound) {
             error += removeAllocationStudentNotAllocatedError;
         }
 
@@ -429,16 +449,9 @@ public class DepartmentController {
         if (job == null) {
             error += autoAllocationNullJobError;
         }else {
-            int numberOfAllocated = 0;
-            if(job.getPosType() == PositionType.Grader){
-                numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
-            }else{
-                numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
 
-            }
-
-            if (job.getState() != JobStatus.AppliedTo) {
-                error += autoAllocationWrongJobStatusError;
+            if (job.getState() != JobStatus.AppliedTo && job.getState() != JobStatus.Allocated) {
+                error += " ("+job.getState().toString()+")" +  autoAllocationWrongJobStatusError;
             }
 
         }
@@ -478,7 +491,7 @@ public class DepartmentController {
 
 
 
-        for(int i = 0; job.getAllocatedStudent().size() < numberOfAllocated; i++){
+        for(int i = 0; job.getAllocatedStudent().size() + job.getOfferReceiver().size() + job.getEmployee().size() < numberOfAllocated; i++){
             if(tmpGraduateList.size() > 0){
                 try {
                     createAllocation(job, tmpGraduateList.get(0));
@@ -500,6 +513,43 @@ public class DepartmentController {
 
         PersistenceXStream.saveToXMLwithXStream(department);
 
+    }
+
+
+    public void finalizeAllocation(Job job) throws  InvalidInputException {
+
+        String error = "";
+        boolean wasAdded = false;
+
+        if (job == null) {
+            error += finalizeAllocationNullJobError;
+        }else{
+            int numberOfAllocated = 0;
+            if(job.getPosType() == PositionType.Grader){
+                numberOfAllocated = job.getCorrespondingCourse().getGradersNeeded();
+            }else{
+                numberOfAllocated = job.getCorrespondingCourse().getTasNeeded();
+            }
+
+            if(job.getAllocatedStudent().size() +job.getOfferReceiver().size() + job.getEmployee().size() < numberOfAllocated){
+                error += " Allocate "+ (numberOfAllocated - job.getAllocatedStudent().size() +job.getOfferReceiver().size()+ job.getEmployee().size()) + " more students!<br>" ;
+            }
+        }
+
+        if (error.length()>0) {
+            throw new InvalidInputException(error);
+        }
+
+        ArrayList<Student> tmpAllocatedStudentList = new ArrayList<>(job.getAllocatedStudent());
+
+        for(Student s: tmpAllocatedStudentList){
+            job.removeAllocatedStudent(s);
+            job.addOfferReceiver(s);
+        }
+
+        job.setState(JobStatus.Offered);
+
+        PersistenceXStream.saveToXMLwithXStream(department);
     }
 
 }
