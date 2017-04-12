@@ -420,6 +420,7 @@ public class TestStudentController {
         Date postDeadLine = new Date(c.getTimeInMillis());
 
         Job jobPosting = new Job(posType,postDeadLine, course);
+        jobPosting.setState(JobStatus.Posted);
         department.addAllJob(jobPosting);
         assertEquals(1, department.getAllJobs().size());
         assertEquals(0, jobPosting.getApplicant().size());
@@ -736,6 +737,10 @@ public class TestStudentController {
         department.addAllCourse(course);
         assertEquals(1, department.getAllCourses().size());
 
+        Course course2 = new Course(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructor);
+        department.addAllCourse(course);
+        assertEquals(1, department.getAllCourses().size());
+
         //Create Job
         PositionType posType = PositionType.Grader;
         Calendar c = Calendar.getInstance();
@@ -743,6 +748,7 @@ public class TestStudentController {
         Date postDeadLine = new Date(c.getTimeInMillis());
 
         Job jobPosting = new Job(posType,postDeadLine, course);
+        jobPosting.setState(JobStatus.Posted);
         department.addAllJob(jobPosting);
         assertEquals(1, department.getAllJobs().size());
         assertEquals(0, jobPosting.getApplicant().size());
@@ -754,6 +760,7 @@ public class TestStudentController {
         Date postDeadLine2 = new Date(c2.getTimeInMillis());
 
         Job jobPosting2 = new Job(posType2,postDeadLine2, course);
+        jobPosting2.setState(JobStatus.Posted);
         department.addAllJob(jobPosting2);
 
         //Create Job
@@ -762,7 +769,8 @@ public class TestStudentController {
         c3.set(2017, Calendar.APRIL, 16, 9, 0, 0);
         Date postDeadLine3 = new Date(c3.getTimeInMillis());
 
-        Job jobPosting3 = new Job(posType3,postDeadLine3, course);
+        Job jobPosting3 = new Job(posType3,postDeadLine3, course2);
+        jobPosting3.setState(JobStatus.Posted);
         department.addAllJob(jobPosting3);
 
         //Create Job
@@ -771,7 +779,8 @@ public class TestStudentController {
         c4.set(2017, Calendar.FEBRUARY, 16, 9, 0, 0);
         Date postDeadLine4 = new Date(c4.getTimeInMillis());
 
-        Job jobPosting4 = new Job(posType4,postDeadLine4, course);
+        Job jobPosting4 = new Job(posType4,postDeadLine4, course2);
+        jobPosting4.setState(JobStatus.Posted);
         department.addAllJob(jobPosting4);
 
         try{

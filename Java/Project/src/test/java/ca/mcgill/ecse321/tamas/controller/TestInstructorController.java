@@ -193,7 +193,7 @@ public class TestInstructorController {
         }catch (InvalidInputException e){
             error = e.getMessage();
         }
-        assertEquals(error," Offer deadline cannot be before today!<br>");
+        assertEquals(" Offer deadline cannot be before today!<br> Offer deadline cannot be before publishing date!<br>",error);
         assertEquals(JobStatus.Posted, job.getState());
 
         checkJobPosting(job,jobDescription,skillsRequired,experienceRequired,postDeadLine,department);

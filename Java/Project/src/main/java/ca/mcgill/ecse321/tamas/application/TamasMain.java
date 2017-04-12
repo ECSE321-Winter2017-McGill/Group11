@@ -10,7 +10,7 @@ import java.awt.*;
  * Created by matlapo on 2017-02-23.
  */
 public class TamasMain {
-    private static String fileName = "output/data.xml";
+    private static String fileName = "data.xml";
 
     public static void main(String[] args) {
 

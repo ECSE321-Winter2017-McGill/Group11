@@ -1,9 +1,88 @@
 <ca.mcgill.ecse321.tamas.model.Department id="1">
-  <allJobs id="2"/>
-  <allCourses id="3"/>
-  <allInstructors id="4"/>
-  <allStudents id="5">
-    <ca.mcgill.ecse321.tamas.model.Student id="6">
+  <allJobs id="2">
+    <Job id="3">
+      <jobDescription>fdsaf</jobDescription>
+      <posType>TA</posType>
+      <skillsRequired>fdasfdaf</skillsRequired>
+      <experienceRequired>fdsafdas</experienceRequired>
+      <postingDeadlineDate id="4">2017-04-14</postingDeadlineDate>
+      <offerDeadlineDate id="5">2017-04-14</offerDeadlineDate>
+      <state>Posted</state>
+      <jobID>1</jobID>
+      <allocatedStudent id="6"/>
+      <previousWorker id="7"/>
+      <applicant id="8"/>
+      <offerReceiver id="9"/>
+      <employee id="10"/>
+      <correspondingCourse id="11">
+        <code>dfsaf</code>
+        <name>adff</name>
+        <semester>Winter</semester>
+        <numberOfCredits>3</numberOfCredits>
+        <numberOfLabs>3</numberOfLabs>
+        <numberOfTutorials>3</numberOfTutorials>
+        <numberOfHours>45</numberOfHours>
+        <studentsEnrolled>3</studentsEnrolled>
+        <tasNeeded>1</tasNeeded>
+        <gradersNeeded>1</gradersNeeded>
+        <taHourlyRate>1</taHourlyRate>
+        <graderHourlyRate>1</graderHourlyRate>
+        <budget>90</budget>
+        <jobs id="12">
+          <Job reference="3"/>
+          <Job id="13">
+            <jobDescription>fdafd</jobDescription>
+            <posType>Grader</posType>
+            <skillsRequired>dsaf</skillsRequired>
+            <experienceRequired>fdsadfsa</experienceRequired>
+            <postingDeadlineDate id="14">2017-04-14</postingDeadlineDate>
+            <offerDeadlineDate id="15">2017-04-15</offerDeadlineDate>
+            <state>Posted</state>
+            <jobID>1</jobID>
+            <allocatedStudent id="16"/>
+            <previousWorker id="17"/>
+            <applicant id="18"/>
+            <offerReceiver id="19"/>
+            <employee id="20"/>
+            <correspondingCourse reference="11"/>
+          </Job>
+          <Job id="21">
+            <posType>TA</posType>
+            <postingDeadlineDate id="22">2017-04-14</postingDeadlineDate>
+            <state>Ready</state>
+            <jobID>1</jobID>
+            <allocatedStudent id="23"/>
+            <previousWorker id="24"/>
+            <applicant id="25"/>
+            <offerReceiver id="26"/>
+            <employee id="27"/>
+            <correspondingCourse reference="11"/>
+          </Job>
+        </jobs>
+        <instructors id="28">
+          <Instructor id="29">
+            <name>dafjakl</name>
+            <instructorID>213678432</instructorID>
+            <email>dfajkl@gmail.com</email>
+            <courses id="30">
+              <Course reference="11"/>
+            </courses>
+            <reviewText id="31"/>
+          </Instructor>
+        </instructors>
+      </correspondingCourse>
+    </Job>
+    <Job reference="13"/>
+    <Job reference="21"/>
+  </allJobs>
+  <allCourses id="32">
+    <Course reference="11"/>
+  </allCourses>
+  <allInstructors id="33">
+    <Instructor reference="29"/>
+  </allInstructors>
+  <allStudents id="34">
+    <Student id="35">
       <studentID>260685906</studentID>
       <name>Mathieu</name>
       <email>mathieu@mcgill</email>
@@ -11,12 +90,12 @@
       <year>2</year>
       <jobPreference>None</jobPreference>
       <numberOfHours>4</numberOfHours>
-      <previousJobExperiences id="7"/>
-      <jobsAppliedTo id="8"/>
-      <offeredJobs id="9"/>
-      <currentJobs id="10"/>
-      <reviewText id="11"/>
-    </ca.mcgill.ecse321.tamas.model.Student>
+      <previousJobExperiences id="36"/>
+      <jobsAppliedTo id="37"/>
+      <offeredJobs id="38"/>
+      <currentJobs id="39"/>
+      <reviewText id="40"/>
+    </Student>
   </allStudents>
-  <allReviews id="12"/>
+  <allReviews id="41"/>
 </ca.mcgill.ecse321.tamas.model.Department>

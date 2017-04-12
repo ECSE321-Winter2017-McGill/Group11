@@ -22,6 +22,7 @@ public class InstructorController {
 	//private final String createJobPostingNullPostDeadlineErrorMessage = " Job post deadline date cannot be empty!";
 	private final String createJobPostingNullOfferDeadlineErrorMessage = " Job offer deadline date cannot be empty!<br>";
 	private final String createJobPostingInvalidDateError = " Offer deadline cannot be before today!<br>";
+	private final String createJobPostingInvalidOfferDateError = " Offer deadline cannot be before publishing date!<br>";
 
 	private final String createInstructorNotIntegerIDError = " Input a valid 9 digit ID number!<br>";
 	private final String createInstructorDuplicateIDError = " Instructor ID already registered!<br>";
@@ -33,6 +34,7 @@ public class InstructorController {
 	private final String createReviewNullStudentError = " Please select a student!<br>";
 	private final String createReviewNullContentError = " Content cannot be empty!<br>";
 	private final String createReviewNullJobError = " Please select a job!<br>";
+	private final String createReviewAlreadyReviewedJobError = " Cannot review the same student for the same job twice!<br>";
 
 
 
@@ -137,6 +139,13 @@ public class InstructorController {
 		if (offerDeadlineDate != null && current > offerDeadlineDate.getTime()) {
 			error += createJobPostingInvalidDateError;
 		}
+		if (job != null && offerDeadlineDate != null){
+			c.setTime(job.getPostingDeadlineDate());
+			long postingDeadlineDate = c.getTimeInMillis();
+			if(postingDeadlineDate > offerDeadlineDate.getTime()){
+				error += createJobPostingInvalidOfferDateError;
+			}
+		}
 
 		if (error.length()>0){
 			throw new InvalidInputException(error);
@@ -178,6 +187,14 @@ public class InstructorController {
         if (reviewedJob == null) {
 	        error += createReviewNullJobError;
         }
+
+        if(error.length() == 0){
+			for(Review r: department.getAllReviews()){
+				if(r.getReviewedJob() == reviewedJob && r.getReviewer() == reviewer && r.getReviewee() == reviewee){
+					error += createReviewAlreadyReviewedJobError;
+				}
+			}
+		}
 
         if (error.length() > 0) {
 	        throw new InvalidInputException(error);

@@ -29,7 +29,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.util.Vector;
 
 //model classes
 //Controller class
@@ -129,6 +128,8 @@ public class BetaDepartmentPage extends JFrame {
     private WebTextArea jobPreferenceTextAreaForViewStudent;
     private JTextField studentIDFieldForViewStudent;
     private JTextField studentHoursFieldForViewStudent;
+    private JComboBox<String> reviewListForViewStudent;
+    private WebTextArea reviewTextAreaForViewStudent;
     private DefaultTableModel currentJobTableModel = new DefaultTableModel();
     private DefaultTableModel appliedToJobsTableModel = new DefaultTableModel();
     private DefaultTableModel previousJobsTableModel = new DefaultTableModel();
@@ -218,6 +219,7 @@ public class BetaDepartmentPage extends JFrame {
     private Integer selectedStudentForCreateOffer = -1;
     private Integer selectedJobForCreateOffer = -1;
     private Integer selectedStudentForViewStudent = -1;
+    private Integer selectedReviewForViewStudent = -1;
     private Integer selectedSemesterForViewJob = -1;
     private Integer selectedInstructorForViewCourse = -1;
     private Integer selectedCourseListForViewCourse = -1;
@@ -269,19 +271,18 @@ public class BetaDepartmentPage extends JFrame {
         WebPanel webPanel = new WebPanel();
         webPanel.setLayout(new GridLayout(0, 8, -3, -3));
 
-        addNewFrame(desktopPane, PublishJobView(), "Publish Job Posting", "Publish Job Posting", webPanel, 469, 423);
-        addNewFrame(desktopPane, RegisterAStudent(), "Register a Student", "Register a Student", webPanel, 324, 354);
-        addNewFrame(desktopPane, ApplyForAJob(), "Apply for a Job", "Apply for a Job", webPanel, 350, 300);
-        addNewFrame(desktopPane, CreateAJob(), "Create a Job", "Create a Job", webPanel, 350, 300);
-        addNewFrame(desktopPane, CreateACourse(), "Create a Course", "Create a Course", webPanel, 440, 450);
         addNewFrame(desktopPane, CreateAnInstructor(), "Create an Instructor", "Create an Instructor", webPanel, 350, 300);
+        addNewFrame(desktopPane, CreateACourse(), "Create a Course", "Create a Course", webPanel, 440, 450);
+        addNewFrame(desktopPane, CreateAJob(), "Create a Job", "Create a Job", webPanel, 350, 300);
+        addNewFrame(desktopPane, RegisterAStudent(), "Register a Student", "Register a Student", webPanel, 324, 354);
+        addNewFrame(desktopPane, PublishJobView(), "Publish Job Posting", "Publish Job Posting", webPanel, 469, 423);
+        addNewFrame(desktopPane, ApplyForAJob(), "Apply for a Job", "Apply for a Job", webPanel, 350, 300);
+        addNewFrame(desktopPane, AllocationManager(), "Allocation Manager", "Allocation Manager", webPanel, 700, 400);
+        addNewFrame(desktopPane, RespondToOffer(), "Respond to Offer", "Respond to Offer", webPanel, 500, 300);
+        addNewFrame(desktopPane, CreateReview(), "Create Review", "Create Review", webPanel, 500, 300);
         addNewFrame(desktopPane, ViewStudent(), "View Student Info", "View Student Info", webPanel, 500, 300);
         addNewFrame(desktopPane, ViewCourse(), "View Course Info", "View Course Info", webPanel, 500, 300);
         addNewFrame(desktopPane, ViewJob(), "View Job Info", "View Job Info", webPanel, 700, 400);
-        addNewFrame(desktopPane, CreateReview(), "Create Review", "Create Review", webPanel, 500, 300);
-        addNewFrame(desktopPane, RespondToOffer(), "Respond to Offer", "Respond to Offer", webPanel, 500, 300);
-        addNewFrame(desktopPane, AllocationManager(), "Allocation Manager", "Allocation Manager", webPanel, 700, 400);
-
 
         webPanel.setBounds(0, 0, 900, 900);
         webPanel.setOpaque(false);
@@ -458,7 +459,6 @@ public class BetaDepartmentPage extends JFrame {
         numberOfGradersNeededField.setText("");
         taHourlyRateField.setText("");
         graderHourlyRateField.setText("");
-        budgetField.setText("");
 
 
         instructorListForCreateACourse.removeAllItems();
@@ -1464,17 +1464,6 @@ public class BetaDepartmentPage extends JFrame {
         contentPane.add(graderHourlyRateField, gridBagConstraints);
         graderHourlyRateField.setColumns(10);
 
-        JLabel budgetLabel = new JLabel("Budget");
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy++;
-        contentPane.add(budgetLabel, gridBagConstraints);
-
-        budgetField = new JTextField();
-        gridBagConstraints.gridx++;
-
-        contentPane.add(budgetField, gridBagConstraints);
-        budgetField.setColumns(10);
-
 
         final JLabel createCourseErrorLabel = new JLabel("");
         createCourseErrorLabel.setForeground(Color.RED);
@@ -1500,7 +1489,6 @@ public class BetaDepartmentPage extends JFrame {
                 hourlyRateTA = taHourlyRateField.getText();
                 graderHourlyRate = graderHourlyRateField.getText();
                 numberOfCredits = creditsField.getText();
-                budget = budgetField.getText();
 
                 if (selectedSemesterForCreateACourse >= 0) {
                     semester = semesterJComboBox.getSelectedItem().toString();
@@ -1514,7 +1502,7 @@ public class BetaDepartmentPage extends JFrame {
                 }
 
                 try {
-                    departmentController.createCourse(courseCode, courseName, semester, numberOfCredits, numberOfLabs, numberOfTutorials, hours, numberOfStudents, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, budget, dummyInstructor);
+                    departmentController.createCourse(courseCode, courseName, semester, numberOfCredits, numberOfLabs, numberOfTutorials, hours, numberOfStudents, numberOfTAsNeeded, numberOfGradersNeeded, hourlyRateTA, graderHourlyRate, dummyInstructor);
                     createCourseErrorLabel.setText("");
                 } catch (InvalidInputException e1) {
                     createCourseErrorLabel.setText("<html><body>" + e1.getMessage() + "</body></html>");
@@ -1736,6 +1724,27 @@ public class BetaDepartmentPage extends JFrame {
         contentPane.add(areaScrollJobPreferenceRequired, gridBagConstraints);
         areaScrollJobPreferenceRequired.setVisible(false);
 
+        final JLabel reviewLabel = new JLabel("Reviews");
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(reviewLabel, gridBagConstraints);
+
+        reviewListForViewStudent = new JComboBox<>(new String[0]);
+        gridBagConstraints.gridx++;
+        contentPane.add(reviewListForViewStudent, gridBagConstraints);
+
+        reviewTextAreaForViewStudent = new WebTextArea();
+        gridBagConstraints.gridy++;
+        reviewTextAreaForViewStudent.setLineWrap(true);
+        reviewTextAreaForViewStudent.setWrapStyleWord(true);
+        reviewTextAreaForViewStudent.setEditable(false);
+
+        final WebScrollPane areaScrollReview = new WebScrollPane(reviewTextAreaForViewStudent);
+        contentPane.add(areaScrollReview, gridBagConstraints);
+        areaScrollReview.setPreferredSize(new Dimension(250, 75));
+        areaScrollReview.setVisible(false);
+
+
         final JLabel previousJobsLabel = new JLabel("Previous Jobs");
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy++;
@@ -1826,6 +1835,9 @@ public class BetaDepartmentPage extends JFrame {
                     appliedToJobsLabel.setVisible(true);
                     scrollAppliedToJobsTable.setVisible(true);
 
+                    reviewLabel.setVisible(true);
+                    reviewListForViewStudent.setVisible(true);
+
                     previousJobsLabel.setVisible(true);
                     scrollPreviousJobsTable.setVisible(true);
 
@@ -1859,6 +1871,16 @@ public class BetaDepartmentPage extends JFrame {
                             String courseName = j.getCorrespondingCourse().getName();
                             String position = j.getPosType().toString();
                             String salary = "";
+
+                            reviewListForViewStudent.removeAllItems();
+                            for(Review r: tmpStudent.getReviewText()){
+                                String tmp = r.getReviewedJob().getCorrespondingCourse() +" " + r.getReviewedJob().getPosType().toString()+ " by " + r.getReviewer().getName();
+                                reviewListForViewStudent.addItem(tmp);
+                            }
+                            selectedReviewForViewStudent = -1;
+                            reviewListForViewStudent.setSelectedIndex(selectedReviewForViewStudent);
+
+
                             if (position == "TA") {
                                 salary = j.getCorrespondingCourse().getTaHourlyRate() + "";
                             } else {
@@ -1945,6 +1967,9 @@ public class BetaDepartmentPage extends JFrame {
                     appliedToJobsLabel.setVisible(false);
                     scrollAppliedToJobsTable.setVisible(false);
 
+                    reviewLabel.setVisible(false);
+                    reviewListForViewStudent.setVisible(false);
+
                     previousJobsLabel.setVisible(false);
                     scrollPreviousJobsTable.setVisible(false);
 
@@ -1952,6 +1977,32 @@ public class BetaDepartmentPage extends JFrame {
                     appliedToJobsTableModel.setRowCount(0);
                     previousJobsTableModel.setRowCount(0);
 
+                }
+            }
+        });
+
+        reviewListForViewStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JComboBox<String> cb = (JComboBox<String>) evt.getSource();
+                selectedReviewForViewStudent = cb.getSelectedIndex();
+
+                if(cb.getSelectedIndex()>=0){
+
+                    Review review = null;
+
+                    if(selectedStudentForViewStudent != -1){
+                        review = department.getAllStudent(selectedStudentForViewStudent).getReviewText(cb.getSelectedIndex());
+                    }
+
+                    if(review != null) {
+                        if (emailLabel.isVisible()) {
+                            areaScrollReview.setVisible(true);
+                            reviewTextAreaForViewStudent.setText(review.getContent());
+                        } else {
+                            areaScrollReview.setVisible(false);
+                            reviewTextAreaForViewStudent.setText("");
+                        }
+                    }
                 }
             }
         });
@@ -2751,10 +2802,32 @@ public class BetaDepartmentPage extends JFrame {
         createReviewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
 
+                Job job = associatedJobForCreateReview;
+                Student student = associatedStudentForCreateReview;
+                Instructor instructor = associatedInstructorForCreateReview;
+
+                String content = reviewTextAreaForCreateReview.getText();
+
+                InstructorController instructorController = new InstructorController(department);
+
+                try{
+                    instructorController.createReview(instructor,student,content,job);
+                    createReviewErrorLabel.setText("");
+                }catch (InvalidInputException e1){
+                    createReviewErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
+                }
+
+
+
 
                 updateDisplay();
             }
         });
+
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy++;
+        contentPane.add(createReviewButton, gridBagConstraints);
+
 
 
         instructorListForCreateReview.addActionListener(new java.awt.event.ActionListener() {
@@ -2797,6 +2870,10 @@ public class BetaDepartmentPage extends JFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JComboBox<String> cb = (JComboBox<String>) evt.getSource();
                 selectedStudentForCreateReview = cb.getSelectedIndex();
+
+                if(cb.getSelectedIndex() >=0 && associatedJobForCreateReview != null){
+                    associatedStudentForCreateReview = associatedJobForCreateReview.getEmployee(cb.getSelectedIndex());
+                }
             }
         });
 
@@ -2900,7 +2977,7 @@ public class BetaDepartmentPage extends JFrame {
                         studentController.respondToJobOffer(tmpStudent, tmpOfferedJob, false);
                         respondToOfferErrorLabel.setText("");
                     } catch (InvalidInputException e1) {
-                        respondToOfferErrorLabel.setText(e1.getMessage());
+                        respondToOfferErrorLabel.setText("<html><body width='175px'>" + e1.getMessage() + "</body></html>");
                     }
                 } else {
                     respondToOfferErrorLabel.setText("");

@@ -35,7 +35,7 @@ public class DepartmentController {
     private final String createCourseNegativeNumberGraderHourlyRateError = " Input a non-negative grader hourly rate!<br>";
     private final String createCourseNegativeBudgetError = " Input a non-negative budget!<br>";
 
-    private final String createCourseInvalidHourError = "Please input valid number of hourse ranging between 45 hours to 180 hours!<br>";
+    private final String createCourseInvalidHourError = " Please input valid number of hours ranging between 45 hours to 180 hours!<br>";
 
     private final String createJobNullJobPositionTypeError = " Must select a Position!<br>";
     private final String createJobNullDateError = " Posting deadline cannot be empty!<br>";
@@ -84,11 +84,10 @@ public class DepartmentController {
      * @param gradersNeededString
      * @param taHourlyRateString
      * @param graderHourlyRateString
-     * @param budgetString
      * @param instructor
      * @throws InvalidInputException
      */
-	public void createCourse(String code, String name, String semester, String numberOfCreditsString, String numberOfLabsString, String numberOfTutorialsString, String numberOfHoursString, String studentsEnrolledString, String tasNeededString, String gradersNeededString, String taHourlyRateString, String graderHourlyRateString, String budgetString, Instructor instructor) throws InvalidInputException {
+	public void createCourse(String code, String name, String semester, String numberOfCreditsString, String numberOfLabsString, String numberOfTutorialsString, String numberOfHoursString, String studentsEnrolledString, String tasNeededString, String gradersNeededString, String taHourlyRateString, String graderHourlyRateString, Instructor instructor) throws InvalidInputException {
 
 	    String error = "";
 	    int numberOfCredits = -999;
@@ -100,7 +99,6 @@ public class DepartmentController {
 	    int gradersNeeded = -999;
 	    int taHourlyRate = -999;
 	    int graderHourlyRate = -999;
-	    int budget = -999;
 
         boolean isNumberOfCredits = true;
         boolean isNumberOfLabs = true;
@@ -111,7 +109,6 @@ public class DepartmentController {
         boolean isGraderNeeded = true;
         boolean isTaHourlyRate = true;
         boolean isGraderHourlyRate = true;
-        boolean isBudget = true;
 
         try{
             numberOfCredits = Integer.parseInt(numberOfCreditsString);
@@ -165,12 +162,6 @@ public class DepartmentController {
             graderHourlyRate = Integer.parseInt(graderHourlyRateString);
         }catch (NumberFormatException e){
             isGraderHourlyRate = false;
-        }
-
-        try{
-            budget = Integer.parseInt(budgetString);
-        }catch (NumberFormatException e){
-            isBudget = false;
         }
 
 
@@ -228,12 +219,6 @@ public class DepartmentController {
             error += createCourseNegativeNumberGraderHourlyRateError;
         }
 
-        if (!isBudget) {
-            error += createCourseNotIntegerBudgetError;
-        } else  if (budget < 0) {
-            error += createCourseNegativeBudgetError;
-        }
-
         if (code == null || code.length() == 0) {
             error += createCourseNullCourseCodeError;
         }
@@ -253,6 +238,7 @@ public class DepartmentController {
             throw new InvalidInputException(error);
         }
 
+        int budget = taHourlyRate * numberOfHours  + graderHourlyRate * numberOfHours;
 
 		Course course = new Course(code, name, semester, numberOfCredits, numberOfLabs, numberOfTutorials, numberOfHours, studentsEnrolled, tasNeeded, gradersNeeded, taHourlyRate, graderHourlyRate, budget, instructor);
 		department.addAllCourse(course);

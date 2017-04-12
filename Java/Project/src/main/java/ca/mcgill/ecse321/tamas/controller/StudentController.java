@@ -97,6 +97,7 @@ public class StudentController {
 		if(!isIntegerStudentID || studentID/100000000 == 0 ){
 			error += createStudentNotIntegerStudentIDError;
 		}else{
+
 			for(Student s: department.getAllStudents()){
 				if(studentID == s.getStudentID()){
 					error += createStudentAlreadyExistError;
@@ -119,6 +120,9 @@ public class StudentController {
 			if(!m.matches()){
 				error += createStudentInvalidEmailError;
 			}
+
+
+
 		}
 		if(!isIntegerYear){
 			error += createStudentNotIntegerYearError;
@@ -134,9 +138,14 @@ public class StudentController {
 			throw new InvalidInputException(error);
 		}
 
-		Student student = new Student(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
-		department.addAllStudent(student);
-		PersistenceXStream.saveToXMLwithXStream(department);
+		try {
+			Student student = new Student(studentID, name, email, isGrad, year, jobPreference, numberOfHours);
+			department.addAllStudent(student);
+			PersistenceXStream.saveToXMLwithXStream(department);
+
+		}catch(Exception e){
+
+		}
 
 	}
 
