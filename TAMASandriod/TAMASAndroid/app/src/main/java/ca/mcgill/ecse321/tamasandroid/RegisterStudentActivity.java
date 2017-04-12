@@ -51,6 +51,11 @@ public class RegisterStudentActivity extends AppCompatActivity {
         errorText.setText(error);
     }
 
+
+    /**
+     * Method to add a student
+     * @param v
+     */
     public void addStudent(View v) {
         //variables for create student from text view
         //Name

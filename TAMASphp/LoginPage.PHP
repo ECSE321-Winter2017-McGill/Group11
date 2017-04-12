@@ -31,10 +31,14 @@
 				<p>
 					Welcome to the Instructor module.
 				</p>
+				<p>
+					No registration implemented. Please use the premade instructor dummies.
+				</p>
 				<form action="Login.php" method="post">
 					<p> Email: <input type="text" name="instructorEmail"/>
 					<span class="error">
 					<?php
+					
 					session_start();
 					if (isset($_SESSION['errorEmail']) && !empty($_SESSION['errorEmail'])){
 						echo " * " . $_SESSION["errorEmail"];
@@ -54,7 +58,7 @@
 					<p><input type="submit" value="Login to TAMAS"/></p>
 					
 					<h3>
-						The following are premade dummy instructors.
+						The following are premade dummy instructor(s).
 					</h3>
 					<table class="Instructor attributes table">
 						<thead>
@@ -80,17 +84,6 @@
 								</td>
 								<td>
 									260543215
-								</td>
-							</tr>
-							<tr>
-								<td>
-									Instructor Teaching
-								</td>
-								<td>
-									instructor.teaching@mcgill.ca
-								</td>
-								<td>
-									260102344
 								</td>
 							</tr>
 						</tbody>

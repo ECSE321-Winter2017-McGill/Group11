@@ -394,7 +394,7 @@ public class TestDepartmentController {
     }
 
     @Test
-    public void testCreateJobOffer() {
+    public void testAutoAllocation() {
 
         String error = "";
 
@@ -402,9 +402,10 @@ public class TestDepartmentController {
         assertEquals(0, department.getAllInstructors().size());
 
         DepartmentController departmentController = new DepartmentController(department);
+        StudentController studentController = new StudentController(department);
 
         //Create student
-        int studentID = 666666666;
+        int studentID = 232323237;
         String studentName = "Bobby Jones";
         String studentEmail = "bobbyjones@mail.mcgill.ca";
         Boolean isGrad = false;
@@ -433,7 +434,7 @@ public class TestDepartmentController {
 
         //Create instructor for creating a course
         String instructorName = "James";
-        int instructorID = 777777777;
+        int instructorID = 565656567;
         String instructorEmail = "james@mcgill.ca";
 
         Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
@@ -444,43 +445,116 @@ public class TestDepartmentController {
         department.addAllCourse(courseA);
         assertEquals(1,department.numberOfAllCourses());
 
+        //Create a job
+        PositionType posType = PositionType.Grader;
+
+        Calendar c = Calendar.getInstance();
+        c.set(2019, Calendar.MARCH, 16, 9, 0, 0);
+        java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
+
+        Job jobA = new Job(posType,postDeadLine,courseA);
+        jobA.setState(JobStatus.AppliedTo);
+        jobA.addApplicant(studentA);
+
+        department.addAllJob(jobA);
+        assertEquals(1,department.getAllJobs().size());
+
+
+        try {
+            departmentController.autoAllocation(jobA);
+        } catch (InvalidInputException e) {
+            fail();
+        }
+
+        try {
+            departmentController.autoAllocation(null);
+        } catch (InvalidInputException e) {
+            error = e.getMessage();
+        }
+        assertEquals(" Job cannot be empty!<br>", error);
+
+        studentA.delete();
+        instructorA.delete();
+    }
+
+    @Test
+    public void testFinalizeAllocation() {
+
+        String error = "";
+
+        assertEquals(0, department.getAllCourses().size());
+        assertEquals(0, department.getAllInstructors().size());
+
+        DepartmentController departmentController = new DepartmentController(department);
+        StudentController studentController = new StudentController(department);
+
+        //Create student
+        int studentID = 232323237;
+        String studentName = "Bobby Jones";
+        String studentEmail = "bobbyjones@mail.mcgill.ca";
+        Boolean isGrad = false;
+        int studentYear = 2;
+        String studentJobPreference = "TA, but I don't mind.";
+        int studentNumberOfHours = 45;
+
+        Student studentA = new Student(studentID,studentName,studentEmail,isGrad,studentYear,studentJobPreference,studentNumberOfHours);
+        department.addAllStudent(studentA);
+        assertEquals(1,department.numberOfAllStudents());
+
+        //Create a course
+        String courseCode = "ECSE321";
+        String courseName = "Software Engineering";
+        String courseSemester = "W2017";
+        int courseNumOfCredits = 3;
+        int courseNumOfLabs = 0;
+        int courseNumOfTutorials = 2;
+        int courseNumOfHours = 1;
+        int courseNumOfStudentsEnrolled = 100;
+        int courseTasRequired = 0;
+        int courseGradersRequired = 1;
+        int courseTaHourlyRates = 12;
+        int courseGraderHourlyRates = 12;
+        int courseBudget = 10000;
+
+        //Create instructor for creating a course
+        String instructorName = "James";
+        int instructorID = 565656567;
+        String instructorEmail = "james@mcgill.ca";
+
+        Instructor instructorA = new Instructor(instructorName,instructorID,instructorEmail);
+        department.addAllInstructor(instructorA);
+        assertEquals(1, department.getAllInstructors().size());
+
+        Course courseA = new Course(courseCode,courseName,courseSemester,courseNumOfCredits,courseNumOfLabs,courseNumOfTutorials,courseNumOfHours,courseNumOfStudentsEnrolled,courseTasRequired,courseGradersRequired,courseTaHourlyRates,courseGraderHourlyRates,courseBudget,instructorA);
+        department.addAllCourse(courseA);
+        assertEquals(1,department.numberOfAllCourses());
 
         //Create a job
         PositionType posType = PositionType.Grader;
 
         Calendar c = Calendar.getInstance();
-        c.set(2017, Calendar.MARCH, 16, 9, 0, 0);
+        c.set(2019, Calendar.MARCH, 16, 9, 0, 0);
         java.sql.Date postDeadLine = new java.sql.Date(c.getTimeInMillis());
 
         Job jobA = new Job(posType,postDeadLine,courseA);
+        jobA.setState(JobStatus.Allocated);
+        jobA.addApplicant(studentA);
+
         department.addAllJob(jobA);
         assertEquals(1,department.getAllJobs().size());
 
         try {
-            departmentController.createJobOffer(jobA,studentA);
+            departmentController.finalizeAllocation(jobA);
         } catch (InvalidInputException e) {
-            fail();
+            System.out.println(e.getMessage());
         }
 
-        //try adding the job offer a second time
         try {
-            departmentController.createJobOffer(jobA,studentA);
+            departmentController.finalizeAllocation(null);
         } catch (InvalidInputException e) {
             error = e.getMessage();
         }
-        assertEquals(" Offer already made to this student!<br>", error);
-
-        try {
-            departmentController.createJobOffer(null,null);
-        } catch (InvalidInputException e) {
-            error = e.getMessage();
-        }
-        assertEquals(" Job cannot be empty!<br> Select student from the allocated table!<br>", error);
-        assertEquals(1,department.getAllJobs().size());
-
-        instructorA.delete();
-        studentA.delete();
-        courseA.delete();
+        assertEquals(" Job cannot be empty!<br>", error);
 
     }
 

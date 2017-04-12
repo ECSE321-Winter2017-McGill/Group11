@@ -48,6 +48,9 @@ public class ViewReviewsActivity extends AppCompatActivity {
         spinner2.setAdapter(reviewAdapter);
     }
 
+    /**
+     * Method will generate a review for the student
+     */
     public void generateReview(){
         //generate a view to be available to be viewed
         //Create Instructor
@@ -93,6 +96,10 @@ public class ViewReviewsActivity extends AppCompatActivity {
         d.addAllReview(review);
     }
 
+    /**
+     * Method will show the review to the student on the screen in a text view field
+     * @param view
+     */
     public void viewReview(View view){
         final Spinner reviewSpinner = (Spinner) findViewById(R.id.reviewspinner);
 
