@@ -6,3 +6,6 @@ Note about using the web app:
 - Login page provides the premade teacher dummy that can be used for manual testing
 - No teacher registration has been provided as no further functionality can be performed on it afterwards. However, the controller fully implements that as reflected by our PHPunits.
 - Refer to Dummies.php for a full list of dummies created.
+
+Testing:
+- One of the tests (testCreateReview(), line 684) has non-functional lines that have been commented out. This decision has been justified within the test in the instructorControllerTest.php file.
