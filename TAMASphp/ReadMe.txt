@@ -5,3 +5,4 @@ Note about using the web app:
 - Greyed out tabs/thumbnails/pages represent extra features that are still work-in-progress (e.g. profile).
 - Login page provides the premade teacher dummy that can be used for manual testing
 - No teacher registration has been provided as no further functionality can be performed on it afterwards. However, the controller fully implements that as reflected by our PHPunits.
+- Refer to Dummies.php for a full list of dummies created.
