@@ -1,5 +1,7 @@
 Note about using the web app:
-- If accessing it directly, always start at Index.php
-- The logout page redirects you to the login page after 3 seconds
-- All functionalities concerning instructors are implemeneted: post job, TA/Grader review, modify job allocation
-- Greyed out tabs/thumbnails/pages represent extra features that are still work-in-progress (e.g. profile)
+- If accessing it directly, always start at Index.php, otherwise the dummy variables will not set correctly.
+- The logout page redirects you to the login page after 3 seconds.
+- All functionalities concerning instructors are implemented: post job, TA/Grader review, modify job allocation.
+- Greyed out tabs/thumbnails/pages represent extra features that are still work-in-progress (e.g. profile).
+- Login page provides the premade teacher dummy that can be used for manual testing
+- No teacher registration has been provided as no further functionality can be performed on it afterwards. However, the controller fully implements that as reflected by our PHPunits.
