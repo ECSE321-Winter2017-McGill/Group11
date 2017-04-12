@@ -92,9 +92,10 @@ public class StudentController {
 		}catch (NumberFormatException e){
 			isIntegerNumberOfHours = false;
 		}
-
-
-		if(!isIntegerStudentID || studentID/100000000 == 0 ){
+		if(studentIDString!=null) {
+			studentIDString = studentIDString.trim();
+		}
+		if(!isIntegerStudentID ||(studentID/100000000 == 0 && studentIDString.length()<9) ){
 			error += createStudentNotIntegerStudentIDError;
 		}else{
 

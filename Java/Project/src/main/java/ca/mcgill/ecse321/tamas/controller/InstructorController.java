@@ -67,8 +67,10 @@ public class InstructorController {
         }catch (NumberFormatException e){
             isInstructorID = false;
         }
-
-        if (!isInstructorID|| instructorID/100000000 == 0) {
+        if(instructorIDString != null) {
+			instructorIDString = instructorIDString.trim();
+		}
+        if (!isInstructorID|| (instructorID/100000000 == 0 && instructorIDString.length()<9) ) {
             error += createInstructorNotIntegerIDError;
         }else{
 			for(Instructor i: department.getAllInstructors()){

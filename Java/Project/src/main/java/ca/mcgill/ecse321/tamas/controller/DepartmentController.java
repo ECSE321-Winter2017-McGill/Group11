@@ -238,7 +238,7 @@ public class DepartmentController {
             throw new InvalidInputException(error);
         }
 
-        int budget = taHourlyRate * numberOfHours  + graderHourlyRate * numberOfHours;
+        int budget = taHourlyRate * numberOfHours * tasNeeded  + graderHourlyRate * numberOfHours * gradersNeeded;
 
 		Course course = new Course(code, name, semester, numberOfCredits, numberOfLabs, numberOfTutorials, numberOfHours, studentsEnrolled, tasNeeded, gradersNeeded, taHourlyRate, graderHourlyRate, budget, instructor);
 		department.addAllCourse(course);
@@ -273,6 +273,12 @@ public class DepartmentController {
 
         if (postingDeadlineDate != null && current > postingDeadlineDate.getTime()) {
             error += createJobInvalidDateError;
+        }
+
+        if(posType != null && course != null){
+            if(course.getJobs().size() != 0){
+
+            }
         }
 
         if (error.length()>0){
