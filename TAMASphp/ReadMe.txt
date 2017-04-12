@@ -9,3 +9,4 @@ Note about using the web app:
 
 Testing:
 - One of the tests (testCreateReview(), line 684) has non-functional lines that have been commented out. This decision has been justified within the test in the instructorControllerTest.php file.
+- the .travis.yml file included with the php project is not the same one used within our repository. A modification has been brought to the .yml file because when exporting the php project, it is placed in another director, therefore the path to the test files has been modified. The original .yml file is still in our team directory.
